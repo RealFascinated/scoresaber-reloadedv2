@@ -130,7 +130,7 @@ export default function Player({ params }: { params: { id: string } }) {
               </div>
               {/* Labels */}
               <div className="flex flex-col gap-2">
-                <div className="flex gap-2">
+                <div className="flex gap-2 ">
                   <Label
                     title="Total play count"
                     className="bg-blue-500"

@@ -13,7 +13,7 @@ export default function Label({
 }: LabelProps) {
   return (
     <div className={clsx("flex flex-col justify-center rounded-md", className)}>
-      <div className="flex items-center gap-2 p-[0.3rem]">
+      <div className="p4-[0.3rem] flex items-center gap-2 pb-[0.2rem] pl-[0.3rem] pr-[0.3rem] pt-[0.2rem]">
         <p>{title}</p>
         <div className="h-4 w-[1px] bg-neutral-100"></div>
         <p>{value}</p>
