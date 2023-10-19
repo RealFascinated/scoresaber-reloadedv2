@@ -4,12 +4,14 @@ import Image from "next/image";
 interface AvatarProps {
   label: string;
   url: string;
-  className: string;
+  size?: number;
+  className?: string;
 }
 
 export default function Avatar({
   label = "Avatar",
   url,
+  size = 150,
   className,
 }: AvatarProps) {
   return (
@@ -18,8 +20,8 @@ export default function Avatar({
         className={clsx("rounded-full", className)}
         alt={label}
         src={url}
-        width={150}
-        height={150}
+        width={size}
+        height={size}
         priority
       />
     </>

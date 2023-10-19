@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
+import Image from "next/image";
 import "./globals.css";
 
-const inter = Inter({ subsets: ["latin"] });
+const font = Inter({ subsets: ["latin-ext"], weight: "500" });
 
 export const metadata: Metadata = {
   title: {
@@ -18,7 +19,20 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={inter.className}>{children}</body>
+      <body className={font.className}>
+        <div className="fixed left-0 top-0 z-0 h-full w-full blur-sm">
+          <Image
+            alt="Background image"
+            src={"https://cdn.fascinated.cc/W9jC5MLf.jpg"}
+            layout="fill"
+            objectFit="cover"
+            objectPosition="center"
+            quality={100}
+          />
+        </div>
+
+        {children}
+      </body>
     </html>
   );
 }
