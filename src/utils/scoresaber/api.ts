@@ -1,15 +1,13 @@
+import { connectMongo } from "@/database/mongo";
+import { PlayerSchema } from "@/database/schemas/player";
 import { logger } from "@/logger";
 import { ScoresaberPlayer } from "@/schemas/scoresaber/player";
 import { ScoresaberPlayerScore } from "@/schemas/scoresaber/playerScore";
-import { fetchBuilder, MemoryCache } from "node-fetch-cache";
+import { FetchQueue } from "../fetchWithQueue";
 import { formatString } from "../string";
 
 // Create a fetch instance with a cache
-const fetch = fetchBuilder.withCache(
-  new MemoryCache({
-    ttl: 15 * 60 * 1000, // 15 minutes
-  }),
-);
+const fetchQueue = new FetchQueue(15 * 60 * 1000);
 
 // Api endpoints
 const API_URL = "https://scoresaber.com/api";
@@ -33,7 +31,9 @@ const SearchType = {
 export async function searchByName(
   name: string,
 ): Promise<ScoresaberPlayer[] | undefined> {
-  const response = await fetch(formatString(SEARCH_PLAYER_URL, name));
+  const response = await fetchQueue.fetch(
+    formatString(SEARCH_PLAYER_URL, name),
+  );
   const json = await response.json();
 
   // Check if there was an error fetching the user data
@@ -52,8 +52,18 @@ export async function searchByName(
  */
 export async function getPlayerInfo(
   playerId: string,
-): Promise<ScoresaberPlayer | undefined> {
-  const response = await fetch(formatString(GET_PLAYER_DATA_FULL, playerId));
+  apiOnly = false,
+): Promise<ScoresaberPlayer | undefined | null> {
+  await connectMongo();
+  const isPlayerInDb = await PlayerSchema.exists({ _id: playerId });
+  if (isPlayerInDb && !apiOnly) {
+    const player = await PlayerSchema.findById({ _id: playerId });
+    return player.scoresaber;
+  }
+
+  const response = await fetchQueue.fetch(
+    formatString(GET_PLAYER_DATA_FULL, playerId),
+  );
   const json = await response.json();
 
   // Check if there was an error fetching the user data
@@ -85,7 +95,7 @@ export async function fetchScores(
     );
     limit = 100;
   }
-  const response = await fetch(
+  const response = await fetchQueue.fetch(
     formatString(PLAYER_SCORES, playerId, limit, searchType, page),
   );
   const json = await response.json();

@@ -2,3 +2,4 @@
 
 export * from "./fetchNewScores";
 export * from "./setupUser";
+export * from "./updateUsers";

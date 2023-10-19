@@ -4,7 +4,7 @@ const { Schema } = mongoose;
 
 const playerSchema = new Schema({
   _id: String,
-  avatar: String,
+  profilePicture: String,
   name: String,
   country: String,
 
