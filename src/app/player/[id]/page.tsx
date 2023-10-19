@@ -100,10 +100,10 @@ export default function Player({ params }: { params: { id: string } }) {
   return (
     <main>
       <Container>
-        <div className="mt-2 flex w-full flex-row justify-center rounded-sm bg-neutral-800 md:flex-col">
-          <div className="flex flex-col items-center gap-3 p-3 md:flex-row md:items-start">
+        <div className="mt-2 flex w-full flex-row justify-center rounded-sm bg-neutral-800 xs:flex-col">
+          <div className="flex flex-col items-center gap-3 p-3 xs:flex-row xs:items-start">
             <Avatar url={playerData.profilePicture} label="Avatar" />
-            <div className="flex flex-col items-center gap-2 md:items-start">
+            <div className="flex flex-col items-center gap-2 xs:items-start">
               <p className="text-2xl">{playerData.name}</p>
 
               <div className="flex gap-3 text-xl">
@@ -129,11 +129,32 @@ export default function Player({ params }: { params: { id: string } }) {
                 </div>
               </div>
               {/* Labels */}
-              <div>
-                <Label
-                  title="Total play count"
-                  value={formatNumber(playerData.scoreStats.totalPlayCount)}
-                />
+              <div className="flex flex-col gap-2">
+                <div className="flex gap-2">
+                  <Label
+                    title="Total play count"
+                    className="bg-blue-500"
+                    value={formatNumber(playerData.scoreStats.totalPlayCount)}
+                  />
+                  <Label
+                    title="Total score"
+                    className="bg-blue-500"
+                    value={formatNumber(playerData.scoreStats.totalScore)}
+                  />
+                  <Label
+                    title="Avg ranked acc"
+                    className="bg-blue-500"
+                    value={`${playerData.scoreStats.averageRankedAccuracy.toFixed(
+                      2,
+                    )}%`}
+                  />
+                </div>
+                <div className="flex gap-2">
+                  <Label
+                    title="Replays watched"
+                    value={formatNumber(playerData.scoreStats.replaysWatched)}
+                  />
+                </div>
               </div>
             </div>
           </div>

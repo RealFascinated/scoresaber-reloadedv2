@@ -1,5 +1,4 @@
 import { connectMongo } from "@/database/mongo";
-import { PlayerSchema } from "@/database/schemas/player";
 import { logger } from "@/logger";
 import { ScoresaberPlayer } from "@/schemas/scoresaber/player";
 import { ScoresaberPlayerScore } from "@/schemas/scoresaber/playerScore";
@@ -55,12 +54,6 @@ export async function getPlayerInfo(
   apiOnly = false,
 ): Promise<ScoresaberPlayer | undefined | null> {
   await connectMongo();
-  const isPlayerInDb = await PlayerSchema.exists({ _id: playerId });
-  if (isPlayerInDb && !apiOnly) {
-    const player = await PlayerSchema.findById({ _id: playerId });
-    return player.scoresaber;
-  }
-
   const response = await fetchQueue.fetch(
     formatString(GET_PLAYER_DATA_FULL, playerId),
   );
