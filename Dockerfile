@@ -5,7 +5,7 @@ FROM base AS deps
 RUN apk add --no-cache libc6-compat
 WORKDIR /app
 COPY package.json* package-lock.yaml* ./
-RUN npm install --production --frozen-lockfile --quiet
+RUN npm install --frozen-lockfile --quiet
 
 # Build from source
 FROM base AS builder
