@@ -17,6 +17,7 @@ const SEARCH_PLAYER_URL =
   API_URL + "/players?search={}&page=1&withMetadata=false";
 const PLAYER_SCORES =
   API_URL + "/player/{}/scores?limit={}&sort={}&page={}&withMetadata=true";
+const GET_PLAYER_DATA_FULL = API_URL + "/player/{}/full";
 
 const SearchType = {
   RECENT: "recent",
@@ -43,6 +44,35 @@ export async function searchByName(
   return json.players as ScoresaberPlayer[];
 }
 
+/**
+ * Returns the player info for the provided player id
+ *
+ * @param playerId the id of the player
+ * @returns the player info
+ */
+export async function getPlayerInfo(
+  playerId: string,
+): Promise<ScoresaberPlayer | undefined> {
+  const response = await fetch(formatString(GET_PLAYER_DATA_FULL, playerId));
+  const json = await response.json();
+
+  // Check if there was an error fetching the user data
+  if (json.errorMessage) {
+    return undefined;
+  }
+
+  return json as ScoresaberPlayer;
+}
+
+/**
+ * Get the players scores from the given page
+ *
+ * @param playerId the id of the player
+ * @param page the page to get the scores from
+ * @param searchType the type of search to perform
+ * @param limit the limit of scores to get
+ * @returns a list of scores
+ */
 export async function fetchScores(
   playerId: string,
   page: number = 1,

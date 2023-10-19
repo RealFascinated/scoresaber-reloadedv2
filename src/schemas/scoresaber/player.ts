@@ -12,7 +12,7 @@ export type ScoresaberPlayer = {
   role: string;
   badges: ScoresaberBadge[];
   histories: string;
-  scoreStats: ScoresaberScoreStats[];
+  scoreStats: ScoresaberScoreStats;
   permissions: number;
   banned: boolean;
   inactive: boolean;
