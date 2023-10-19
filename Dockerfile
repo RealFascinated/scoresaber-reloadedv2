@@ -13,7 +13,7 @@ WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 ENV NEXT_TELEMETRY_DISABLED 1
-RUN npm build
+RUN npm run build
 
 # Run the app
 FROM base AS runner
@@ -37,4 +37,4 @@ USER nextjs
 EXPOSE 80
 ENV HOSTNAME "0.0.0.0"
 ENV PORT 80
-CMD ["npm", "start"]
+CMD ["npm", "run", "start"]
