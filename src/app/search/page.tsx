@@ -14,7 +14,7 @@ export default function Home() {
     <main>
       <Container>
         <Card
-          className="mt-2 w-full rounded-md bg-gray-800 text-center"
+          className="mt-2 w-full rounded-md bg-gray-800"
           innerClassName="flex flex-col items-center justify-center"
         >
           <Avatar
