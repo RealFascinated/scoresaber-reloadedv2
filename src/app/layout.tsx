@@ -10,6 +10,13 @@ export const metadata: Metadata = {
     template: "Scoresaber Reloaded - %s",
     default: "Scoresaber Reloaded",
   },
+  openGraph: {
+    title: "Scoresaber Reloaded",
+    description: "SSR is a new way to view your scoresaber profile. (in dev)",
+    url: "https://ssrdev.fascinated.cc",
+    locale: "en_US",
+    type: "website",
+  },
 };
 
 export default function RootLayout({
