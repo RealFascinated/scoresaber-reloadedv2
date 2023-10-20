@@ -129,7 +129,7 @@ export default function Player({ params }: { params: { id: string } }) {
       <Container>
         {/* Player Info */}
         <Card className="mt-2">
-          <div className="flex flex-col items-center gap-3 p-3 xs:flex-row xs:items-start">
+          <div className="flex flex-col items-center gap-3 xs:flex-row xs:items-start">
             <div>
               <div className="flex flex-col items-center gap-2">
                 <Avatar url={playerData.profilePicture} label="Avatar" />
