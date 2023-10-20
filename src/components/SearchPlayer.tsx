@@ -1,6 +1,7 @@
 "use client";
 
 import { ScoresaberPlayer } from "@/schemas/scoresaber/player";
+import { formatNumber } from "@/utils/number";
 import { searchByName } from "@/utils/scoresaber/api";
 import { MagnifyingGlassIcon } from "@heroicons/react/20/solid";
 import clsx from "clsx";
@@ -63,7 +64,12 @@ export default function SearchPlayer() {
           >
             <Avatar label="Account" size={40} url={player.profilePicture} />
 
-            <p className="truncate">{player.name}</p>
+            <div>
+              <p className="text-xs text-gray-400">
+                #{formatNumber(player.rank)}
+              </p>
+              <p className="text-sm">{player.name}</p>
+            </div>
           </a>
         ))}
       </div>
