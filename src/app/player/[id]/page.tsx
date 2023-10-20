@@ -96,7 +96,7 @@ export default function Player({ params }: { params: { id: string } }) {
     return (
       <main>
         <Container>
-          <div className="mt-2 flex w-full flex-col justify-center rounded-sm bg-neutral-800">
+          <div className="mt-2 flex w-full flex-col justify-center rounded-md bg-gray-800">
             <div className="p-3 text-center">
               <div role="status">
                 {player.loading && <Spinner />}
@@ -127,7 +127,7 @@ export default function Player({ params }: { params: { id: string } }) {
     <main>
       <Container>
         {/* Player Info */}
-        <div className="mt-2 flex w-full flex-row justify-center rounded-sm bg-neutral-800 xs:flex-col">
+        <div className="mt-2 flex w-full flex-row justify-center rounded-md bg-gray-800 xs:flex-col">
           <div className="flex flex-col items-center gap-3 p-3 xs:flex-row xs:items-start">
             <Avatar url={playerData.profilePicture} label="Avatar" />
             <div className="flex flex-col items-center gap-2 xs:items-start">
@@ -184,7 +184,7 @@ export default function Player({ params }: { params: { id: string } }) {
         </div>
 
         {/* Scores */}
-        <div className="mt-2 flex w-full flex-row justify-center rounded-sm bg-neutral-800 xs:flex-col">
+        <div className="mt-2 flex w-full flex-row justify-center rounded-md bg-gray-800 xs:flex-col">
           <div className="p-3">
             {scores.loading ? (
               <div className="flex justify-center">
@@ -249,7 +249,7 @@ export default function Player({ params }: { params: { id: string } }) {
           </div>
 
           {/* Pagination */}
-          <div className="flex w-full flex-row justify-center rounded-sm bg-neutral-800 xs:flex-col">
+          <div className="flex w-full flex-row justify-center rounded-md bg-gray-800 xs:flex-col">
             <div className="p-3">
               <Pagination
                 currentPage={scores.page}

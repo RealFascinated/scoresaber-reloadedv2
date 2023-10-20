@@ -12,7 +12,7 @@ export default function Home() {
   return (
     <main>
       <Container>
-        <div className="mt-2 flex w-full flex-col items-center justify-center rounded-sm bg-neutral-800">
+        <div className="mt-2 flex w-full flex-col items-center justify-center rounded-md bg-gray-800">
           <Avatar
             className="m-6"
             label="Player Avatar"

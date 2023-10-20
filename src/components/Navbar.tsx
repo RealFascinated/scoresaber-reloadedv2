@@ -17,7 +17,7 @@ function NavbarButton({ text, icon, href, children }: ButtonProps) {
   return (
     <div className="group">
       <a
-        className="flex w-fit transform-gpu items-center justify-center gap-1 rounded-sm p-3 transition-all hover:cursor-pointer hover:bg-blue-500"
+        className="flex w-fit transform-gpu items-center justify-center gap-1 rounded-md p-3 transition-all hover:cursor-pointer hover:bg-blue-500"
         href={href}
       >
         <>
@@ -27,7 +27,7 @@ function NavbarButton({ text, icon, href, children }: ButtonProps) {
       </a>
 
       {children && (
-        <div className="absolute z-20 hidden divide-y rounded-sm bg-neutral-600 shadow-sm group-hover:flex">
+        <div className="absolute z-20 hidden divide-y rounded-md bg-neutral-600 shadow-sm group-hover:flex">
           <div className="p-2">{children}</div>
         </div>
       )}
@@ -38,7 +38,7 @@ function NavbarButton({ text, icon, href, children }: ButtonProps) {
 export default function Navbar() {
   return (
     <>
-      <div className="flex h-fit w-full rounded-sm bg-neutral-800">
+      <div className="flex h-fit w-full rounded-md bg-gray-800">
         <NavbarButton text="Friends" icon={<UserIcon height={20} width={20} />}>
           <p className="text-sm font-bold">No friends, add someone!</p>
 
