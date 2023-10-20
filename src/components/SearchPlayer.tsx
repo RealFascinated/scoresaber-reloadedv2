@@ -1,6 +1,7 @@
 "use client";
 
 import { ScoresaberPlayer } from "@/schemas/scoresaber/player";
+import { searchByName } from "@/utils/scoresaber/api";
 import { MagnifyingGlassIcon } from "@heroicons/react/20/solid";
 import clsx from "clsx";
 import { useEffect, useState } from "react";
@@ -19,15 +20,11 @@ export default function SearchPlayer() {
     searchPlayer(search);
   }, [search]);
 
-  function searchPlayer(search: string) {
-    fetch(`/api/player/search?name=${search}`).then(async (reponse) => {
-      const json = await reponse.json();
+  async function searchPlayer(search: string) {
+    const players = await searchByName(search);
+    if (players == undefined) return;
 
-      if (json.error || !json.players) {
-        setPlayers([]); // Clear players
-      }
-      setPlayers(json.players); // Set players
-    });
+    setPlayers(players);
   }
 
   function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
@@ -54,14 +51,14 @@ export default function SearchPlayer() {
 
       <div
         className={clsx(
-          "absolute z-20 mt-7 flex min-w-[14rem] flex-col divide-y rounded-md bg-neutral-700 shadow-sm",
+          "absolute z-20 mt-7 flex min-w-[14rem] flex-col divide-y rounded-md bg-gray-700 shadow-sm",
           players.length > 0 ? "flex" : "hidden",
         )}
       >
         {players.map((player: ScoresaberPlayer) => (
           <a
             key={player.id}
-            className="flex min-w-[14rem] items-center gap-2 rounded-md p-2 transition-all hover:bg-neutral-600"
+            className="flex min-w-[14rem] items-center gap-2 rounded-md p-2 transition-all hover:bg-gray-600"
             href={`/player/${player.id}`}
           >
             <Avatar label="Account" size={40} url={player.profilePicture} />
