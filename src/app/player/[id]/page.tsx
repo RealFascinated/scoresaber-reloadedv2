@@ -229,10 +229,12 @@ export default function Player({ params }: { params: { id: string } }) {
                         </div>
                         <div className="flex flex-col items-end p-1">
                           <div className="flex flex-row gap-2">
-                            <ScoreStatLabel
-                              value={formatNumber(score.pp.toFixed(2)) + "pp"}
-                              className="bg-blue-500"
-                            />
+                            {score.pp > 0 && (
+                              <ScoreStatLabel
+                                value={formatNumber(score.pp.toFixed(2)) + "pp"}
+                                className="bg-blue-500"
+                              />
+                            )}
                             <ScoreStatLabel
                               value={score.modifiedScore.toFixed(0)}
                             />
