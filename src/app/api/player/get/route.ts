@@ -15,5 +15,5 @@ export async function GET(request: Request) {
     });
   }
 
-  return Response.json({ error: false, data: player });
+  return Response.json({ error: false, player: player });
 }
