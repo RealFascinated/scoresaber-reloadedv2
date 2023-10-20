@@ -14,8 +14,8 @@ const buildId = process.env.NEXT_PUBLIC_BUILD_ID
 
 export default function Footer() {
   return (
-    <footer className="m-3 rounded-md bg-gray-800 text-gray-300">
-      <div className="m-3 flex flex-col items-center justify-center gap-1">
+    <footer>
+      <div className="m-3 flex flex-col items-center justify-center gap-1 rounded-md bg-gray-800 p-3">
         <div className="flex flex-row gap-3">
           <p>Scoresaber Reloaded</p>
 
