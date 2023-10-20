@@ -4,7 +4,7 @@
  * @param number the number to format
  * @returns the formatted number
  */
-export function formatNumber(number: number) {
+export function formatNumber(number: any) {
   if (number === undefined) {
     return "";
   }

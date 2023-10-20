@@ -10,20 +10,16 @@
   },
   "dependencies": {
     "@heroicons/react": "^2.0.18",
-    "@trigger.dev/nextjs": "^2.2.0",
-    "@trigger.dev/react": "^2.2.0",
-    "@trigger.dev/sdk": "^2.2.0",
     "bluebird": "^3.7.2",
     "clsx": "^2.0.0",
     "encoding": "^0.1.13",
-    "mongoose": "^7.6.3",
+    "moment": "^2.29.4",
     "next": "13.5.6",
     "node-fetch-cache": "^3.1.3",
     "react": "^18",
     "react-country-flag": "^3.1.0",
     "react-dom": "^18",
     "sharp": "^0.32.6",
-    "winston": "^3.11.0",
     "zustand": "^4.4.3"
   },
   "devDependencies": {
@@ -39,8 +35,5 @@
     "prettier-plugin-tailwindcss": "^0.5.6",
     "tailwindcss": "^3.3.3",
     "typescript": "^5"
-  },
-  "trigger.dev": {
-    "endpointId": "scoresaber-reloaded-3SPH"
   }
 }

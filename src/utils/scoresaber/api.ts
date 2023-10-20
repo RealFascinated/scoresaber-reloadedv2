@@ -1,12 +1,10 @@
-import { connectMongo } from "@/database/mongo";
-import { logger } from "@/logger";
 import { ScoresaberPlayer } from "@/schemas/scoresaber/player";
 import { ScoresaberPlayerScore } from "@/schemas/scoresaber/playerScore";
 import { FetchQueue } from "../fetchWithQueue";
 import { formatString } from "../string";
 
 // Create a fetch instance with a cache
-const fetchQueue = new FetchQueue(15 * 60 * 1000);
+const fetchQueue = new FetchQueue();
 
 // Api endpoints
 const API_URL = "https://scoresaber.com/api";
@@ -51,9 +49,7 @@ export async function searchByName(
  */
 export async function getPlayerInfo(
   playerId: string,
-  apiOnly = false,
 ): Promise<ScoresaberPlayer | undefined | null> {
-  await connectMongo();
   const response = await fetchQueue.fetch(
     formatString(GET_PLAYER_DATA_FULL, playerId),
   );
@@ -81,9 +77,19 @@ export async function fetchScores(
   page: number = 1,
   searchType: string = SearchType.RECENT,
   limit: number = 100,
-): Promise<ScoresaberPlayerScore[] | undefined> {
+): Promise<
+  | {
+      scores: ScoresaberPlayerScore[];
+      pageInfo: {
+        totalScores: number;
+        page: number;
+        totalPages: number;
+      };
+    }
+  | undefined
+> {
   if (limit > 100) {
-    logger.warn(
+    console.log(
       "Scoresaber API only allows a limit of 100 scores per request, limiting to 100.",
     );
     limit = 100;
@@ -98,7 +104,16 @@ export async function fetchScores(
     return undefined;
   }
 
-  return json.playerScores as ScoresaberPlayerScore[];
+  const scores = json.playerScores as ScoresaberPlayerScore[];
+  const metadata = json.metadata;
+  return {
+    scores: scores,
+    pageInfo: {
+      totalScores: metadata.total,
+      page: metadata.page,
+      totalPages: Math.ceil(metadata.total / metadata.itemsPerPage),
+    },
+  };
 }
 
 export async function fetchAllScores(
@@ -111,11 +126,16 @@ export async function fetchAllScores(
     page = 1;
   do {
     const response = await fetchScores(playerId, page, searchType);
-    if (response == undefined || response.length === 0) {
+    if (response == undefined) {
       done = true;
       break;
     }
-    scores.push(...response);
+    const { scores } = response;
+    if (scores.length === 0) {
+      done = true;
+      break;
+    }
+    scores.push(...scores);
     page++;
   } while (!done);
 

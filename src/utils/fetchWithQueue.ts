@@ -1,16 +1,8 @@
-import { fetchBuilder, MemoryCache } from "node-fetch-cache";
-
 export class FetchQueue {
-  private _fetch;
   private _queue: string[];
   private _rateLimitReset: number;
 
-  constructor(ttl: number) {
-    this._fetch = fetchBuilder.withCache(
-      new MemoryCache({
-        ttl: ttl,
-      }),
-    );
+  constructor() {
     this._queue = [];
     this._rateLimitReset = Date.now();
   }
@@ -31,7 +23,7 @@ export class FetchQueue {
       );
     }
 
-    const response = await this._fetch(url);
+    const response = await fetch(url);
     if (response.status === 429) {
       const retryAfter = Number(response.headers.get("retry-after")) * 1000;
       this._queue.push(url);
