@@ -204,11 +204,14 @@ export default function Player({ params }: { params: { id: string } }) {
 
                     return (
                       <div
-                        className="grid grid-cols-[1fr_6fr_3fr] p-2"
+                        className="grid grid-cols-[.95fr_6fr_3fr] pb-2 pt-2"
                         key={id}
                       >
-                        <div className="flex flex-col items-center justify-center">
-                          <p>#{score.rank}</p>
+                        <div className="ml-4 flex flex-col items-start justify-center">
+                          <div className="flex flex-row items-center justify-start gap-1">
+                            <GlobeAsiaAustraliaIcon width={20} height={20} />
+                            <p>#{score.rank}</p>
+                          </div>
                           <p className="text-sm text-gray-300">
                             {moment(score.timeSet).fromNow()}
                           </p>
