@@ -1,7 +1,5 @@
 const nextBuildId = require("next-build-id");
 
-console.log("Building with build id: " + process.env.GIT_REV);
-
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   generateEtags: true,

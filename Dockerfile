@@ -13,6 +13,10 @@ WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 ENV NEXT_TELEMETRY_DISABLED 1
+
+ARG GIT_REV
+ENV GIT_REV ${GIT_REV}
+
 RUN npm run build
 
 # Run the app
@@ -33,9 +37,6 @@ COPY --from=builder --chown=nextjs:nodejs /app/.next ./.next
 COPY --from=builder --chown=nextjs:nodejs /app/public ./public
 COPY --from=builder --chown=nextjs:nodejs /app/package.json ./package.json
 COPY --from=builder --chown=nextjs:nodejs /app/next.config.js ./next.config.js
-
-ARG GIT_REV
-ENV GIT_REV ${GIT_REV}
 
 USER nextjs
 EXPOSE 80
