@@ -10,7 +10,7 @@ import { ScoresaberPlayer } from "@/schemas/scoresaber/player";
 import { ScoresaberPlayerScore } from "@/schemas/scoresaber/playerScore";
 import { formatNumber } from "@/utils/number";
 import { fetchScores, getPlayerInfo } from "@/utils/scoresaber/api";
-import { GlobeAsiaAustraliaIcon } from "@heroicons/react/20/solid";
+import { GlobeAsiaAustraliaIcon, HomeIcon } from "@heroicons/react/20/solid";
 import moment from "moment";
 import Image from "next/image";
 import { useCallback, useEffect, useState } from "react";
@@ -53,7 +53,7 @@ export default function Player({ params }: { params: { id: string } }) {
         (scoresResponse) => {
           if (!scoresResponse) {
             setError(true);
-            setErrorMessage("Failed to fetch scores");
+            setErrorMessage("No Scores");
             setScores({ ...scores, loading: false });
             return;
           }
@@ -69,6 +69,15 @@ export default function Player({ params }: { params: { id: string } }) {
     },
     [params.id, scores],
   );
+
+  function claimProfile() {
+    // set cookie to claim profile
+    document.cookie = `profile=${params.id};path=/`;
+  }
+
+  function isClaimedProfile() {
+    return document.cookie.includes(`profile=${params.id}`);
+  }
 
   useEffect(() => {
     if (!params.id) {
@@ -129,7 +138,20 @@ export default function Player({ params }: { params: { id: string } }) {
         {/* Player Info */}
         <div className="mt-2 flex w-full flex-row justify-center rounded-md bg-gray-800 xs:flex-col">
           <div className="flex flex-col items-center gap-3 p-3 xs:flex-row xs:items-start">
-            <Avatar url={playerData.profilePicture} label="Avatar" />
+            <div>
+              <div className="flex flex-col items-center gap-2">
+                <Avatar url={playerData.profilePicture} label="Avatar" />
+                {!isClaimedProfile() && (
+                  <button onClick={claimProfile}>
+                    <HomeIcon
+                      title="Set as your profile"
+                      width={24}
+                      height={24}
+                    />
+                  </button>
+                )}
+              </div>
+            </div>
             <div className="flex flex-col items-center gap-2 xs:items-start">
               <p className="text-2xl">{playerData.name}</p>
 
@@ -193,7 +215,7 @@ export default function Player({ params }: { params: { id: string } }) {
             ) : (
               <div className="grid grid-cols-1 divide-y divide-gray-500">
                 {!scores.loading && scores.scores.length == 0 ? (
-                  <p className="text-red-400">No Scores</p>
+                  <p className="text-red-400">{errorMessage}</p>
                 ) : (
                   scores.scores.map((scoreData, id) => {
                     const { score, leaderboard } = scoreData;
