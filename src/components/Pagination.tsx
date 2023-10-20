@@ -36,6 +36,21 @@ export default function Pagination(props: PaginationProps) {
               </button>
             </li>
           )}
+
+          {currentPage !== 1 && currentPage - 2 > 1 && (
+            <>
+              <li>
+                <button
+                  className="rounded-md bg-neutral-700 px-3 py-1 hover:opacity-80"
+                  onClick={() => onPageChange(1)}
+                >
+                  1
+                </button>
+              </li>
+              <p>...</p>
+            </>
+          )}
+
           {pageNumbers.map((pageNumber) => (
             <li key={pageNumber}>
               <button
@@ -50,6 +65,22 @@ export default function Pagination(props: PaginationProps) {
               </button>
             </li>
           ))}
+
+          {currentPage !== totalPages && currentPage + 2 < totalPages && (
+            <>
+              <p>...</p>
+
+              <li>
+                <button
+                  className="rounded-md bg-neutral-700 px-3 py-1 hover:opacity-80"
+                  onClick={() => onPageChange(totalPages)}
+                >
+                  {totalPages}
+                </button>
+              </li>
+            </>
+          )}
+
           {currentPage < totalPages && (
             <li className="rounded-md bg-neutral-700 hover:opacity-80">
               <button
