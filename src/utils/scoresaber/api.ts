@@ -7,7 +7,7 @@ import { formatString } from "../string";
 const fetchQueue = new FetchQueue();
 
 // Api endpoints
-const API_URL = "https://scoresaber.com/api";
+const API_URL = "https://proxy.fascinated.cc/https://scoresaber.com/api";
 const SEARCH_PLAYER_URL =
   API_URL + "/players?search={}&page=1&withMetadata=false";
 const PLAYER_SCORES =
