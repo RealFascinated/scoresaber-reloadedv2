@@ -135,7 +135,7 @@ export default function Player({ params }: { params: { id: string } }) {
                 <Avatar url={playerData.profilePicture} label="Avatar" />
               </div>
             </div>
-            <div className="flex flex-col items-center gap-2 xs:items-start">
+            <div className="mt-1 flex flex-col items-center gap-2 xs:items-start">
               <p className="text-2xl">{playerData.name}</p>
 
               <div className="flex gap-3 text-xl">
