@@ -29,7 +29,7 @@ export async function searchByName(
   name: string,
 ): Promise<ScoresaberPlayer[] | undefined> {
   const response = await fetchQueue.fetch(
-    formatString(SEARCH_PLAYER_URL, name),
+    encodeURIComponent(formatString(SEARCH_PLAYER_URL, name)),
   );
   const json = await response.json();
 
@@ -95,7 +95,9 @@ export async function fetchScores(
     limit = 100;
   }
   const response = await fetchQueue.fetch(
-    formatString(PLAYER_SCORES, playerId, limit, searchType, page),
+    encodeURIComponent(
+      formatString(PLAYER_SCORES, playerId, limit, searchType, page),
+    ),
   );
   const json = await response.json();
 
