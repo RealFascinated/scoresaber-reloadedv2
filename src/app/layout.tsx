@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import { Metadata } from "next";
 import { Inter } from "next/font/google";
 import Image from "next/image";
 import "./globals.css";
@@ -11,9 +11,10 @@ export const metadata: Metadata = {
     default: "Scoresaber Reloaded",
   },
   openGraph: {
-    title: "Scoresaber Reloaded",
-    description: "SSR is a new way to view your scoresaber profile. (in dev)",
-    url: "https://ssrdev.fascinated.cc",
+    title: "Next.js",
+    description: "The React Framework for the Web",
+    url: "https://nextjs.org",
+    siteName: "Next.js",
     locale: "en_US",
     type: "website",
   },

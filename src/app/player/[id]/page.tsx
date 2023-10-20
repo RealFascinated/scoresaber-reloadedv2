@@ -248,7 +248,12 @@ export default function Player({ params }: { params: { id: string } }) {
                               />
                             )}
                             <ScoreStatLabel
-                              value={score.modifiedScore.toFixed(0)}
+                              value={
+                                (
+                                  (score.baseScore / leaderboard.maxScore) *
+                                  100
+                                ).toFixed(2) + "%"
+                              }
                             />
                           </div>
                         </div>
