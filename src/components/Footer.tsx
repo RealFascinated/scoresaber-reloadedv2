@@ -17,7 +17,12 @@ export default function Footer() {
     <footer>
       <div className="m-3 flex flex-col items-center justify-center gap-1 rounded-md bg-gray-800 p-3">
         <div className="flex flex-row gap-3">
-          <p>Scoresaber Reloaded</p>
+          <a
+            className="transform-gpu transition-all hover:text-blue-500"
+            href="https://git.fascinated.cc/Fascinated/scoresaber-reloaded-v2"
+          >
+            Scoresaber Reloaded
+          </a>
 
           {buttons.map((button, index) => {
             return (
