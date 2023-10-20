@@ -1,6 +1,7 @@
 "use client";
 
 import Avatar from "@/components/Avatar";
+import Card from "@/components/Card";
 import Container from "@/components/Container";
 import Label from "@/components/Label";
 import Pagination from "@/components/Pagination";
@@ -96,7 +97,7 @@ export default function Player({ params }: { params: { id: string } }) {
     return (
       <main>
         <Container>
-          <div className="mt-2 flex w-full flex-col justify-center rounded-md bg-gray-800">
+          <Card className="mt-2">
             <div className="p-3 text-center">
               <div role="status">
                 {player.loading && <Spinner />}
@@ -115,7 +116,7 @@ export default function Player({ params }: { params: { id: string } }) {
                 )}
               </div>
             </div>
-          </div>
+          </Card>
         </Container>
       </main>
     );
@@ -127,7 +128,7 @@ export default function Player({ params }: { params: { id: string } }) {
     <main>
       <Container>
         {/* Player Info */}
-        <div className="mt-2 flex w-full flex-row justify-center rounded-md bg-gray-800 xs:flex-col">
+        <Card className="mt-2">
           <div className="flex flex-col items-center gap-3 p-3 xs:flex-row xs:items-start">
             <div>
               <div className="flex flex-col items-center gap-2">
@@ -185,11 +186,11 @@ export default function Player({ params }: { params: { id: string } }) {
               </div>
             </div>
           </div>
-        </div>
+        </Card>
 
         {/* Scores */}
-        <div className="mt-2 flex w-full flex-row justify-center rounded-md bg-gray-800 xs:flex-col">
-          <div className="p-3">
+        <Card className="mt-2 w-full xs:flex-col">
+          <div className="p-1">
             {scores.loading ? (
               <div className="flex justify-center">
                 <Spinner />
@@ -207,7 +208,7 @@ export default function Player({ params }: { params: { id: string } }) {
                         className="grid grid-cols-[.95fr_6fr_3fr] pb-2 pt-2"
                         key={id}
                       >
-                        <div className="ml-4 flex flex-col items-start justify-center">
+                        <div className="ml-3 flex flex-col items-start justify-center">
                           <div className="flex flex-row items-center justify-start gap-1">
                             <GlobeAsiaAustraliaIcon width={20} height={20} />
                             <p>#{score.rank}</p>
@@ -267,7 +268,7 @@ export default function Player({ params }: { params: { id: string } }) {
               />
             </div>
           </div>
-        </div>
+        </Card>
       </Container>
     </main>
   );
