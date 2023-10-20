@@ -2,18 +2,9 @@ import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
 
 export function middleware(request: NextRequest) {
-  console.log(request.cookies);
-  const profileCookie = request.cookies.get("profile");
-
+  // todo: make this redirect to the users profile if they have a profile selected
   if (request.nextUrl.pathname == "/") {
-    // Has a claimed profile cookie
-    if (profileCookie) {
-      const id = profileCookie.value;
-      return NextResponse.redirect(new URL(`/profile/${id}`, request.url));
-    } else {
-      // User has not claimed a profile
-      return NextResponse.redirect(new URL("/search", request.url));
-    }
+    return NextResponse.redirect(new URL("/search", request.url));
   }
 }
 

@@ -10,7 +10,7 @@ import { ScoresaberPlayer } from "@/schemas/scoresaber/player";
 import { ScoresaberPlayerScore } from "@/schemas/scoresaber/playerScore";
 import { formatNumber } from "@/utils/number";
 import { fetchScores, getPlayerInfo } from "@/utils/scoresaber/api";
-import { GlobeAsiaAustraliaIcon, HomeIcon } from "@heroicons/react/20/solid";
+import { GlobeAsiaAustraliaIcon } from "@heroicons/react/20/solid";
 import moment from "moment";
 import Image from "next/image";
 import { useCallback, useEffect, useState } from "react";
@@ -69,15 +69,6 @@ export default function Player({ params }: { params: { id: string } }) {
     },
     [params.id, scores],
   );
-
-  function claimProfile() {
-    // set cookie to claim profile
-    document.cookie = `profile=${params.id};path=/`;
-  }
-
-  function isClaimedProfile() {
-    return document.cookie.includes(`profile=${params.id}`);
-  }
 
   useEffect(() => {
     if (!params.id) {
@@ -141,15 +132,6 @@ export default function Player({ params }: { params: { id: string } }) {
             <div>
               <div className="flex flex-col items-center gap-2">
                 <Avatar url={playerData.profilePicture} label="Avatar" />
-                {!isClaimedProfile() && (
-                  <button onClick={claimProfile}>
-                    <HomeIcon
-                      title="Set as your profile"
-                      width={24}
-                      height={24}
-                    />
-                  </button>
-                )}
               </div>
             </div>
             <div className="flex flex-col items-center gap-2 xs:items-start">
@@ -222,7 +204,7 @@ export default function Player({ params }: { params: { id: string } }) {
 
                     return (
                       <div
-                        className="grid grid-cols-[.9fr_6fr_3fr] p-2"
+                        className="grid grid-cols-[1fr_6fr_3fr] p-2"
                         key={id}
                       >
                         <div className="flex flex-col items-center justify-center">
