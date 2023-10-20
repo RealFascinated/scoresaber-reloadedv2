@@ -34,7 +34,7 @@ export default function SearchPlayer() {
     }
 
     // Search by name
-    const players = await searchByName(search);
+    const players = await searchByName(encodeURIComponent(search));
     if (players == undefined) return;
 
     setPlayers(players);
