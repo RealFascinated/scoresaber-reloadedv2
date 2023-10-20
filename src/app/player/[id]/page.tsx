@@ -205,15 +205,15 @@ export default function Player({ params }: { params: { id: string } }) {
 
                     return (
                       <div
-                        className="grid grid-cols-[.95fr_6fr_3fr] pb-2 pt-2"
+                        className="grid grid-cols-1 pb-2 pt-2 first:pt-0 last:pb-0 md:grid-cols-[1.1fr_6fr_3fr] xl:xs:grid-cols-[.95fr_6fr_3fr]"
                         key={id}
                       >
                         <div className="ml-3 flex flex-col items-start justify-center">
-                          <div className="flex flex-row items-center justify-start gap-1">
+                          <div className="hidden w-fit flex-row items-center justify-start gap-1 md:flex">
                             <GlobeAsiaAustraliaIcon width={20} height={20} />
                             <p>#{score.rank}</p>
                           </div>
-                          <p className="text-sm text-gray-300">
+                          <p className="absolute right-3 mt-4 block divide-y text-sm text-gray-300 md:relative md:right-auto md:mt-0">
                             {moment(score.timeSet).fromNow()}
                           </p>
                         </div>
@@ -225,7 +225,7 @@ export default function Player({ params }: { params: { id: string } }) {
                             width={60}
                             height={60}
                           />
-                          <div className="text-blue-500">
+                          <div className="w-fit truncate text-blue-500">
                             <p>{leaderboard.songName}</p>
                             <p>
                               {leaderboard.songAuthorName}{" "}
@@ -235,8 +235,12 @@ export default function Player({ params }: { params: { id: string } }) {
                             </p>
                           </div>
                         </div>
-                        <div className="flex flex-col items-end p-1">
-                          <div className="flex flex-row gap-2">
+                        <div className="flex items-center justify-between p-1 md:items-start md:justify-end">
+                          <div className="flex items-center gap-1 md:hidden">
+                            <GlobeAsiaAustraliaIcon width={20} height={20} />
+                            <p>#{score.rank}</p>
+                          </div>
+                          <div className="flex items-end justify-end gap-2">
                             {score.pp > 0 && (
                               <ScoreStatLabel
                                 value={formatNumber(score.pp.toFixed(2)) + "pp"}
