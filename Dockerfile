@@ -34,6 +34,9 @@ COPY --from=builder --chown=nextjs:nodejs /app/public ./public
 COPY --from=builder --chown=nextjs:nodejs /app/package.json ./package.json
 COPY --from=builder --chown=nextjs:nodejs /app/next.config.js ./next.config.js
 
+ARG GIT_REV
+ENV GIT_REV ${GIT_REV}
+
 USER nextjs
 EXPOSE 80
 ENV HOSTNAME "0.0.0.0"
