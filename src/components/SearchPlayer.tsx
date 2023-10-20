@@ -22,6 +22,7 @@ export default function SearchPlayer() {
   }, [search]);
 
   async function searchPlayer(search: string) {
+    // Check if the search is a profile link
     if (search.startsWith("https://scoresaber.com/u/")) {
       const id = search.split("/").pop();
       if (id == undefined) return;
@@ -31,6 +32,8 @@ export default function SearchPlayer() {
 
       setPlayers([player]);
     }
+
+    // Search by name
     const players = await searchByName(search);
     if (players == undefined) return;
 

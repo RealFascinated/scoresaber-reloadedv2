@@ -5,6 +5,7 @@ import Card from "@/components/Card";
 import Container from "@/components/Container";
 import Label from "@/components/Label";
 import Pagination from "@/components/Pagination";
+import PlayerChart from "@/components/PlayerChart";
 import ScoreStatLabel from "@/components/ScoreStatLabel";
 import { Spinner } from "@/components/Spinner";
 import { ScoresaberPlayer } from "@/schemas/scoresaber/player";
@@ -135,7 +136,7 @@ export default function Player({ params }: { params: { id: string } }) {
                 <Avatar url={playerData.profilePicture} label="Avatar" />
               </div>
             </div>
-            <div className="mt-1 flex flex-col items-center gap-2 xs:items-start">
+            <div className="mt-1 flex w-full flex-col items-center gap-2 xs:items-start">
               <p className="text-2xl">{playerData.name}</p>
 
               <div className="flex gap-3 text-xl">
@@ -184,6 +185,8 @@ export default function Player({ params }: { params: { id: string } }) {
                   value={formatNumber(playerData.scoreStats.replaysWatched)}
                 />
               </div>
+
+              <PlayerChart scoresaber={player.player} />
             </div>
           </div>
         </Card>
