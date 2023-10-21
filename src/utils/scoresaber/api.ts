@@ -13,6 +13,7 @@ const SEARCH_PLAYER_URL =
 const PLAYER_SCORES =
   API_URL + "/player/{}/scores?limit={}&sort={}&page={}&withMetadata=true";
 const GET_PLAYER_DATA_FULL = API_URL + "/player/{}/full";
+const GET_PLAYERS_URL = API_URL + "/players?page={}";
 
 const SearchType = {
   RECENT: "recent",
@@ -140,4 +141,43 @@ export async function fetchAllScores(
   } while (!done);
 
   return scores as ScoresaberPlayerScore[];
+}
+
+/**
+ * Get the top players
+ *
+ * @param page the page to get the players from
+ * @returns a list of players
+ */
+export async function fetchTopPlayers(page: number = 1): Promise<
+  | {
+      players: ScoresaberPlayer[];
+      pageInfo: {
+        totalPlayers: number;
+        page: number;
+        totalPages: number;
+      };
+    }
+  | undefined
+> {
+  const response = await fetchQueue.fetch(
+    formatString(GET_PLAYERS_URL, true, page),
+  );
+  const json = await response.json();
+
+  // Check if there was an error fetching the user data
+  if (json.errorMessage) {
+    return undefined;
+  }
+
+  const players = json.players as ScoresaberPlayer[];
+  const metadata = json.metadata;
+  return {
+    players: players,
+    pageInfo: {
+      totalPlayers: metadata.total,
+      page: metadata.page,
+      totalPages: Math.ceil(metadata.total / metadata.itemsPerPage),
+    },
+  };
 }
