@@ -2,6 +2,7 @@ import { ScoresaberLeaderboardInfo } from "@/schemas/scoresaber/leaderboard";
 import { ScoresaberScore } from "@/schemas/scoresaber/score";
 import { formatNumber } from "@/utils/number";
 import { GlobeAsiaAustraliaIcon } from "@heroicons/react/20/solid";
+import clsx from "clsx";
 import moment from "moment";
 import Image from "next/image";
 import ScoreStatLabel from "./ScoreStatLabel";
@@ -12,6 +13,8 @@ type ScoreProps = {
 };
 
 export default function Score({ score, leaderboard }: ScoreProps) {
+  const isFullCombo = score.missedNotes + score.badCuts === 0;
+
   return (
     <div className="grid grid-cols-1 pb-2 pt-2 first:pt-0 last:pb-0 md:grid-cols-[1.1fr_6fr_3fr] xl:xs:grid-cols-[.95fr_6fr_3fr]">
       <div className="ml-3 flex flex-col items-start justify-center">
@@ -59,30 +62,42 @@ export default function Score({ score, leaderboard }: ScoreProps) {
         </div>
 
         {/* PP */}
-        <div className="grid w-fit grid-cols-2 grid-rows-1 justify-end gap-2">
-          {score.pp > 0 && (
+        <div className="flex flex-col justify-end gap-2">
+          <div className="flex justify-end gap-2">
+            {score.pp > 0 && (
+              <ScoreStatLabel
+                className="bg-blue-500 text-center"
+                value={formatNumber(score.pp.toFixed(2)) + "pp"}
+              />
+            )}
+
+            {/* Percentage score */}
             <ScoreStatLabel
-              className="bg-blue-500 text-center"
-              value={formatNumber(score.pp.toFixed(2)) + "pp"}
+              value={
+                !leaderboard.maxScore
+                  ? formatNumber(score.baseScore)
+                  : ((score.baseScore / leaderboard.maxScore) * 100).toFixed(
+                      2,
+                    ) + "%"
+              }
             />
-          )}
+          </div>
 
-          {/* Percentage score */}
-          <ScoreStatLabel
-            value={
-              !leaderboard.maxScore
-                ? formatNumber(score.baseScore)
-                : ((score.baseScore / leaderboard.maxScore) * 100).toFixed(2) +
-                  "%"
-            }
-          />
-
-          {/* Missed Notes */}
-          <ScoreStatLabel
-            className="min-w-[3rem] bg-red-500"
-            title={`${score.missedNotes} missed notes. ${score.badCuts} bad cuts.`}
-            value={formatNumber(score.missedNotes + score.badCuts) + "x"}
-          />
+          <div className="flex justify-end gap-2">
+            {/* Missed Notes */}
+            <ScoreStatLabel
+              className={clsx(
+                "min-w-[2rem]",
+                isFullCombo ? "bg-green-500" : "bg-red-500",
+              )}
+              title={`${score.missedNotes} missed notes. ${score.badCuts} bad cuts.`}
+              value={
+                isFullCombo
+                  ? "FC"
+                  : formatNumber(score.missedNotes + score.badCuts) + "x"
+              }
+            />
+          </div>
         </div>
       </div>
     </div>
