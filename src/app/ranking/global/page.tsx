@@ -60,9 +60,13 @@ export default function Player({ params }: { params: { id: string } }) {
           page: page,
         });
         if (page > 1) {
-          router.push(`/ranking/global?page=${page}`);
+          router.push(`/ranking/global?page=${page}`, {
+            scroll: false,
+          });
         } else {
-          router.push(`/ranking/global`);
+          router.push(`/ranking/global`, {
+            scroll: false,
+          });
         }
       });
     },
@@ -165,7 +169,6 @@ export default function Player({ params }: { params: { id: string } }) {
               <Pagination
                 currentPage={pageInfo.page}
                 totalPages={pageInfo.totalPages}
-                loadingPage={pageInfo.loadingNextPage}
                 onPageChange={(page) => {
                   updatePage(page);
                 }}

@@ -12,8 +12,13 @@ import { ScoresaberPlayer } from "@/schemas/scoresaber/player";
 import { ScoresaberPlayerScore } from "@/schemas/scoresaber/playerScore";
 import { formatNumber } from "@/utils/number";
 import { fetchScores, getPlayerInfo } from "@/utils/scoresaber/api";
-import { GlobeAsiaAustraliaIcon } from "@heroicons/react/20/solid";
+import {
+  ClockIcon,
+  GlobeAsiaAustraliaIcon,
+  TrophyIcon,
+} from "@heroicons/react/20/solid";
 import Image from "next/image";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
 import ReactCountryFlag from "react-country-flag";
 
@@ -21,7 +26,7 @@ type PageInfo = {
   loading: boolean;
   page: number;
   totalPages: number;
-  sortType: string;
+  sortType: SortType;
   scores: ScoresaberPlayerScore[];
 };
 
@@ -30,7 +35,46 @@ type PlayerInfo = {
   player: ScoresaberPlayer | undefined;
 };
 
+type SortType = {
+  name: string;
+  value: string;
+  icon: JSX.Element;
+};
+const sortTypes: { [key: string]: SortType } = {
+  top: {
+    name: "Top Scores",
+    value: "top",
+    icon: <TrophyIcon width={20} height={20} />,
+  },
+  recent: {
+    name: "Recent Scores",
+    value: "recent",
+    icon: <ClockIcon width={20} height={20} />,
+  },
+};
+
+const DEFAULT_SORT_TYPE = sortTypes.top;
+
 export default function Player({ params }: { params: { id: string } }) {
+  const searchParams = useSearchParams();
+  const router = useRouter();
+
+  let page;
+  const pageString = searchParams.get("page");
+  if (pageString == null) {
+    page = 1;
+  } else {
+    page = Number.parseInt(pageString) || 1;
+  }
+
+  let sortType;
+  const sortTypeString = searchParams.get("sort");
+  if (sortTypeString == null) {
+    sortType = DEFAULT_SORT_TYPE;
+  } else {
+    sortType = sortTypes[sortTypeString] || DEFAULT_SORT_TYPE;
+  }
+
   const [error, setError] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
 
@@ -41,16 +85,16 @@ export default function Player({ params }: { params: { id: string } }) {
 
   const [scores, setScores] = useState<PageInfo>({
     loading: true,
-    page: 1,
+    page: page,
     totalPages: 1,
-    sortType: "recent",
+    sortType: sortType,
     scores: [],
   });
 
   const updateScoresPage = useCallback(
-    (page: any) => {
+    (sortType: SortType, page: any) => {
       console.log("Switching page to", page);
-      fetchScores(params.id, page, scores.sortType, 10).then(
+      fetchScores(params.id, page, sortType.value, 10).then(
         (scoresResponse) => {
           if (!scoresResponse) {
             setError(true);
@@ -64,11 +108,25 @@ export default function Player({ params }: { params: { id: string } }) {
             totalPages: scoresResponse.pageInfo.totalPages,
             loading: false,
             page: page,
+            sortType: sortType,
           });
+
+          if (page > 1) {
+            router.push(
+              `/player/${params.id}?page=${page}&sort=${sortType.value}`,
+              {
+                scroll: false,
+              },
+            );
+          } else {
+            router.push(`/player/${params.id}?sort=${sortType.value}`, {
+              scroll: false,
+            });
+          }
         },
       );
     },
-    [params.id, scores],
+    [params.id, router, scores],
   );
 
   useEffect(() => {
@@ -89,7 +147,7 @@ export default function Player({ params }: { params: { id: string } }) {
         return;
       }
       setPlayer({ ...player, player: playerResponse, loading: false });
-      updateScoresPage(1);
+      updateScoresPage(scores.sortType, 1);
     });
   }, [error, params.id, player, scores, updateScoresPage]);
 
@@ -191,7 +249,31 @@ export default function Player({ params }: { params: { id: string } }) {
         </Card>
 
         {/* Scores */}
-        <Card className="mt-2 w-full xs:flex-col">
+        <Card className="mt-2 w-full items-center xs:flex-col">
+          {/* Sort */}
+          <div className="m-2 w-full text-sm">
+            <div className="flex justify-center gap-2">
+              {Object.values(sortTypes).map((sortType) => {
+                return (
+                  <button
+                    key={sortType.value}
+                    className={`flex transform-gpu flex-row items-center gap-1 rounded-md p-[0.35rem] transition-all hover:opacity-80 ${
+                      scores.sortType.value === sortType.value
+                        ? "bg-blue-500"
+                        : "bg-gray-500"
+                    }`}
+                    onClick={() => {
+                      updateScoresPage(sortType, 1);
+                    }}
+                  >
+                    {sortType.icon}
+                    <p>{sortType.name}</p>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+
           <div className="p-1">
             {scores.loading ? (
               <div className="flex justify-center">
@@ -221,7 +303,7 @@ export default function Player({ params }: { params: { id: string } }) {
                 currentPage={scores.page}
                 totalPages={scores.totalPages}
                 onPageChange={(page) => {
-                  updateScoresPage(page);
+                  updateScoresPage(scores.sortType, page);
                 }}
               />
             </div>
