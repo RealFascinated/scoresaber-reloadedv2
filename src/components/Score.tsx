@@ -19,7 +19,7 @@ export default function Score({ score, leaderboard }: ScoreProps) {
           <GlobeAsiaAustraliaIcon width={20} height={20} />
           <p>#{score.rank}</p>
         </div>
-        <p className="absolute right-3 mt-4 block divide-y text-sm text-gray-300 md:relative md:right-auto md:mt-0">
+        <p className="hidden text-sm text-gray-200 xs:block">
           {moment(score.timeSet).fromNow()}
         </p>
       </div>
@@ -40,9 +40,17 @@ export default function Score({ score, leaderboard }: ScoreProps) {
         </div>
       </div>
       <div className="flex items-center justify-between p-1 md:items-start md:justify-end">
-        <div className="flex items-center gap-1 md:hidden">
-          <GlobeAsiaAustraliaIcon width={20} height={20} />
-          <p>#{score.rank}</p>
+        <div className="flex flex-col md:hidden">
+          <div className="flex items-center gap-1">
+            <GlobeAsiaAustraliaIcon width={20} height={20} />
+            <p>#{score.rank}</p>
+          </div>
+          <div>
+            {" "}
+            <p className="block text-sm text-gray-200 xs:hidden">
+              {moment(score.timeSet).fromNow()}
+            </p>
+          </div>
         </div>
         <div className="flex items-end justify-end gap-2">
           {score.pp > 0 && (
