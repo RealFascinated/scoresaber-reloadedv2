@@ -32,7 +32,7 @@ export default function RootLayout({
         <div className="fixed left-0 top-0 z-0 h-full w-full blur-sm">
           <Image
             alt="Background image"
-            src={"https://cdn.fascinated.cc/W9jC5MLf.jpg"}
+            src={"/assets/background.webp"}
             layout="fill"
             objectFit="cover"
             objectPosition="center"
