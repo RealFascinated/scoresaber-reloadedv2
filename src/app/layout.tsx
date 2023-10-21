@@ -12,13 +12,13 @@ export const metadata: Metadata = {
     default: "Scoresaber Reloaded",
   },
   openGraph: {
-    title: "Next.js",
-    description: "The React Framework for the Web",
-    url: "https://nextjs.org",
-    siteName: "Next.js",
+    title: "Scoresaber Reloaded",
+    description: "Aggregate your scores with other leaderboards together!",
+    url: "https://ssrdev.fascinated.cc",
     locale: "en_US",
     type: "website",
   },
+  themeColor: "#3B82F6",
 };
 
 export default function RootLayout({
