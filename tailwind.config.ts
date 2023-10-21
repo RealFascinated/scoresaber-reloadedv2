@@ -17,7 +17,6 @@ const config: Config = {
       },
     },
     screens: {
-      xs: "545px",
       ...defaultTheme.screens,
     },
   },

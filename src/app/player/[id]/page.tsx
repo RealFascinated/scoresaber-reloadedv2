@@ -10,17 +10,20 @@ import Score from "@/components/Score";
 import { Spinner } from "@/components/Spinner";
 import { ScoresaberPlayer } from "@/schemas/scoresaber/player";
 import { ScoresaberPlayerScore } from "@/schemas/scoresaber/playerScore";
+import { useSettingsStore } from "@/store/settingsStore";
 import { formatNumber } from "@/utils/number";
 import { fetchScores, getPlayerInfo } from "@/utils/scoresaber/api";
 import {
   ClockIcon,
   GlobeAsiaAustraliaIcon,
+  HomeIcon,
   TrophyIcon,
 } from "@heroicons/react/20/solid";
 import Image from "next/image";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
 import ReactCountryFlag from "react-country-flag";
+import { toast } from "react-toastify";
 
 type PageInfo = {
   loading: boolean;
@@ -56,6 +59,7 @@ const sortTypes: { [key: string]: SortType } = {
 const DEFAULT_SORT_TYPE = sortTypes.top;
 
 export default function Player({ params }: { params: { id: string } }) {
+  const settingsStore = useSettingsStore();
   const searchParams = useSearchParams();
   const router = useRouter();
 
@@ -70,6 +74,7 @@ export default function Player({ params }: { params: { id: string } }) {
   let sortType;
   const sortTypeString = searchParams.get("sort");
   if (sortTypeString == null) {
+    // todo: check settings to get last used sort type
     sortType = DEFAULT_SORT_TYPE;
   } else {
     sortType = sortTypes[sortTypeString] || DEFAULT_SORT_TYPE;
@@ -129,6 +134,11 @@ export default function Player({ params }: { params: { id: string } }) {
     [params.id, router, scores],
   );
 
+  function claimProfile() {
+    settingsStore.setUserId(params.id);
+    toast.success("Successfully claimed profile");
+  }
+
   useEffect(() => {
     if (!params.id) {
       setError(true);
@@ -187,13 +197,29 @@ export default function Player({ params }: { params: { id: string } }) {
       <Container>
         {/* Player Info */}
         <Card className="mt-2">
-          <div className="flex flex-col items-center gap-3 xs:flex-row xs:items-start">
-            <div>
+          <div className="flex flex-col items-center gap-3 md:flex-row md:items-start">
+            <div className="min-w-fit">
+              {/* Avatar */}
               <div className="flex flex-col items-center gap-2">
                 <Avatar url={playerData.profilePicture} label="Avatar" />
               </div>
+
+              {/* Settings Buttons */}
+              <div className="absolute right-3 top-16 flex justify-end md:relative md:right-3 md:top-0 md:mt-2 md:justify-center">
+                {settingsStore.userId !== params.id && (
+                  <button>
+                    <HomeIcon
+                      title="Set as your Profile"
+                      width={28}
+                      height={28}
+                      onClick={claimProfile}
+                    />
+                  </button>
+                )}
+              </div>
             </div>
-            <div className="mt-1 flex w-full flex-col items-center gap-2 xs:items-start">
+            <div className="mt-1 flex w-full flex-col items-center gap-2 md:items-start">
+              {/* Name */}
               <p className="text-2xl">{playerData.name}</p>
 
               <div className="flex gap-3 text-xl">
@@ -219,7 +245,7 @@ export default function Player({ params }: { params: { id: string } }) {
                 </div>
               </div>
               {/* Labels */}
-              <div className="flex flex-wrap justify-center gap-2 xs:justify-start">
+              <div className="flex flex-wrap justify-center gap-2 md:justify-start">
                 <Label
                   title="Total play count"
                   className="bg-blue-500"
@@ -249,7 +275,7 @@ export default function Player({ params }: { params: { id: string } }) {
         </Card>
 
         {/* Scores */}
-        <Card className="mt-2 w-full items-center xs:flex-col">
+        <Card className="mt-2 w-full items-center md:flex-col">
           {/* Sort */}
           <div className="m-2 w-full text-sm">
             <div className="flex justify-center gap-2">
@@ -297,7 +323,7 @@ export default function Player({ params }: { params: { id: string } }) {
           </div>
 
           {/* Pagination */}
-          <div className="flex w-full flex-row justify-center rounded-md bg-gray-800 xs:flex-col">
+          <div className="flex w-full flex-row justify-center rounded-md bg-gray-800 md:flex-col">
             <div className="p-3">
               <Pagination
                 currentPage={scores.page}

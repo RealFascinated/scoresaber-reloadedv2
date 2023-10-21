@@ -1,6 +1,7 @@
 import { Metadata } from "next";
 import { Inter } from "next/font/google";
 import Image from "next/image";
+import "react-toastify/dist/ReactToastify.css";
 import "./globals.css";
 
 const font = Inter({ subsets: ["latin-ext"], weight: "500" });

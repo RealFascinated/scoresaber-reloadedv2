@@ -164,7 +164,7 @@ export default function Player({ params }: { params: { id: string } }) {
           )}
 
           {/* Pagination */}
-          <div className="flex w-full flex-row justify-center rounded-md bg-gray-800 xs:flex-col">
+          <div className="flex w-full flex-row justify-center rounded-md bg-gray-800 md:flex-col">
             <div className="p-3">
               <Pagination
                 currentPage={pageInfo.page}

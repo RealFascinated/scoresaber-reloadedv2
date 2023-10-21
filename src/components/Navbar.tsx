@@ -1,9 +1,14 @@
+"use client";
+
+import { useSettingsStore } from "@/store/settingsStore";
+import { useStore } from "@/utils/useState";
 import {
   CogIcon,
   MagnifyingGlassIcon,
   UserIcon,
 } from "@heroicons/react/20/solid";
 import { GlobeAltIcon } from "@heroicons/react/24/outline";
+import Avatar from "./Avatar";
 import Button from "./Button";
 
 interface ButtonProps {
@@ -17,12 +22,12 @@ function NavbarButton({ text, icon, href, children }: ButtonProps) {
   return (
     <div className="group">
       <a
-        className="flex w-fit transform-gpu items-center justify-center gap-1 rounded-md p-3 transition-all hover:cursor-pointer hover:bg-blue-500"
+        className="flex h-full w-fit transform-gpu items-center justify-center gap-1 rounded-md p-3 transition-all hover:cursor-pointer hover:bg-blue-500"
         href={href}
       >
         <>
           {icon}
-          <p className="hidden xs:block">{text}</p>
+          <p className="hidden md:block">{text}</p>
         </>
       </a>
 
@@ -36,9 +41,30 @@ function NavbarButton({ text, icon, href, children }: ButtonProps) {
 }
 
 export default function Navbar() {
+  const settingsStore = useStore(useSettingsStore, (state) => {
+    return {
+      profilePicture: state.profilePicture,
+      userId: state.userId,
+    };
+  });
+
   return (
     <>
       <div className="flex h-fit w-full rounded-md bg-gray-800">
+        {settingsStore && settingsStore.profilePicture && (
+          <NavbarButton
+            text="You"
+            icon={
+              <Avatar
+                url={settingsStore.profilePicture}
+                label="Your avatar"
+                size={32}
+              />
+            }
+            href={`/player/${settingsStore.userId}`}
+          />
+        )}
+
         <NavbarButton text="Friends" icon={<UserIcon height={20} width={20} />}>
           <p className="text-sm font-bold">No friends, add someone!</p>
 

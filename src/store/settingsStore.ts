@@ -1,19 +1,47 @@
 "use client";
 
+import { getPlayerInfo } from "@/utils/scoresaber/api";
 import { create } from "zustand";
-import { createJSONStorage, persist } from "zustand/middleware";
+import { persist } from "zustand/middleware";
 
-export const useSettingsStore = create(
+interface SettingsStore {
+  userId: string | undefined;
+  profilePicture: string | undefined;
+
+  setUserId: (userId: string) => void;
+  setProfilePicture: (profilePicture: string) => void;
+}
+
+export const useSettingsStore = create<SettingsStore>()(
   persist(
-    (set: any, get: any) => ({
-      userId: null,
+    (set) => ({
+      userId: undefined,
+      profilePicture: undefined,
 
-      setUserId: (userId: string) => set({ userId: userId }),
+      setUserId: (userId: string) => {
+        set({ userId });
+      },
+      setProfilePicture: (profilePicture: string) => set({ profilePicture }),
     }),
     {
-      name: "settings", // name of the item in the storage (must be unique)
-      storage: createJSONStorage(() => sessionStorage), // (optional) by default, 'localStorage' is used
-      skipHydration: true,
+      name: "settings",
+      getStorage: () => localStorage,
     },
   ),
 );
+
+async function refreshProfile() {
+  const id = useSettingsStore.getState().userId;
+  if (!id) return;
+
+  const profile = await getPlayerInfo(id);
+  if (profile == undefined || profile == null) return;
+
+  useSettingsStore.setState({
+    userId: profile.id,
+    profilePicture: profile.profilePicture,
+  });
+  console.log("Updated profile:", profile.id);
+}
+
+refreshProfile();

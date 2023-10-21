@@ -16,13 +16,13 @@ export default function Score({ score, leaderboard }: ScoreProps) {
   const isFullCombo = score.missedNotes + score.badCuts === 0;
 
   return (
-    <div className="grid grid-cols-1 pb-2 pt-2 first:pt-0 last:pb-0 md:grid-cols-[1.1fr_6fr_3fr] xl:xs:grid-cols-[.95fr_6fr_3fr]">
+    <div className="grid grid-cols-1 pb-2 pt-2 first:pt-0 last:pb-0 md:grid-cols-[1.1fr_6fr_3fr] xl:md:grid-cols-[.95fr_6fr_3fr]">
       <div className="ml-3 flex flex-col items-start justify-center">
         <div className="hidden w-fit flex-row items-center justify-start gap-1 md:flex">
           <GlobeAsiaAustraliaIcon width={20} height={20} />
           <p>#{score.rank}</p>
         </div>
-        <p className="hidden text-sm text-gray-200 xs:block">
+        <p className="hidden text-sm text-gray-200 md:block">
           {moment(score.timeSet).fromNow()}
         </p>
       </div>
@@ -55,7 +55,7 @@ export default function Score({ score, leaderboard }: ScoreProps) {
           {/* Time Set (Mobile) */}
           <div>
             {" "}
-            <p className="block text-sm text-gray-200 xs:hidden">
+            <p className="block text-sm text-gray-200 md:hidden">
               {moment(score.timeSet).fromNow()}
             </p>
           </div>
