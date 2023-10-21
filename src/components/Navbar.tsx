@@ -1,7 +1,7 @@
 "use client";
 
 import { useSettingsStore } from "@/store/settingsStore";
-import { useStore } from "@/utils/useState";
+import useStore from "@/utils/useStore";
 import {
   CogIcon,
   MagnifyingGlassIcon,

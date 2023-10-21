@@ -13,6 +13,7 @@ import { ScoresaberPlayerScore } from "@/schemas/scoresaber/playerScore";
 import { useSettingsStore } from "@/store/settingsStore";
 import { formatNumber } from "@/utils/number";
 import { fetchScores, getPlayerInfo } from "@/utils/scoresaber/api";
+import useStore from "@/utils/useStore";
 import {
   ClockIcon,
   GlobeAsiaAustraliaIcon,
@@ -59,7 +60,13 @@ const sortTypes: { [key: string]: SortType } = {
 const DEFAULT_SORT_TYPE = sortTypes.top;
 
 export default function Player({ params }: { params: { id: string } }) {
-  const settingsStore = useSettingsStore();
+  const settingsStore = useStore(useSettingsStore, (state) => {
+    return {
+      userId: state.userId,
+      setUserId: state.setUserId,
+      refreshProfile: state.refreshProfile,
+    };
+  });
   const searchParams = useSearchParams();
   const router = useRouter();
 
@@ -135,7 +142,8 @@ export default function Player({ params }: { params: { id: string } }) {
   );
 
   function claimProfile() {
-    settingsStore.setUserId(params.id);
+    settingsStore?.setUserId(params.id);
+    settingsStore?.refreshProfile();
     toast.success("Successfully claimed profile");
   }
 
@@ -206,7 +214,7 @@ export default function Player({ params }: { params: { id: string } }) {
 
               {/* Settings Buttons */}
               <div className="absolute right-3 top-16 flex justify-end md:relative md:right-3 md:top-0 md:mt-2 md:justify-center">
-                {settingsStore.userId !== params.id && (
+                {settingsStore?.userId !== params.id && (
                   <button>
                     <HomeIcon
                       title="Set as your Profile"

@@ -2,7 +2,7 @@
 
 import { getPlayerInfo } from "@/utils/scoresaber/api";
 import { create } from "zustand";
-import { persist } from "zustand/middleware";
+import { createJSONStorage, persist } from "zustand/middleware";
 
 interface SettingsStore {
   userId: string | undefined;
@@ -10,6 +10,7 @@ interface SettingsStore {
 
   setUserId: (userId: string) => void;
   setProfilePicture: (profilePicture: string) => void;
+  refreshProfile: () => void;
 }
 
 export const useSettingsStore = create<SettingsStore>()(
@@ -22,26 +23,25 @@ export const useSettingsStore = create<SettingsStore>()(
         set({ userId });
       },
       setProfilePicture: (profilePicture: string) => set({ profilePicture }),
+      async refreshProfile() {
+        const id = useSettingsStore.getState().userId;
+        if (!id) return;
+
+        const profile = await getPlayerInfo(id);
+        if (profile == undefined || profile == null) return;
+
+        useSettingsStore.setState({
+          userId: profile.id,
+          profilePicture: profile.profilePicture,
+        });
+        console.log("Updated profile:", profile.id);
+      },
     }),
     {
       name: "settings",
-      getStorage: () => localStorage,
+      storage: createJSONStorage(() => localStorage),
     },
   ),
 );
 
-async function refreshProfile() {
-  const id = useSettingsStore.getState().userId;
-  if (!id) return;
-
-  const profile = await getPlayerInfo(id);
-  if (profile == undefined || profile == null) return;
-
-  useSettingsStore.setState({
-    userId: profile.id,
-    profilePicture: profile.profilePicture,
-  });
-  console.log("Updated profile:", profile.id);
-}
-
-refreshProfile();
+useSettingsStore.getState().refreshProfile();
