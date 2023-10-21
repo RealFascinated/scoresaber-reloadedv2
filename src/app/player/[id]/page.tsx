@@ -213,7 +213,7 @@ export default function Player({ params }: { params: { id: string } }) {
               </div>
 
               {/* Settings Buttons */}
-              <div className="absolute right-3 top-16 flex justify-end md:relative md:right-0 md:top-0 md:mt-2 md:justify-center">
+              <div className="absolute right-3 top-20 flex flex-col justify-end gap-2 md:relative md:right-0 md:top-0 md:mt-2 md:flex-row md:justify-center">
                 {settingsStore?.userId !== params.id && (
                   <button>
                     <HomeIcon
@@ -277,6 +277,7 @@ export default function Player({ params }: { params: { id: string } }) {
                 />
               </div>
 
+              {/* Chart */}
               <PlayerChart scoresaber={player.player} />
             </div>
           </div>
