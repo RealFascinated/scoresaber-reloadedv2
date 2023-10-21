@@ -23,6 +23,7 @@ export default function Score({ score, leaderboard }: ScoreProps) {
           {moment(score.timeSet).fromNow()}
         </p>
       </div>
+      {/* Song Image */}
       <div className="flex w-full items-center gap-2">
         <Image
           src={leaderboard.coverImage}
@@ -31,6 +32,7 @@ export default function Score({ score, leaderboard }: ScoreProps) {
           width={60}
           height={60}
         />
+        {/* Song Info */}
         <div className="w-fit truncate text-blue-500">
           <p>{leaderboard.songName}</p>
           <p>
@@ -41,10 +43,13 @@ export default function Score({ score, leaderboard }: ScoreProps) {
       </div>
       <div className="flex items-center justify-between p-1 md:items-start md:justify-end">
         <div className="flex flex-col md:hidden">
+          {/* Score rank */}
           <div className="flex items-center gap-1">
             <GlobeAsiaAustraliaIcon width={20} height={20} />
             <p>#{score.rank}</p>
           </div>
+
+          {/* Time Set (Mobile) */}
           <div>
             {" "}
             <p className="block text-sm text-gray-200 xs:hidden">
@@ -52,13 +57,17 @@ export default function Score({ score, leaderboard }: ScoreProps) {
             </p>
           </div>
         </div>
-        <div className="flex items-end justify-end gap-2">
+
+        {/* PP */}
+        <div className="grid w-fit grid-cols-2 grid-rows-1 justify-end gap-2">
           {score.pp > 0 && (
             <ScoreStatLabel
+              className="bg-blue-500 text-center"
               value={formatNumber(score.pp.toFixed(2)) + "pp"}
-              className="bg-blue-500"
             />
           )}
+
+          {/* Percentage score */}
           <ScoreStatLabel
             value={
               !leaderboard.maxScore
@@ -66,6 +75,13 @@ export default function Score({ score, leaderboard }: ScoreProps) {
                 : ((score.baseScore / leaderboard.maxScore) * 100).toFixed(2) +
                   "%"
             }
+          />
+
+          {/* Missed Notes */}
+          <ScoreStatLabel
+            className="min-w-[3rem] bg-red-500"
+            title={`${score.missedNotes} missed notes. ${score.badCuts} bad cuts.`}
+            value={formatNumber(score.missedNotes + score.badCuts) + "x"}
           />
         </div>
       </div>
