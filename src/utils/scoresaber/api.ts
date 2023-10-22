@@ -1,6 +1,6 @@
 import { ScoresaberPlayer } from "@/schemas/scoresaber/player";
 import { ScoresaberPlayerScore } from "@/schemas/scoresaber/playerScore";
-import { SSRSettings } from "@/ssrSettings";
+import { ssrSettings } from "@/ssrSettings";
 import { FetchQueue } from "../fetchWithQueue";
 import { formatString } from "../string";
 
@@ -8,7 +8,7 @@ import { formatString } from "../string";
 const fetchQueue = new FetchQueue();
 
 // Api endpoints
-const API_URL = SSRSettings.proxy + "/https://scoresaber.com/api";
+const API_URL = ssrSettings.proxy + "/https://scoresaber.com/api";
 const SEARCH_PLAYER_URL =
   API_URL + "/players?search={}&page=1&withMetadata=false";
 const PLAYER_SCORES =

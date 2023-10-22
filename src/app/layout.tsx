@@ -1,5 +1,4 @@
-import AppProvider from "@/components/AppProvider";
-import { SSRSettings } from "@/ssrSettings";
+import { ssrSettings } from "@/ssrSettings";
 import { Metadata } from "next";
 import { Inter } from "next/font/google";
 import Image from "next/image";
@@ -10,13 +9,13 @@ const font = Inter({ subsets: ["latin-ext"], weight: "500" });
 
 export const metadata: Metadata = {
   title: {
-    template: SSRSettings.siteName + " - %s",
-    default: SSRSettings.siteName,
+    template: ssrSettings.siteName + " - %s",
+    default: ssrSettings.siteName,
   },
   openGraph: {
-    title: SSRSettings.siteName,
+    title: ssrSettings.siteName,
     description: "Aggregate your scores with other leaderboards together!",
-    url: SSRSettings.siteUrl,
+    url: ssrSettings.siteUrl,
     locale: "en_US",
     type: "website",
   },
@@ -41,7 +40,7 @@ export default function RootLayout({
           />
         </div>
 
-        <AppProvider>{children}</AppProvider>
+        {children}
       </body>
     </html>
   );
