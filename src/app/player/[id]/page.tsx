@@ -3,9 +3,9 @@
 import Card from "@/components/Card";
 import Container from "@/components/Container";
 import Error from "@/components/Error";
-import PlayerInfo from "@/components/PlayerInfo";
-import Scores from "@/components/Scores";
 import { Spinner } from "@/components/Spinner";
+import PlayerInfo from "@/components/player/PlayerInfo";
+import Scores from "@/components/player/Scores";
 import { ScoresaberPlayer } from "@/schemas/scoresaber/player";
 import { useSettingsStore } from "@/store/settingsStore";
 import { SortType, SortTypes } from "@/types/SortTypes";

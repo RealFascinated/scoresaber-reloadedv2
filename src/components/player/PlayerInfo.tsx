@@ -8,9 +8,9 @@ import { useRef } from "react";
 import ReactCountryFlag from "react-country-flag";
 import { toast } from "react-toastify";
 import { useStore } from "zustand";
-import Avatar from "./Avatar";
-import Card from "./Card";
-import Label from "./Label";
+import Avatar from "../Avatar";
+import Card from "../Card";
+import Label from "../Label";
 import PlayerChart from "./PlayerChart";
 
 type PlayerInfoProps = {
@@ -119,16 +119,19 @@ export default function PlayerInfo({ playerData }: PlayerInfoProps) {
             <Label
               title="Total play count"
               className="bg-blue-500"
+              hoverValue="Total ranked song play count"
               value={formatNumber(playerData.scoreStats.totalPlayCount)}
             />
             <Label
               title="Total score"
               className="bg-blue-500"
+              hoverValue="Total score of all your plays"
               value={formatNumber(playerData.scoreStats.totalScore)}
             />
             <Label
               title="Avg ranked acc"
               className="bg-blue-500"
+              hoverValue="Average accuracy of all your ranked plays"
               value={`${playerData.scoreStats.averageRankedAccuracy.toFixed(
                 2,
               )}%`}
@@ -139,6 +142,7 @@ export default function PlayerInfo({ playerData }: PlayerInfoProps) {
                 <Label
                   title="Top PP"
                   className="bg-[#8992e8]"
+                  hoverValue="Highest pp play"
                   value={`${formatNumber(
                     getHighestPpPlay(playerId)?.toFixed(2),
                   )}pp`}
@@ -146,9 +150,10 @@ export default function PlayerInfo({ playerData }: PlayerInfoProps) {
                 <Label
                   title="+ 1pp"
                   className="bg-[#8992e8]"
+                  hoverValue="Amount of raw pp required to increase your pp by 1pp"
                   value={`${formatNumber(
                     calcPpBoundary(playerId, 1)?.toFixed(2),
-                  )}pp per global raw`}
+                  )}pp per raw`}
                 />
               </>
             )}

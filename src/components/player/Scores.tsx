@@ -5,10 +5,10 @@ import { SortType, SortTypes } from "@/types/SortTypes";
 import { fetchScores } from "@/utils/scoresaber/api";
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
-import Card from "./Card";
-import Pagination from "./Pagination";
+import Card from "../Card";
+import Pagination from "../Pagination";
+import { Spinner } from "../Spinner";
 import Score from "./Score";
-import { Spinner } from "./Spinner";
 
 type PageInfo = {
   loading: boolean;

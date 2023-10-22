@@ -6,7 +6,7 @@ import { getPlayerInfo, searchByName } from "@/utils/scoresaber/api";
 import { MagnifyingGlassIcon } from "@heroicons/react/20/solid";
 import clsx from "clsx";
 import { useEffect, useState } from "react";
-import Avatar from "./Avatar";
+import Avatar from "../Avatar";
 
 export default function SearchPlayer() {
   const [search, setSearch] = useState("");
