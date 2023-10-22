@@ -8,9 +8,13 @@ import Avatar from "../Avatar";
 
 type PlayerRankingProps = {
   player: ScoresaberPlayer;
+  showCountryFlag?: boolean;
 };
 
-export default function PlayerRanking({ player }: PlayerRankingProps) {
+export default function PlayerRanking({
+  player,
+  showCountryFlag,
+}: PlayerRankingProps) {
   const settingsStore = useStore(useSettingsStore, (store) => store);
 
   return (
@@ -18,11 +22,13 @@ export default function PlayerRanking({ player }: PlayerRankingProps) {
       <td className="px-4 py-2">#{formatNumber(player.rank)}</td>
       <td className="flex items-center gap-2 px-4 py-2">
         <Avatar url={player.profilePicture} label="Avatar" size={24} />
-        <ReactCountryFlag
-          countryCode={player.country}
-          svg
-          className="!h-5 !w-5"
-        />
+        {showCountryFlag && (
+          <ReactCountryFlag
+            countryCode={player.country}
+            svg
+            className="!h-5 !w-5"
+          />
+        )}
         <Link
           className="transform-gpu transition-all hover:text-blue-500"
           href={"/player/" + player.id}

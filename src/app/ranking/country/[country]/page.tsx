@@ -20,11 +20,11 @@ type PageInfo = {
   players: ScoresaberPlayer[];
 };
 
-export default function RankingCountry({
-  params,
-}: {
+type RankingCountryProps = {
   params: { country: string };
-}) {
+};
+
+export default function RankingCountry({ params }: RankingCountryProps) {
   const searchParams = useSearchParams();
   const router = useRouter();
 
@@ -141,7 +141,7 @@ export default function RankingCountry({
                 <tbody className="border-none">
                   {players.map((player) => (
                     <tr key={player.rank} className="border-b border-gray-700">
-                      <PlayerRanking player={player} />
+                      <PlayerRanking showCountryFlag={false} player={player} />
                     </tr>
                   ))}
                 </tbody>
