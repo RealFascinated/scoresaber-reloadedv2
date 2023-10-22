@@ -8,6 +8,7 @@ import { Spinner } from "@/components/Spinner";
 import PlayerRanking from "@/components/player/PlayerRanking";
 import { ScoresaberPlayer } from "@/schemas/scoresaber/player";
 import { fetchTopPlayers } from "@/utils/scoresaber/api";
+import { normalizedRegionName } from "@/utils/utils";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
 import ReactCountryFlag from "react-country-flag";
@@ -121,7 +122,9 @@ export default function RankingCountry({
                   svg
                   className="!h-8 !w-8"
                 />
-                <p>You are viewing scores from {country}</p>
+                <p>
+                  You are viewing scores from {normalizedRegionName(country)}
+                </p>
               </div>
 
               <table className="w-full table-auto border-spacing-2 border-none text-left">
