@@ -99,7 +99,7 @@ export const usePlayerScoresStore = create<PlayerScoresStore>()(
         }
 
         // Get all of the players scores
-        const scores = await fetchAllScores(
+        let scores = await fetchAllScores(
           playerId,
           "recent",
           (page, totalPages) => {
@@ -113,6 +113,18 @@ export const usePlayerScoresStore = create<PlayerScoresStore>()(
             message: "Could not fetch scores for player",
           };
         }
+
+        // Remove scores that are already in the database
+        const player = usePlayerScoresStore.getState().get(playerId);
+        if (player) {
+          scores = scores.filter(
+            (score) =>
+              player.scores.scoresaber.findIndex(
+                (s) => s.score.id == score.score.id,
+              ) == -1,
+          );
+        }
+
         set({
           players: [
             ...players,
@@ -149,6 +161,15 @@ export const usePlayerScoresStore = create<PlayerScoresStore>()(
         }
 
         const players = usePlayerScoresStore.getState().players;
+        if (players.length == 0) {
+          const userId = useSettingsStore.getState().userId;
+          if (userId) {
+            console.log(
+              `Your profile was not found in the scores database, adding it...`,
+            );
+            await usePlayerScoresStore.getState().addPlayer(userId);
+          }
+        }
         const friends = useSettingsStore.getState().friends;
         for (const friend of friends) {
           players.push({
@@ -157,6 +178,15 @@ export const usePlayerScoresStore = create<PlayerScoresStore>()(
               scoresaber: [],
             },
           });
+        }
+
+        if (players.length == 0) {
+          for (const friend of friends) {
+            console.log(
+              `Friend ${friend.name} was not found in the scores database, adding them...`,
+            );
+            await usePlayerScoresStore.getState().addPlayer(friend.id);
+          }
         }
 
         for (const player of players) {
@@ -172,10 +202,7 @@ export const usePlayerScoresStore = create<PlayerScoresStore>()(
             return bDate.getTime() - aDate.getTime();
           });
 
-          if (!oldScores || oldScores.length == 0) continue;
-
           const mostRecentScore = oldScores[0].score;
-          if (mostRecentScore == undefined) continue;
           let search = true;
 
           let page = 0;
@@ -186,7 +213,7 @@ export const usePlayerScoresStore = create<PlayerScoresStore>()(
             if (newScores == undefined) continue;
 
             for (const newScore of newScores.scores) {
-              if (newScore.score.id == mostRecentScore.id) {
+              if (mostRecentScore && newScore.score.id == mostRecentScore.id) {
                 search = false;
                 break;
               }
