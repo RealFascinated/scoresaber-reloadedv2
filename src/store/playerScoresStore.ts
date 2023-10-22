@@ -232,11 +232,14 @@ export const usePlayerScoresStore = create<PlayerScoresStore>()(
 
       migrate: (state: any, version: number) => {
         if (version == 1) {
-          console.log("Migrating player scores...");
-          const players = state.players;
-          for (const player of players) {
-            player.scores = player.scores.scoresaber;
-          }
+          state.players = state.players.map((player: any) => {
+            return {
+              id: player.id,
+              scores: {
+                scoresaber: player.scores,
+              },
+            };
+          });
 
           return state;
         }
