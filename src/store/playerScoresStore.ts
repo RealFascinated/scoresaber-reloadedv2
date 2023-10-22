@@ -165,6 +165,7 @@ export const usePlayerScoresStore = create<PlayerScoresStore>()(
         const friends = useSettingsStore.getState().friends;
         if (players.length == 0) {
           for (const friend of friends) {
+            if (usePlayerScoresStore.getState().exists(friend.id)) continue;
             players.push({
               id: friend.id,
               scores: {
