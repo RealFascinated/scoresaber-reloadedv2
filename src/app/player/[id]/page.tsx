@@ -58,7 +58,6 @@ export default function Player({ params }: { params: { id: string } }) {
   let sortType: SortType;
   const sortTypeString = searchParams.get("sort");
   if (sortTypeString == null) {
-    // todo: check settings to get last used sort type
     sortType =
       useSettingsStore.getState().lastUsedSortType || DEFAULT_SORT_TYPE;
   } else {

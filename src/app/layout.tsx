@@ -32,11 +32,10 @@ export default function RootLayout({
       <body className={font.className}>
         <div className="fixed left-0 top-0 z-0 h-full w-full blur-sm">
           <Image
+            className="object-fill object-center"
             alt="Background image"
             src={"/assets/background.webp"}
-            layout="fill"
-            objectFit="cover"
-            objectPosition="center"
+            fill
             quality={100}
           />
         </div>
