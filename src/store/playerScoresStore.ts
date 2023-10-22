@@ -6,7 +6,7 @@ import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
 
 type Player = {
-  lastUpdated: Date;
+  lastUpdated: number;
   id: string;
   scores: ScoresaberPlayerScore[];
 };
@@ -81,7 +81,7 @@ export const usePlayerScoresStore = create<PlayerScoresStore>()(
             ...players,
             {
               id: playerId,
-              lastUpdated: new Date(),
+              lastUpdated: new Date().getTime(),
               scores: scores,
             },
           ],
@@ -99,15 +99,22 @@ export const usePlayerScoresStore = create<PlayerScoresStore>()(
           if (player == undefined) continue;
 
           // Skip if the player was already updated recently
-          if (player.lastUpdated > new Date(Date.now() - UPDATE_INTERVAL))
+          if (
+            player.lastUpdated >
+            new Date(Date.now() - UPDATE_INTERVAL).getTime()
+          )
             continue;
 
           console.log(`Updating scores for ${player.id}...`);
 
           let oldScores = player.scores;
 
-          // Sort the scores by id, so we know when to stop searching for new scores
-          oldScores = oldScores.sort((a, b) => b.score.id - a.score.id);
+          // Sort the scores by date (newset to oldest), so we know when to stop searching for new scores
+          oldScores = oldScores.sort((a, b) => {
+            const aDate = new Date(a.score.timeSet);
+            const bDate = new Date(b.score.timeSet);
+            return bDate.getTime() - aDate.getTime();
+          });
 
           const mostRecentScore = oldScores?.[0].score;
           if (mostRecentScore == undefined) continue;
@@ -143,12 +150,14 @@ export const usePlayerScoresStore = create<PlayerScoresStore>()(
           newPlayers = newPlayers.filter((playerr) => playerr.id != player.id);
           // Add the player
           newPlayers.push({
-            lastUpdated: new Date(),
+            lastUpdated: new Date().getTime(),
             id: player.id,
             scores: oldScores,
           });
 
-          console.log(`Found ${newScoresCount} new scores for ${player.id}`);
+          if (newScoresCount > 0) {
+            console.log(`Found ${newScoresCount} new scores for ${player.id}`);
+          }
         }
       },
     }),

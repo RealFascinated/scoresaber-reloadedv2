@@ -1,3 +1,4 @@
+import AppProvider from "@/components/AppProvider";
 import { Metadata } from "next";
 import { Inter } from "next/font/google";
 import Image from "next/image";
@@ -40,7 +41,7 @@ export default function RootLayout({
           />
         </div>
 
-        {children}
+        <AppProvider>{children}</AppProvider>
       </body>
     </html>
   );

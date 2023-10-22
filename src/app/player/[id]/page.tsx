@@ -12,15 +12,11 @@ import { ScoresaberPlayer } from "@/schemas/scoresaber/player";
 import { ScoresaberPlayerScore } from "@/schemas/scoresaber/playerScore";
 import { usePlayerScoresStore } from "@/store/playerScoresStore";
 import { useSettingsStore } from "@/store/settingsStore";
+import { SortType, SortTypes } from "@/types/SortTypes";
 import { formatNumber } from "@/utils/number";
 import { fetchScores, getPlayerInfo } from "@/utils/scoresaber/api";
 import useStore from "@/utils/useStore";
-import {
-  ClockIcon,
-  GlobeAsiaAustraliaIcon,
-  HomeIcon,
-  TrophyIcon,
-} from "@heroicons/react/20/solid";
+import { GlobeAsiaAustraliaIcon, HomeIcon } from "@heroicons/react/20/solid";
 import Image from "next/image";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useRef, useState } from "react";
@@ -40,27 +36,11 @@ type PlayerInfo = {
   player: ScoresaberPlayer | undefined;
 };
 
-type SortType = {
-  name: string;
-  value: string;
-  icon: JSX.Element;
-};
-const sortTypes: { [key: string]: SortType } = {
-  top: {
-    name: "Top Scores",
-    value: "top",
-    icon: <TrophyIcon width={20} height={20} />,
-  },
-  recent: {
-    name: "Recent Scores",
-    value: "recent",
-    icon: <ClockIcon width={20} height={20} />,
-  },
-};
-
-const DEFAULT_SORT_TYPE = sortTypes.top;
+const DEFAULT_SORT_TYPE = SortTypes.top;
 
 export default function Player({ params }: { params: { id: string } }) {
+  const [mounted, setMounted] = useState(false);
+
   const settingsStore = useStore(useSettingsStore, (store) => store);
   const playerScoreStore = useStore(usePlayerScoresStore, (store) => store);
 
@@ -75,13 +55,14 @@ export default function Player({ params }: { params: { id: string } }) {
     page = Number.parseInt(pageString) || 1;
   }
 
-  let sortType;
+  let sortType: SortType;
   const sortTypeString = searchParams.get("sort");
   if (sortTypeString == null) {
     // todo: check settings to get last used sort type
-    sortType = DEFAULT_SORT_TYPE;
+    sortType =
+      useSettingsStore.getState().lastUsedSortType || DEFAULT_SORT_TYPE;
   } else {
-    sortType = sortTypes[sortTypeString] || DEFAULT_SORT_TYPE;
+    sortType = SortTypes[sortTypeString] || DEFAULT_SORT_TYPE;
   }
 
   const [error, setError] = useState(false);
@@ -118,6 +99,9 @@ export default function Player({ params }: { params: { id: string } }) {
             loading: false,
             page: page,
             sortType: sortType,
+          });
+          useSettingsStore.setState({
+            lastUsedSortType: sortType,
           });
 
           if (page > 1) {
@@ -178,12 +162,18 @@ export default function Player({ params }: { params: { id: string } }) {
   }
 
   useEffect(() => {
+    setMounted(true);
+
     if (!params.id) {
       setError(true);
       setPlayer({ ...player, loading: false });
       return;
     }
     if (error || !player.loading) {
+      return;
+    }
+
+    if (mounted == true) {
       return;
     }
 
@@ -197,7 +187,7 @@ export default function Player({ params }: { params: { id: string } }) {
       setPlayer({ ...player, player: playerResponse, loading: false });
       updateScoresPage(scores.sortType, 1);
     });
-  }, [error, params.id, player, scores, updateScoresPage]);
+  }, [error, mounted, params.id, player, scores, updateScoresPage]);
 
   if (player.loading || error || !player.player) {
     return (
@@ -318,7 +308,7 @@ export default function Player({ params }: { params: { id: string } }) {
           {/* Sort */}
           <div className="m-2 w-full text-sm">
             <div className="flex justify-center gap-2">
-              {Object.values(sortTypes).map((sortType) => {
+              {Object.values(SortTypes).map((sortType) => {
                 return (
                   <button
                     key={sortType.value}
