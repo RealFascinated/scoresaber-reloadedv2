@@ -8,6 +8,7 @@ import { Spinner } from "@/components/Spinner";
 import PlayerRanking from "@/components/player/PlayerRanking";
 import { ScoresaberPlayer } from "@/schemas/scoresaber/player";
 import { fetchTopPlayers } from "@/utils/scoresaber/api";
+import { GlobeAsiaAustraliaIcon } from "@heroicons/react/20/solid";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
 
@@ -109,6 +110,7 @@ export default function RankingGlobal() {
           ) : (
             <div className="flex flex-col gap-2">
               <div className="flex items-center gap-2 rounded-md bg-gray-700 p-2">
+                <GlobeAsiaAustraliaIcon width={32} height={32} />
                 <p>You are viewing Global scores</p>
               </div>
               <table className="w-full table-auto border-spacing-2 border-none text-left">
