@@ -163,16 +163,15 @@ export const usePlayerScoresStore = create<PlayerScoresStore>()(
 
         const players = usePlayerScoresStore.getState().players;
         const friends = useSettingsStore.getState().friends;
-        for (const friend of friends) {
-          players.push({
-            id: friend.id,
-            scores: {
-              scoresaber: [],
-            },
-          });
-        }
-
         if (players.length == 0) {
+          for (const friend of friends) {
+            players.push({
+              id: friend.id,
+              scores: {
+                scoresaber: [],
+              },
+            });
+          }
           toast.info(
             "Scores database was empty, adding your profile and friends to it",
           );
@@ -185,6 +184,8 @@ export const usePlayerScoresStore = create<PlayerScoresStore>()(
             await usePlayerScoresStore.getState().addPlayer(userId);
           }
           for (const friend of friends) {
+            if (usePlayerScoresStore.getState().exists(friend.id)) continue;
+
             console.log(
               `Friend ${friend.name} was not found in the scores database, adding them...`,
             );
@@ -206,6 +207,7 @@ export const usePlayerScoresStore = create<PlayerScoresStore>()(
           });
 
           const mostRecentScore = oldScores[0].score;
+          if (mostRecentScore == undefined) continue;
           let search = true;
 
           let page = 0;
