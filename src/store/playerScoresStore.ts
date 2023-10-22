@@ -3,6 +3,7 @@
 import { ScoresaberPlayerScore } from "@/schemas/scoresaber/playerScore";
 import { fetchAllScores, fetchScores } from "@/utils/scoresaber/api";
 import moment from "moment";
+import { toast } from "react-toastify";
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
 import { useSettingsStore } from "./settingsStore";
@@ -161,15 +162,6 @@ export const usePlayerScoresStore = create<PlayerScoresStore>()(
         }
 
         const players = usePlayerScoresStore.getState().players;
-        if (players.length == 0) {
-          const userId = useSettingsStore.getState().userId;
-          if (userId) {
-            console.log(
-              `Your profile was not found in the scores database, adding it...`,
-            );
-            await usePlayerScoresStore.getState().addPlayer(userId);
-          }
-        }
         const friends = useSettingsStore.getState().friends;
         for (const friend of friends) {
           players.push({
@@ -181,6 +173,17 @@ export const usePlayerScoresStore = create<PlayerScoresStore>()(
         }
 
         if (players.length == 0) {
+          toast.info(
+            "Scores database was empty, adding your profile and friends to it",
+          );
+
+          const userId = useSettingsStore.getState().userId;
+          if (userId) {
+            console.log(
+              `Your profile was not found in the scores database, adding it...`,
+            );
+            await usePlayerScoresStore.getState().addPlayer(userId);
+          }
           for (const friend of friends) {
             console.log(
               `Friend ${friend.name} was not found in the scores database, adding them...`,
