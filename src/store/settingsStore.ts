@@ -8,14 +8,12 @@ import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
 
 interface SettingsStore {
-  userId: string | undefined;
-  profilePicture: string | undefined;
+  player: ScoresaberPlayer | undefined;
   lastUsedSortType: SortType;
   friends: ScoresaberPlayer[];
   profilesLastUpdated: number;
 
-  setUserId: (userId: string) => void;
-  setProfilePicture: (profilePicture: string) => void;
+  setProfile: (playerData: ScoresaberPlayer) => void;
   setLastUsedSortType: (sortType: SortType) => void;
   addFriend: (friendId: string) => Promise<boolean>;
   removeFriend: (friendId: string) => void;
@@ -30,17 +28,16 @@ const UPDATE_INTERVAL = 1000 * 60 * 10; // 10 minutes
 export const useSettingsStore = create<SettingsStore>()(
   persist(
     (set) => ({
-      userId: undefined,
-      profilePicture: undefined,
+      player: undefined,
       lastUsedSortType: SortTypes.top,
       friends: [],
       profilesLastUpdated: 0,
 
-      setUserId: (userId: string) => {
-        set({ userId });
+      async setProfile(playerData: ScoresaberPlayer) {
+        set({
+          player: playerData,
+        });
       },
-
-      setProfilePicture: (profilePicture: string) => set({ profilePicture }),
 
       setLastUsedSortType: (sortType: SortType) =>
         set({ lastUsedSortType: sortType }),
@@ -72,8 +69,9 @@ export const useSettingsStore = create<SettingsStore>()(
         return friends.some((friend) => friend.id == friendId);
       },
 
-      setProfilesLastUpdated: (profilesLastUpdated: number) =>
-        set({ profilesLastUpdated }),
+      setProfilesLastUpdated: (profilesLastUpdated: number) => {
+        set({ profilesLastUpdated });
+      },
 
       async refreshProfiles() {
         const timeUntilRefreshMs =
@@ -87,32 +85,6 @@ export const useSettingsStore = create<SettingsStore>()(
           );
           setTimeout(() => this.refreshProfiles(), timeUntilRefreshMs);
           return;
-        }
-
-        const userId = useSettingsStore.getState().userId;
-        const profiles =
-          useSettingsStore.getState().friends.map((f) => f.id) ?? [];
-        if (userId) {
-          profiles.push(userId);
-        }
-
-        for (const profileId of profiles) {
-          const profile = await getPlayerInfo(profileId);
-          if (profile == undefined || profile == null) return;
-
-          if (this.isFriend(profileId)) {
-            const friends = useSettingsStore.getState().friends;
-            const friendIndex = friends.findIndex(
-              (friend) => friend.id == profileId,
-            );
-            friends[friendIndex] = profile;
-            set({ friends });
-          } else {
-            this.setProfilePicture(profile.profilePicture);
-            set({ userId: profile.id });
-          }
-
-          console.log("Updated profile:", profile.id);
         }
 
         useSettingsStore.setState({ profilesLastUpdated: Date.now() });

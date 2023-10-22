@@ -35,7 +35,7 @@ export default function PlayerRanking({
         >
           <p
             className={
-              player.id == settingsStore?.userId
+              player.id == settingsStore.player?.id
                 ? "transform-gpu text-red-500 transition-all hover:text-blue-500"
                 : ""
             }

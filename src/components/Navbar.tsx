@@ -46,17 +46,17 @@ export default function Navbar() {
   return (
     <>
       <div className="flex h-fit w-full rounded-md bg-gray-800">
-        {settingsStore && settingsStore.profilePicture && (
+        {settingsStore !== undefined && settingsStore.player && (
           <NavbarButton
             text="You"
             icon={
               <Avatar
-                url={settingsStore.profilePicture}
+                url={settingsStore.player.profilePicture}
                 label="Your avatar"
                 size={32}
               />
             }
-            href={`/player/${settingsStore.userId}`}
+            href={`/player/${settingsStore.player.id}`}
           />
         )}
 

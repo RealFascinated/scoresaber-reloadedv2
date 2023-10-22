@@ -1,5 +1,6 @@
 "use client";
 
+import { ScoresaberPlayer } from "@/schemas/scoresaber/player";
 import { ScoresaberPlayerScore } from "@/schemas/scoresaber/playerScore";
 import { fetchAllScores, fetchScores } from "@/utils/scoresaber/api";
 import moment from "moment";
@@ -147,33 +148,29 @@ export const usePlayerScoresStore = create<PlayerScoresStore>()(
         const players = usePlayerScoresStore.getState().players;
         const friends = useSettingsStore.getState().friends;
 
-        const localPlayer = {
-          id: useSettingsStore.getState().userId,
-          scores: {
-            scoresaber: [],
-          },
-        };
-        let allPlayers: any = friends;
-        if (players.findIndex((player) => player.id == localPlayer.id) == -1) {
+        let allPlayers = new Array<ScoresaberPlayer>();
+        for (const friend of friends) {
+          allPlayers.push(friend);
+        }
+        const localPlayer = useSettingsStore.getState().player;
+        if (localPlayer) {
           allPlayers.push(localPlayer);
         }
 
         // add local player and friends if they don't exist
         for (const player of allPlayers) {
           if (usePlayerScoresStore.getState().get(player.id) == undefined) {
-            toast.success(
+            toast.info(
               `${
-                player.id == localPlayer.id
+                player.id == localPlayer?.id
                   ? `You were`
                   : `Friend ${player.name} was`
               } missing from the scores database, adding...`,
             );
-            console.log(
-              await usePlayerScoresStore.getState().addPlayer(player.id),
-            );
+            await usePlayerScoresStore.getState().addPlayer(player.id);
             toast.success(
               `${
-                player.id == useSettingsStore.getState().userId
+                player.id == useSettingsStore.getState().player?.id
                   ? `You were`
                   : `Friend ${player.name} was`
               } added to the scores database`,
@@ -259,6 +256,7 @@ export const usePlayerScoresStore = create<PlayerScoresStore>()(
             players: newPlayers,
             lastUpdated: Date.now(),
           });
+          console.log(friends);
         }
       },
     }),

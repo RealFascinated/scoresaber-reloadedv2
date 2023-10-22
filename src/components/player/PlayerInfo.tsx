@@ -36,7 +36,7 @@ export default function PlayerInfo({ playerData }: PlayerInfoProps) {
   const toastId: any = useRef(null);
 
   async function claimProfile() {
-    settingsStore?.setUserId(playerId);
+    settingsStore?.setProfile(playerData);
     addProfile(false);
   }
 
@@ -91,7 +91,7 @@ export default function PlayerInfo({ playerData }: PlayerInfoProps) {
     }
   }
 
-  const isOwnProfile = settingsStore?.userId == playerId;
+  const isOwnProfile = settingsStore.player?.id == playerId;
 
   return (
     <Card className="mt-2">
