@@ -212,7 +212,7 @@ export default function PlayerInfo({ playerData }: PlayerInfoProps) {
                   hoverValue="Amount of raw pp required to increase your pp by 1pp"
                   value={`${formatNumber(
                     calcPpBoundary(playerId, 1)?.toFixed(2),
-                  )}pp per raw`}
+                  )}pp raw per global`}
                 />
               </>
             )}
