@@ -142,7 +142,7 @@ export default function Player({ params }: { params: { id: string } }) {
                       />{" "}
                       <Link
                         className="transform-gpu transition-all hover:text-blue-500"
-                        href={"/players/" + player.id}
+                        href={"/player/" + player.id}
                       >
                         <p>{player.name}</p>
                       </Link>
