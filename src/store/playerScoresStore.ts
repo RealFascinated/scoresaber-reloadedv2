@@ -144,6 +144,43 @@ export const usePlayerScoresStore = create<PlayerScoresStore>()(
       },
 
       updatePlayerScores: async () => {
+        const players = usePlayerScoresStore.getState().players;
+        const friends = useSettingsStore.getState().friends;
+
+        const localPlayer = {
+          id: useSettingsStore.getState().userId,
+          scores: {
+            scoresaber: [],
+          },
+        };
+        let allPlayers: any = friends;
+        if (players.findIndex((player) => player.id == localPlayer.id) == -1) {
+          allPlayers.push(localPlayer);
+        }
+
+        // add local player and friends if they don't exist
+        for (const player of allPlayers) {
+          if (usePlayerScoresStore.getState().get(player.id) == undefined) {
+            toast.success(
+              `${
+                player.id == localPlayer.id
+                  ? `You were`
+                  : `Friend ${player.name} was`
+              } missing from the scores database, adding...`,
+            );
+            console.log(
+              await usePlayerScoresStore.getState().addPlayer(player.id),
+            );
+            toast.success(
+              `${
+                player.id == useSettingsStore.getState().userId
+                  ? `You were`
+                  : `Friend ${player.name} was`
+              } added to the scores database`,
+            );
+          }
+        }
+
         // Skip if we refreshed the scores recently
         const timeUntilRefreshMs =
           UPDATE_INTERVAL -
@@ -161,39 +198,6 @@ export const usePlayerScoresStore = create<PlayerScoresStore>()(
           return;
         }
 
-        const players = usePlayerScoresStore.getState().players;
-        const friends = useSettingsStore.getState().friends;
-        if (players.length == 0) {
-          for (const friend of friends) {
-            if (usePlayerScoresStore.getState().exists(friend.id)) continue;
-            players.push({
-              id: friend.id,
-              scores: {
-                scoresaber: [],
-              },
-            });
-          }
-          toast.info(
-            "Scores database was empty, adding your profile and friends to it",
-          );
-
-          const userId = useSettingsStore.getState().userId;
-          if (userId) {
-            console.log(
-              `Your profile was not found in the scores database, adding it...`,
-            );
-            await usePlayerScoresStore.getState().addPlayer(userId);
-          }
-          for (const friend of friends) {
-            if (usePlayerScoresStore.getState().exists(friend.id)) continue;
-
-            console.log(
-              `Friend ${friend.name} was not found in the scores database, adding them...`,
-            );
-            await usePlayerScoresStore.getState().addPlayer(friend.id);
-          }
-        }
-
         for (const player of players) {
           if (player == undefined) continue;
           console.log(`Updating scores for ${player.id}...`);
@@ -206,9 +210,9 @@ export const usePlayerScoresStore = create<PlayerScoresStore>()(
             const bDate = new Date(b.score.timeSet);
             return bDate.getTime() - aDate.getTime();
           });
+          if (!oldScores.length) continue;
 
           const mostRecentScore = oldScores[0].score;
-          if (mostRecentScore == undefined) continue;
           let search = true;
 
           let page = 0;
