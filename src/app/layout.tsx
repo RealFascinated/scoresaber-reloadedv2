@@ -15,7 +15,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Scoresaber Reloaded",
     description: "Aggregate your scores with other leaderboards together!",
-    url: "https://ssrdev.fascinated.cc",
+    url: "https://ssr.fascinated.cc",
     locale: "en_US",
     type: "website",
   },

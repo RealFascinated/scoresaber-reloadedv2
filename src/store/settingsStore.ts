@@ -125,6 +125,7 @@ export const useSettingsStore = create<SettingsStore>()(
   ),
 );
 
+// Refresh profiles every 10 minutes
 useSettingsStore.getState().refreshProfiles();
 setInterval(
   () => useSettingsStore.getState().refreshProfiles(),

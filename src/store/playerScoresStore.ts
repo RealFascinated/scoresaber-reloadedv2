@@ -16,9 +16,36 @@ interface PlayerScoresStore {
   lastUpdated: number;
   players: Player[];
 
+  /**
+   * Sets when the player scores were last updated
+   *
+   * @param lastUpdated when the player scores were last updated
+   */
   setLastUpdated: (lastUpdated: number) => void;
+
+  /**
+   * Checks if the player exists
+   *
+   * @param playerId the player id
+   * @returns if the player exists
+   */
   exists: (playerId: string) => boolean;
+
+  /**
+   * Gets the given player
+   *
+   * @param playerId the player id
+   * @returns the player
+   */
   get(playerId: string): Player | undefined;
+
+  /**
+   * Adds the player to the local database
+   *
+   * @param playerId the player id
+   * @param callback a callback to call when a score page is fetched
+   * @returns if the player was added successfully
+   */
   addPlayer: (
     playerId: string,
     callback?: (page: number, totalPages: number) => void,
@@ -26,6 +53,10 @@ interface PlayerScoresStore {
     error: boolean;
     message: string;
   }>;
+
+  /**
+   * Refreshes the player scores and adds any new scores to the local database
+   */
   updatePlayerScores: () => void;
 }
 
@@ -193,6 +224,7 @@ export const usePlayerScoresStore = create<PlayerScoresStore>()(
   ),
 );
 
+// Update the player scores every 30 minutes
 usePlayerScoresStore.getState().updatePlayerScores();
 setInterval(() => {
   usePlayerScoresStore.getState().updatePlayerScores();

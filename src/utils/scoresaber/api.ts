@@ -117,6 +117,14 @@ export async function fetchScores(
   };
 }
 
+/**
+ * Gets all of the players for the given player id
+ *
+ * @param playerId the id of the player
+ * @param searchType the type of search to perform
+ * @param callback a callback to call when a page is fetched
+ * @returns a list of scores
+ */
 export async function fetchAllScores(
   playerId: string,
   searchType: string,
