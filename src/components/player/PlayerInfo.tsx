@@ -136,13 +136,20 @@ export default function PlayerInfo({ playerData }: PlayerInfoProps) {
             </div>
 
             {/* Country Rank */}
-            <div className="flex items-center gap-1 text-gray-300">
-              <ReactCountryFlag
-                countryCode={playerData.country}
-                svg
-                className="!h-7 !w-7"
-              />
-              <p>#{playerData.countryRank}</p>
+            <div className="text-gray-300">
+              <a
+                className="flex transform-gpu items-center gap-1 transition-all hover:text-blue-500"
+                href={`/ranking/country/${playerData.country}?page=${Math.round(
+                  playerData.countryRank / 50,
+                )}`}
+              >
+                <ReactCountryFlag
+                  countryCode={playerData.country}
+                  svg
+                  className="!h-7 !w-7"
+                />
+                <p>#{playerData.countryRank}</p>
+              </a>
             </div>
 
             {/* PP */}

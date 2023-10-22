@@ -18,9 +18,15 @@ type PageInfo = {
   players: ScoresaberPlayer[];
 };
 
-export default function RankingGlobal() {
+export default function RankingCountry({
+  params,
+}: {
+  params: { country: string };
+}) {
   const searchParams = useSearchParams();
   const router = useRouter();
+
+  const country = params.country;
 
   let page;
   const pageString = searchParams.get("page");
@@ -43,7 +49,7 @@ export default function RankingGlobal() {
   const updatePage = useCallback(
     (page: any) => {
       console.log("Switching page to", page);
-      fetchTopPlayers(page).then((response) => {
+      fetchTopPlayers(page, country).then((response) => {
         if (!response) {
           setError(true);
           setErrorMessage("No players found");
@@ -58,24 +64,24 @@ export default function RankingGlobal() {
           page: page,
         });
         if (page > 1) {
-          router.push(`/ranking/global?page=${page}`, {
+          router.push(`/ranking/country/${country}?page=${page}`, {
             scroll: false,
           });
         } else {
-          router.push(`/ranking/global`, {
+          router.push(`/ranking/country/${country}`, {
             scroll: false,
           });
         }
       });
     },
-    [pageInfo, router],
+    [country, pageInfo, router],
   );
 
   useEffect(() => {
     if (!pageInfo.loading || error) return;
 
     updatePage(pageInfo.page);
-  }, [error, updatePage, pageInfo.page, pageInfo.loading]);
+  }, [error, params.country, updatePage, pageInfo.page, pageInfo.loading]);
 
   if (pageInfo.loading || error) {
     return (

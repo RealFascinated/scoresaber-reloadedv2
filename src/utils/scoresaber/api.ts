@@ -14,6 +14,7 @@ const PLAYER_SCORES =
   API_URL + "/player/{}/scores?limit={}&sort={}&page={}&withMetadata=true";
 const GET_PLAYER_DATA_FULL = API_URL + "/player/{}/full";
 const GET_PLAYERS_URL = API_URL + "/players?page={}";
+const GET_PLAYERS_BY_COUNTRY_URL = API_URL + "/players?page={}&countries={}";
 
 const SearchType = {
   RECENT: "recent",
@@ -160,9 +161,13 @@ export async function fetchAllScores(
  * Get the top players
  *
  * @param page the page to get the players from
+ * @param country the country to get the players from
  * @returns a list of players
  */
-export async function fetchTopPlayers(page: number = 1): Promise<
+export async function fetchTopPlayers(
+  page: number = 1,
+  country?: string,
+): Promise<
   | {
       players: ScoresaberPlayer[];
       pageInfo: {
@@ -173,9 +178,10 @@ export async function fetchTopPlayers(page: number = 1): Promise<
     }
   | undefined
 > {
-  const response = await fetchQueue.fetch(
-    formatString(GET_PLAYERS_URL, true, page),
-  );
+  const url = country
+    ? formatString(GET_PLAYERS_BY_COUNTRY_URL, true, page, country)
+    : formatString(GET_PLAYERS_URL, true, page);
+  const response = await fetchQueue.fetch(url);
   const json = await response.json();
 
   // Check if there was an error fetching the user data
