@@ -9,7 +9,9 @@ import { useSettingsStore } from "./settingsStore";
 
 type Player = {
   id: string;
-  scores: ScoresaberPlayerScore[];
+  scores: {
+    scoresaber: ScoresaberPlayerScore[];
+  };
 };
 
 interface PlayerScoresStore {
@@ -116,7 +118,9 @@ export const usePlayerScoresStore = create<PlayerScoresStore>()(
             ...players,
             {
               id: playerId,
-              scores: scores,
+              scores: {
+                scoresaber: scores,
+              },
             },
           ],
         });
@@ -149,7 +153,9 @@ export const usePlayerScoresStore = create<PlayerScoresStore>()(
         for (const friend of friends) {
           players.push({
             id: friend.id,
-            scores: [],
+            scores: {
+              scoresaber: [],
+            },
           });
         }
 
@@ -157,7 +163,7 @@ export const usePlayerScoresStore = create<PlayerScoresStore>()(
           if (player == undefined) continue;
           console.log(`Updating scores for ${player.id}...`);
 
-          let oldScores = player.scores;
+          let oldScores = player.scores.scoresaber;
 
           // Sort the scores by date (newset to oldest), so we know when to stop searching for new scores
           oldScores = oldScores.sort((a, b) => {
@@ -203,7 +209,9 @@ export const usePlayerScoresStore = create<PlayerScoresStore>()(
           // Add the player
           newPlayers.push({
             id: player.id,
-            scores: oldScores,
+            scores: {
+              scoresaber: oldScores,
+            },
           });
 
           if (newScoresCount > 0) {
@@ -220,6 +228,19 @@ export const usePlayerScoresStore = create<PlayerScoresStore>()(
     {
       name: "playerScores",
       storage: createJSONStorage(() => localStorage),
+      version: 1,
+
+      migrate: (state: any, version: number) => {
+        if (version == 1) {
+          console.log("Migrating player scores...");
+          const players = state.players;
+          for (const player of players) {
+            player.scores = player.scores.scoresaber;
+          }
+
+          return state;
+        }
+      },
     },
   ),
 );
