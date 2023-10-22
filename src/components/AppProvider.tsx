@@ -1,6 +1,5 @@
 "use client";
 
-import { useBeatLeaderScoresStore } from "@/store/beatLeaderScoresStore";
 import { useScoresaberScoresStore } from "@/store/scoresaberScoresStore";
 
 type AppProviderProps = {
@@ -12,11 +11,6 @@ export function AppProvider({ children }: AppProviderProps) {
 }
 
 const UPDATE_INTERVAL = 1000 * 60 * 15; // 15 minutes
-
-useBeatLeaderScoresStore.getState().updatePlayerScores();
-setInterval(() => {
-  useBeatLeaderScoresStore.getState().updatePlayerScores();
-}, UPDATE_INTERVAL);
 
 useScoresaberScoresStore.getState().updatePlayerScores();
 setInterval(() => {

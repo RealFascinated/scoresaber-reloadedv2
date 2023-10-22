@@ -1,7 +1,6 @@
 import { ScoresaberLeaderboardInfo } from "@/schemas/scoresaber/leaderboard";
 import { ScoresaberPlayer } from "@/schemas/scoresaber/player";
 import { ScoresaberScore } from "@/schemas/scoresaber/score";
-import { useBeatLeaderScoresStore } from "@/store/beatLeaderScoresStore";
 import { formatNumber } from "@/utils/number";
 import {
   CheckIcon,
@@ -21,11 +20,6 @@ type ScoreProps = {
 
 export default function Score({ score, player, leaderboard }: ScoreProps) {
   const isFullCombo = score.missedNotes + score.badCuts === 0;
-  const beatleaderScoreData = useBeatLeaderScoresStore
-    .getState()
-    .getScore(player.id, leaderboard.songHash);
-
-  console.log(beatleaderScoreData);
 
   return (
     <div className="grid grid-cols-1 pb-2 pt-2 first:pt-0 last:pb-0 md:grid-cols-[1.1fr_6fr_3fr] xl:md:grid-cols-[.95fr_6fr_3fr]">

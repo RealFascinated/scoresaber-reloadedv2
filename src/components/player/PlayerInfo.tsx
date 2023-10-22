@@ -1,5 +1,4 @@
 import { ScoresaberPlayer } from "@/schemas/scoresaber/player";
-import { useBeatLeaderScoresStore } from "@/store/beatLeaderScoresStore";
 import { useScoresaberScoresStore } from "@/store/scoresaberScoresStore";
 import { useSettingsStore } from "@/store/settingsStore";
 import { formatNumber } from "@/utils/number";
@@ -51,80 +50,39 @@ export default function PlayerInfo({ playerData }: PlayerInfoProps) {
   }
 
   async function addProfile(isFriend: boolean) {
-    const setupScoresaber = async () => {
-      if (!useScoresaberScoresStore.getState().exists(playerId)) {
-        const reponse = await playerScoreStore?.addPlayer(
-          playerId,
-          (page, totalPages) => {
-            const autoClose = page == totalPages ? 5000 : false;
+    if (!useScoresaberScoresStore.getState().exists(playerId)) {
+      const reponse = await playerScoreStore?.addPlayer(
+        playerId,
+        (page, totalPages) => {
+          const autoClose = page == totalPages ? 5000 : false;
 
-            if (page == 1) {
-              toastId.current = toast.info(
-                `Fetching ScoreSaber scores ${page}/${totalPages}`,
-                {
-                  autoClose: autoClose,
-                  progress: page / totalPages,
-                },
-              );
-            } else {
-              toast.update(toastId.current, {
-                progress: page / totalPages,
-                render: `Fetching ScoreSaber scores ${page}/${totalPages}`,
+          if (page == 1) {
+            toastId.current = toast.info(
+              `Fetching scores ${page}/${totalPages}`,
+              {
                 autoClose: autoClose,
-              });
-            }
-
-            console.log(
-              `Fetching ScoreSaber scores for ${playerId} (${page}/${totalPages})`,
-            );
-          },
-        );
-        if (reponse?.error) {
-          toast.error("Failed to fetch scores");
-          console.log(reponse.message);
-          return;
-        }
-      }
-    };
-
-    const setupBeatleader = async () => {
-      if (!useBeatLeaderScoresStore.getState().exists(playerId)) {
-        const reponse = await playerScoreStore?.addPlayer(
-          playerId,
-          (page, totalPages) => {
-            const autoClose = page == totalPages ? 5000 : false;
-
-            if (page == 1) {
-              toastId.current = toast.info(
-                `Fetching BeatLeader scores ${page}/${totalPages}`,
-                {
-                  autoClose: autoClose,
-                  progress: page / totalPages,
-                },
-              );
-            } else {
-              toast.update(toastId.current, {
                 progress: page / totalPages,
-                render: `Fetching BeatLeader scores ${page}/${totalPages}`,
-                autoClose: autoClose,
-              });
-            }
-
-            console.log(
-              `Fetching BeatLeader scores for ${playerId} (${page}/${totalPages})`,
+              },
             );
-          },
-        );
-        if (reponse?.error) {
-          toast.error("Failed to fetch scores");
-          console.log(reponse.message);
-          return;
-        }
-      }
-    };
+          } else {
+            toast.update(toastId.current, {
+              progress: page / totalPages,
+              render: `Fetching scores ${page}/${totalPages}`,
+              autoClose: autoClose,
+            });
+          }
 
-    await setupScoresaber();
-    await setupBeatleader();
+          console.log(
+            `Fetching scores for ${playerId} (${page}/${totalPages})`,
+          );
+        },
+      );
+      if (reponse?.error) {
+        toast.error("Failed to fetch scores");
+        console.log(reponse.message);
+        return;
+      }
+    }
 
     if (!isFriend) {
       toast.success(`Successfully set ${playerData.name} as your profile`);
