@@ -3,7 +3,11 @@ import { usePlayerScoresStore } from "@/store/playerScoresStore";
 import { useSettingsStore } from "@/store/settingsStore";
 import { formatNumber } from "@/utils/number";
 import { calcPpBoundary, getHighestPpPlay } from "@/utils/scoresaber/scores";
-import { GlobeAsiaAustraliaIcon, HomeIcon } from "@heroicons/react/20/solid";
+import {
+  GlobeAsiaAustraliaIcon,
+  HomeIcon,
+  UserIcon,
+} from "@heroicons/react/20/solid";
 import { useRef } from "react";
 import ReactCountryFlag from "react-country-flag";
 import { toast } from "react-toastify";
@@ -29,40 +33,61 @@ export default function PlayerInfo({ playerData }: PlayerInfoProps) {
 
   async function claimProfile() {
     settingsStore?.setUserId(playerId);
-    settingsStore?.refreshProfile();
+    addProfile(false);
+  }
 
-    const reponse = await playerScoreStore?.addPlayer(
-      playerId,
-      (page, totalPages) => {
-        const autoClose = page == totalPages ? 5000 : false;
-
-        if (page == 1) {
-          toastId.current = toast.info(
-            `Fetching scores ${page}/${totalPages}`,
-            {
-              autoClose: autoClose,
-              progress: page / totalPages,
-            },
-          );
-        } else {
-          toast.update(toastId.current, {
-            progress: page / totalPages,
-            render: `Fetching scores ${page}/${totalPages}`,
-            autoClose: autoClose,
-          });
-        }
-
-        console.log(`Fetching scores for ${playerId} (${page}/${totalPages})`);
-      },
-    );
-    if (reponse?.error) {
-      toast.error("Failed to claim profile");
-      console.log(reponse.message);
+  async function addFriend() {
+    const friend = await settingsStore?.addFriend(playerData.id);
+    if (!friend) {
+      toast.error(`Failed to add ${playerData.name} as a friend`);
       return;
     }
-
-    toast.success("Successfully claimed profile");
+    addProfile(true);
   }
+
+  async function addProfile(isFriend: boolean) {
+    if (!usePlayerScoresStore.getState().exists(playerId)) {
+      const reponse = await playerScoreStore?.addPlayer(
+        playerId,
+        (page, totalPages) => {
+          const autoClose = page == totalPages ? 5000 : false;
+
+          if (page == 1) {
+            toastId.current = toast.info(
+              `Fetching scores ${page}/${totalPages}`,
+              {
+                autoClose: autoClose,
+                progress: page / totalPages,
+              },
+            );
+          } else {
+            toast.update(toastId.current, {
+              progress: page / totalPages,
+              render: `Fetching scores ${page}/${totalPages}`,
+              autoClose: autoClose,
+            });
+          }
+
+          console.log(
+            `Fetching scores for ${playerId} (${page}/${totalPages})`,
+          );
+        },
+      );
+      if (reponse?.error) {
+        toast.error("Failed to fetch scores");
+        console.log(reponse.message);
+        return;
+      }
+    }
+
+    if (!isFriend) {
+      toast.success(`Successfully set ${playerData.name} as your profile`);
+    } else {
+      toast.success(`Successfully added ${playerData.name} as a friend`);
+    }
+  }
+
+  const isOwnProfile = settingsStore?.userId == playerId;
 
   return (
     <Card className="mt-2">
@@ -76,14 +101,21 @@ export default function PlayerInfo({ playerData }: PlayerInfoProps) {
 
           {/* Settings Buttons */}
           <div className="absolute right-3 top-20 flex flex-col justify-end gap-2 md:relative md:right-0 md:top-0 md:mt-2 md:flex-row md:justify-center">
-            {settingsStore?.userId !== playerId && (
-              <button>
-                <HomeIcon
-                  title="Set as your Profile"
-                  width={28}
-                  height={28}
-                  onClick={claimProfile}
-                />
+            {!isOwnProfile && (
+              <button
+                className="h-fit w-fit rounded-md bg-blue-500 p-1 hover:bg-blue-600"
+                onClick={claimProfile}
+              >
+                <HomeIcon title="Set as your Profile" width={24} height={24} />
+              </button>
+            )}
+
+            {!settingsStore?.isFriend(playerId) && !isOwnProfile && (
+              <button
+                className="rounded-md bg-blue-500 p-1 hover:bg-blue-600"
+                onClick={addFriend}
+              >
+                <UserIcon title="Add as Friend" width={24} height={24} />
               </button>
             )}
           </div>

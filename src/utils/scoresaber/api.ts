@@ -145,8 +145,6 @@ export async function fetchAllScores(
     page++;
   } while (!done);
 
-  console.log(scores);
-
   return scores as ScoresaberPlayerScore[];
 }
 

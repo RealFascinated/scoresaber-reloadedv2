@@ -2,21 +2,23 @@
 
 import { ScoresaberPlayerScore } from "@/schemas/scoresaber/playerScore";
 import { fetchAllScores, fetchScores } from "@/utils/scoresaber/api";
+import moment from "moment";
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
+import { useSettingsStore } from "./settingsStore";
 
 type Player = {
-  lastUpdated: number;
   id: string;
   scores: ScoresaberPlayerScore[];
 };
 
 interface PlayerScoresStore {
+  lastUpdated: number;
   players: Player[];
 
+  setLastUpdated: (lastUpdated: number) => void;
   exists: (playerId: string) => boolean;
   get(playerId: string): Player | undefined;
-
   addPlayer: (
     playerId: string,
     callback?: (page: number, totalPages: number) => void,
@@ -27,12 +29,17 @@ interface PlayerScoresStore {
   updatePlayerScores: () => void;
 }
 
-const UPDATE_INTERVAL = 1000 * 60 * 60; // 1 hour
+const UPDATE_INTERVAL = 1000 * 60 * 30; // 30 minutes
 
 export const usePlayerScoresStore = create<PlayerScoresStore>()(
   persist(
     (set) => ({
+      lastUpdated: 0,
       players: [],
+
+      setLastUpdated: (lastUpdated: number) => {
+        set({ lastUpdated });
+      },
 
       exists: (playerId: string) => {
         const players: Player[] = usePlayerScoresStore.getState().players;
@@ -73,15 +80,11 @@ export const usePlayerScoresStore = create<PlayerScoresStore>()(
             message: "Could not fetch scores for player",
           };
         }
-
-        console.log(scores);
-
         set({
           players: [
             ...players,
             {
               id: playerId,
-              lastUpdated: new Date().getTime(),
               scores: scores,
             },
           ],
@@ -93,18 +96,34 @@ export const usePlayerScoresStore = create<PlayerScoresStore>()(
       },
 
       updatePlayerScores: async () => {
+        // Skip if we refreshed the scores recently
+        const timeUntilRefreshMs =
+          UPDATE_INTERVAL -
+          (Date.now() - usePlayerScoresStore.getState().lastUpdated);
+        if (timeUntilRefreshMs > 0) {
+          console.log(
+            "Waiting",
+            moment.duration(timeUntilRefreshMs).humanize(),
+            "to refresh scores for players",
+          );
+          setTimeout(
+            () => usePlayerScoresStore.getState().updatePlayerScores(),
+            timeUntilRefreshMs,
+          );
+          return;
+        }
+
         const players = usePlayerScoresStore.getState().players;
+        const friends = useSettingsStore.getState().friends;
+        for (const friend of friends) {
+          players.push({
+            id: friend.id,
+            scores: [],
+          });
+        }
 
         for (const player of players) {
           if (player == undefined) continue;
-
-          // Skip if the player was already updated recently
-          if (
-            player.lastUpdated >
-            new Date(Date.now() - UPDATE_INTERVAL).getTime()
-          )
-            continue;
-
           console.log(`Updating scores for ${player.id}...`);
 
           let oldScores = player.scores;
@@ -116,7 +135,9 @@ export const usePlayerScoresStore = create<PlayerScoresStore>()(
             return bDate.getTime() - aDate.getTime();
           });
 
-          const mostRecentScore = oldScores?.[0].score;
+          if (!oldScores || oldScores.length == 0) continue;
+
+          const mostRecentScore = oldScores[0].score;
           if (mostRecentScore == undefined) continue;
           let search = true;
 
@@ -150,7 +171,6 @@ export const usePlayerScoresStore = create<PlayerScoresStore>()(
           newPlayers = newPlayers.filter((playerr) => playerr.id != player.id);
           // Add the player
           newPlayers.push({
-            lastUpdated: new Date().getTime(),
             id: player.id,
             scores: oldScores,
           });
@@ -158,6 +178,11 @@ export const usePlayerScoresStore = create<PlayerScoresStore>()(
           if (newScoresCount > 0) {
             console.log(`Found ${newScoresCount} new scores for ${player.id}`);
           }
+
+          set({
+            players: newPlayers,
+            lastUpdated: Date.now(),
+          });
         }
       },
     }),
@@ -167,3 +192,8 @@ export const usePlayerScoresStore = create<PlayerScoresStore>()(
     },
   ),
 );
+
+usePlayerScoresStore.getState().updatePlayerScores();
+setInterval(() => {
+  usePlayerScoresStore.getState().updatePlayerScores();
+}, UPDATE_INTERVAL);

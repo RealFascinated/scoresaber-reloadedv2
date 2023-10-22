@@ -1,7 +1,7 @@
 import clsx from "clsx";
 
 interface ButtonProps {
-  text: string;
+  text: JSX.Element | string;
   url: string;
   icon?: JSX.Element;
   className?: string;

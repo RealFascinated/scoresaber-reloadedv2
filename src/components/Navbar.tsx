@@ -32,7 +32,7 @@ function NavbarButton({ text, icon, href, children }: ButtonProps) {
       </a>
 
       {children && (
-        <div className="absolute z-20 hidden divide-y rounded-md bg-neutral-600 shadow-sm group-hover:flex">
+        <div className="absolute z-20 hidden divide-y rounded-md bg-gray-600 opacity-[0.98] shadow-sm group-hover:flex">
           <div className="p-2">{children}</div>
         </div>
       )}
@@ -61,7 +61,27 @@ export default function Navbar() {
         )}
 
         <NavbarButton text="Friends" icon={<UserIcon height={20} width={20} />}>
-          <p className="text-sm font-bold">No friends, add someone!</p>
+          {settingsStore?.friends.length == 0 ? (
+            <p className="text-sm font-bold">No friends, add someone!</p>
+          ) : (
+            settingsStore?.friends.map((friend) => {
+              return (
+                <Button
+                  key={friend.id}
+                  className="mt-2 bg-gray-600"
+                  text={friend.name}
+                  url={`/player/${friend.id}`}
+                  icon={
+                    <Avatar
+                      url={friend.profilePicture}
+                      label={`${friend.name}'s avatar`}
+                      size={20}
+                    />
+                  }
+                />
+              );
+            })
+          )}
 
           <Button
             className="mt-2"
