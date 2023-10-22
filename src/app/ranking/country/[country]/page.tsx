@@ -8,7 +8,7 @@ import { Spinner } from "@/components/Spinner";
 import PlayerRanking from "@/components/player/PlayerRanking";
 import PlayerRankingMobile from "@/components/player/PlayerRankingMobile";
 import { ScoresaberPlayer } from "@/schemas/scoresaber/player";
-import { fetchTopPlayers } from "@/utils/scoresaber/api";
+import { ScoreSaberAPI } from "@/utils/scoresaber/api";
 import { normalizedRegionName } from "@/utils/utils";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -53,7 +53,7 @@ export default function RankingCountry({ params }: RankingCountryProps) {
   const updatePage = useCallback(
     (page: any) => {
       console.log("Switching page to", page);
-      fetchTopPlayers(page, country).then((response) => {
+      ScoreSaberAPI.fetchTopPlayers(page, country).then((response) => {
         if (!response) {
           setError(true);
           setErrorMessage("No players found");

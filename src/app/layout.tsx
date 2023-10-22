@@ -1,3 +1,4 @@
+import { AppProvider } from "@/components/AppProvider";
 import { ssrSettings } from "@/ssrSettings";
 import { Metadata } from "next";
 import { Inter } from "next/font/google";
@@ -40,7 +41,7 @@ export default function RootLayout({
           />
         </div>
 
-        {children}
+        <AppProvider>{children}</AppProvider>
       </body>
     </html>
   );

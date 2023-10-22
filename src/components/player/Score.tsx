@@ -1,7 +1,13 @@
 import { ScoresaberLeaderboardInfo } from "@/schemas/scoresaber/leaderboard";
+import { ScoresaberPlayer } from "@/schemas/scoresaber/player";
 import { ScoresaberScore } from "@/schemas/scoresaber/score";
+import { useBeatLeaderScoresStore } from "@/store/beatLeaderScoresStore";
 import { formatNumber } from "@/utils/number";
-import { GlobeAsiaAustraliaIcon } from "@heroicons/react/20/solid";
+import {
+  CheckIcon,
+  GlobeAsiaAustraliaIcon,
+  XMarkIcon,
+} from "@heroicons/react/20/solid";
 import clsx from "clsx";
 import moment from "moment";
 import Image from "next/image";
@@ -9,11 +15,17 @@ import ScoreStatLabel from "./ScoreStatLabel";
 
 type ScoreProps = {
   score: ScoresaberScore;
+  player: ScoresaberPlayer;
   leaderboard: ScoresaberLeaderboardInfo;
 };
 
-export default function Score({ score, leaderboard }: ScoreProps) {
+export default function Score({ score, player, leaderboard }: ScoreProps) {
   const isFullCombo = score.missedNotes + score.badCuts === 0;
+  const beatleaderScoreData = useBeatLeaderScoresStore
+    .getState()
+    .getScore(player.id, leaderboard.songHash);
+
+  console.log(beatleaderScoreData);
 
   return (
     <div className="grid grid-cols-1 pb-2 pt-2 first:pt-0 last:pb-0 md:grid-cols-[1.1fr_6fr_3fr] xl:md:grid-cols-[.95fr_6fr_3fr]">
@@ -90,7 +102,13 @@ export default function Score({ score, leaderboard }: ScoreProps) {
                 "min-w-[2rem]",
                 isFullCombo ? "bg-green-500" : "bg-red-500",
               )}
-              title={`${score.missedNotes} missed notes. ${score.badCuts} bad cuts.`}
+              icon={
+                isFullCombo ? (
+                  <CheckIcon width={20} height={20} />
+                ) : (
+                  <XMarkIcon width={20} height={20} />
+                )
+              }
               value={
                 isFullCombo
                   ? "FC"

@@ -28,7 +28,7 @@ const SearchType = {
  * @param name the name to search
  * @returns a list of players
  */
-export async function searchByName(
+async function searchByName(
   name: string,
 ): Promise<ScoresaberPlayer[] | undefined> {
   const response = await fetchQueue.fetch(
@@ -50,7 +50,7 @@ export async function searchByName(
  * @param playerId the id of the player
  * @returns the player info
  */
-export async function getPlayerInfo(
+async function getPlayerInfo(
   playerId: string,
 ): Promise<ScoresaberPlayer | undefined | null> {
   const response = await fetchQueue.fetch(
@@ -75,7 +75,7 @@ export async function getPlayerInfo(
  * @param limit the limit of scores to get
  * @returns a list of scores
  */
-export async function fetchScores(
+async function fetchScores(
   playerId: string,
   page: number = 1,
   searchType: string = SearchType.RECENT,
@@ -92,10 +92,7 @@ export async function fetchScores(
   | undefined
 > {
   if (limit > 100) {
-    console.log(
-      "Scoresaber API only allows a limit of 100 scores per request, limiting to 100.",
-    );
-    limit = 100;
+    throw new Error("Limit cannot be greater than 100");
   }
   const response = await fetchQueue.fetch(
     formatString(PLAYER_SCORES, true, playerId, limit, searchType, page),
@@ -127,7 +124,7 @@ export async function fetchScores(
  * @param callback a callback to call when a page is fetched
  * @returns a list of scores
  */
-export async function fetchAllScores(
+async function fetchAllScores(
   playerId: string,
   searchType: string,
   callback?: (currentPage: number, totalPages: number) => void,
@@ -165,7 +162,7 @@ export async function fetchAllScores(
  * @param country the country to get the players from
  * @returns a list of players
  */
-export async function fetchTopPlayers(
+async function fetchTopPlayers(
   page: number = 1,
   country?: string,
 ): Promise<
@@ -201,3 +198,11 @@ export async function fetchTopPlayers(
     },
   };
 }
+
+export const ScoreSaberAPI = {
+  searchByName,
+  getPlayerInfo,
+  fetchScores,
+  fetchAllScores,
+  fetchTopPlayers,
+};

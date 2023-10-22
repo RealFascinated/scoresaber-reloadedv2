@@ -1,8 +1,8 @@
 "use client";
 
 import { ScoresaberPlayer } from "@/schemas/scoresaber/player";
-import { ScoresaberPlayerScore } from "@/schemas/scoresaber/playerScore";
-import { fetchAllScores, fetchScores } from "@/utils/scoresaber/api";
+import { ScoresaberSmallerPlayerScore } from "@/schemas/scoresaber/smaller/smallerPlayerScore";
+import { ScoreSaberAPI } from "@/utils/scoresaber/api";
 import moment from "moment";
 import { toast } from "react-toastify";
 import { create } from "zustand";
@@ -12,11 +12,11 @@ import { useSettingsStore } from "./settingsStore";
 type Player = {
   id: string;
   scores: {
-    scoresaber: ScoresaberPlayerScore[];
+    scoresaber: ScoresaberSmallerPlayerScore[];
   };
 };
 
-interface PlayerScoresStore {
+interface ScoreSaberScoresStore {
   lastUpdated: number;
   players: Player[];
 
@@ -66,7 +66,7 @@ interface PlayerScoresStore {
 
 const UPDATE_INTERVAL = 1000 * 60 * 30; // 30 minutes
 
-export const usePlayerScoresStore = create<PlayerScoresStore>()(
+export const useScoresaberScoresStore = create<ScoreSaberScoresStore>()(
   persist(
     (set) => ({
       lastUpdated: 0,
@@ -77,12 +77,12 @@ export const usePlayerScoresStore = create<PlayerScoresStore>()(
       },
 
       exists: (playerId: string) => {
-        const players: Player[] = usePlayerScoresStore.getState().players;
+        const players: Player[] = useScoresaberScoresStore.getState().players;
         return players.some((player) => player.id == playerId);
       },
 
       get: (playerId: string) => {
-        const players: Player[] = usePlayerScoresStore.getState().players;
+        const players: Player[] = useScoresaberScoresStore.getState().players;
         return players.find((player) => player.id == playerId);
       },
 
@@ -90,10 +90,10 @@ export const usePlayerScoresStore = create<PlayerScoresStore>()(
         playerId: string,
         callback?: (page: number, totalPages: number) => void,
       ) => {
-        const players = usePlayerScoresStore.getState().players;
+        const players = useScoresaberScoresStore.getState().players;
 
         // Check if the player already exists
-        if (usePlayerScoresStore.getState().exists(playerId)) {
+        if (useScoresaberScoresStore.getState().exists(playerId)) {
           return {
             error: true,
             message: "Player already exists",
@@ -101,23 +101,53 @@ export const usePlayerScoresStore = create<PlayerScoresStore>()(
         }
 
         // Get all of the players scores
-        let scores = await fetchAllScores(
+        let scores = await ScoreSaberAPI.fetchAllScores(
           playerId,
           "recent",
           (page, totalPages) => {
             if (callback) callback(page, totalPages);
           },
         );
-
         if (scores == undefined) {
           return {
             error: true,
             message: "Could not fetch scores for player",
           };
         }
+        let smallerScores = new Array<ScoresaberSmallerPlayerScore>();
+        for (const score of scores) {
+          smallerScores.push({
+            score: {
+              id: score.score.id,
+              rank: score.score.rank,
+              baseScore: score.score.baseScore,
+              modifiedScore: score.score.modifiedScore,
+              pp: score.score.pp,
+              weight: score.score.weight,
+              modifiers: score.score.modifiers,
+              multiplier: score.score.multiplier,
+              badCuts: score.score.badCuts,
+              missedNotes: score.score.missedNotes,
+              maxCombo: score.score.maxCombo,
+              fullCombo: score.score.fullCombo,
+              hmd: score.score.hmd,
+              timeSet: score.score.timeSet,
+            },
+            leaderboard: {
+              id: score.leaderboard.id,
+              songHash: score.leaderboard.songHash,
+              difficulty: score.leaderboard.difficulty,
+              maxScore: score.leaderboard.maxScore,
+              createdDate: score.leaderboard.createdDate,
+              stars: score.leaderboard.stars,
+              plays: score.leaderboard.plays,
+              coverImage: score.leaderboard.coverImage,
+            },
+          });
+        }
 
         // Remove scores that are already in the database
-        const player = usePlayerScoresStore.getState().get(playerId);
+        const player = useScoresaberScoresStore.getState().get(playerId);
         if (player) {
           scores = scores.filter(
             (score) =>
@@ -145,7 +175,7 @@ export const usePlayerScoresStore = create<PlayerScoresStore>()(
       },
 
       updatePlayerScores: async () => {
-        const players = usePlayerScoresStore.getState().players;
+        const players = useScoresaberScoresStore.getState().players;
         const friends = useSettingsStore.getState().friends;
 
         let allPlayers = new Array<ScoresaberPlayer>();
@@ -159,21 +189,21 @@ export const usePlayerScoresStore = create<PlayerScoresStore>()(
 
         // add local player and friends if they don't exist
         for (const player of allPlayers) {
-          if (usePlayerScoresStore.getState().get(player.id) == undefined) {
+          if (useScoresaberScoresStore.getState().get(player.id) == undefined) {
             toast.info(
               `${
                 player.id == localPlayer?.id
                   ? `You were`
                   : `Friend ${player.name} was`
-              } missing from the scores database, adding...`,
+              } missing from the ScoreSaber scores database, adding...`,
             );
-            await usePlayerScoresStore.getState().addPlayer(player.id);
+            await useScoresaberScoresStore.getState().addPlayer(player.id);
             toast.success(
               `${
                 player.id == useSettingsStore.getState().player?.id
                   ? `You were`
                   : `Friend ${player.name} was`
-              } added to the scores database`,
+              } added to the ScoreSaber scores database`,
             );
           }
         }
@@ -181,7 +211,7 @@ export const usePlayerScoresStore = create<PlayerScoresStore>()(
         // Skip if we refreshed the scores recently
         const timeUntilRefreshMs =
           UPDATE_INTERVAL -
-          (Date.now() - usePlayerScoresStore.getState().lastUpdated);
+          (Date.now() - useScoresaberScoresStore.getState().lastUpdated);
         if (timeUntilRefreshMs > 0) {
           console.log(
             "Waiting",
@@ -189,12 +219,13 @@ export const usePlayerScoresStore = create<PlayerScoresStore>()(
             "to refresh scores for players",
           );
           setTimeout(
-            () => usePlayerScoresStore.getState().updatePlayerScores(),
+            () => useScoresaberScoresStore.getState().updatePlayerScores(),
             timeUntilRefreshMs,
           );
           return;
         }
 
+        // loop through all of the players and update their scores
         for (const player of players) {
           if (player == undefined) continue;
           console.log(`Updating scores for ${player.id}...`);
@@ -216,23 +247,50 @@ export const usePlayerScoresStore = create<PlayerScoresStore>()(
           let newScoresCount = 0;
           while (search) {
             page++;
-            const newScores = await fetchScores(player.id, page);
+            const newScores = await ScoreSaberAPI.fetchScores(player.id, page);
             if (newScores == undefined) continue;
 
-            for (const newScore of newScores.scores) {
-              if (mostRecentScore && newScore.score.id == mostRecentScore.id) {
+            for (const score of newScores.scores) {
+              if (mostRecentScore && score.score.id == mostRecentScore.id) {
                 search = false;
                 break;
               }
 
               // remove the old score
               const oldScoreIndex = oldScores.findIndex(
-                (score) => score.score.id == newScore.score.id,
+                (score) => score.score.id == score.score.id,
               );
               if (oldScoreIndex != -1) {
                 oldScores = oldScores.splice(oldScoreIndex, 1);
               }
-              oldScores.push(newScore);
+              oldScores.push({
+                score: {
+                  id: score.score.id,
+                  rank: score.score.rank,
+                  baseScore: score.score.baseScore,
+                  modifiedScore: score.score.modifiedScore,
+                  pp: score.score.pp,
+                  weight: score.score.weight,
+                  modifiers: score.score.modifiers,
+                  multiplier: score.score.multiplier,
+                  badCuts: score.score.badCuts,
+                  missedNotes: score.score.missedNotes,
+                  maxCombo: score.score.maxCombo,
+                  fullCombo: score.score.fullCombo,
+                  hmd: score.score.hmd,
+                  timeSet: score.score.timeSet,
+                },
+                leaderboard: {
+                  id: score.leaderboard.id,
+                  songHash: score.leaderboard.songHash,
+                  difficulty: score.leaderboard.difficulty,
+                  maxScore: score.leaderboard.maxScore,
+                  createdDate: score.leaderboard.createdDate,
+                  stars: score.leaderboard.stars,
+                  plays: score.leaderboard.plays,
+                  coverImage: score.leaderboard.coverImage,
+                },
+              });
               newScoresCount++;
             }
           }
@@ -261,7 +319,7 @@ export const usePlayerScoresStore = create<PlayerScoresStore>()(
       },
     }),
     {
-      name: "playerScores",
+      name: "scoresaberScores",
       storage: createJSONStorage(() => localStorage),
       version: 1,
 
@@ -282,9 +340,3 @@ export const usePlayerScoresStore = create<PlayerScoresStore>()(
     },
   ),
 );
-
-// Update the player scores every 30 minutes
-usePlayerScoresStore.getState().updatePlayerScores();
-setInterval(() => {
-  usePlayerScoresStore.getState().updatePlayerScores();
-}, UPDATE_INTERVAL);

@@ -2,7 +2,7 @@
 
 import { ScoresaberPlayer } from "@/schemas/scoresaber/player";
 import { SortType, SortTypes } from "@/types/SortTypes";
-import { getPlayerInfo } from "@/utils/scoresaber/api";
+import { ScoreSaberAPI } from "@/utils/scoresaber/api";
 import moment from "moment";
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
@@ -48,7 +48,7 @@ export const useSettingsStore = create<SettingsStore>()(
           return false;
         }
 
-        const friend = await getPlayerInfo(friendId);
+        const friend = await ScoreSaberAPI.getPlayerInfo(friendId);
         if (friend == undefined || friend == null) return false;
 
         set({ friends: [...friends, friend] });

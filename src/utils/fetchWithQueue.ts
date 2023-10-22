@@ -25,7 +25,18 @@ export class FetchQueue {
 
     const response = await fetch(url);
     if (response.status === 429) {
-      const retryAfter = Number(response.headers.get("retry-after")) * 1000;
+      const hasRetryAfter = response.headers.has("retry-after");
+      let retryAfter =
+        Number(
+          hasRetryAfter
+            ? response.headers.get("retry-after")
+            : new Date(
+                response.headers.get("X-Rate-Limit-Reset") as string,
+              ).getTime() / 1000,
+        ) * 1000;
+      if (!retryAfter) {
+        retryAfter = 3_000; // default to 3 seconds if we can't get the reset time
+      }
       this._queue.push(url);
       await new Promise<void>((resolve) => setTimeout(resolve, retryAfter));
       return this.fetch(this._queue.shift() as string);

@@ -1,7 +1,7 @@
 // Yoinked from https://github.com/Shurdoof/pp-calculator/blob/c24b5ca452119339928831d74e6d603fb17fd5ef/src/lib/pp/calculator.ts
 // Thank for for this I have no fucking idea what the maths is doing but it works!
 
-import { usePlayerScoresStore } from "@/store/playerScoresStore";
+import { useScoresaberScoresStore } from "@/store/scoresaberScoresStore";
 
 export const WEIGHT_COEFFICIENT = 0.965;
 
@@ -115,7 +115,7 @@ function calcRawPpAtIdx(
  * @returns the pp boundary (+ per raw pp)
  */
 export function calcPpBoundary(playerId: string, expectedPp = 1) {
-  const rankedScores = usePlayerScoresStore
+  const rankedScores = useScoresaberScoresStore
     .getState()
     .players.find((p) => p.id === playerId)
     ?.scores?.scoresaber.filter((s) => s.score.pp !== undefined);
@@ -156,7 +156,7 @@ export function calcPpBoundary(playerId: string, expectedPp = 1) {
  * @returns the highest pp play
  */
 export function getHighestPpPlay(playerId: string) {
-  const rankedScores = usePlayerScoresStore
+  const rankedScores = useScoresaberScoresStore
     .getState()
     .players.find((p) => p.id === playerId)
     ?.scores?.scoresaber.filter((s) => s.score.pp !== undefined);
@@ -176,7 +176,7 @@ export function getHighestPpPlay(playerId: string) {
  * @param limit the amount of top scores to average (default: 20)
  */
 export function getAveragePp(playerId: string, limit: number = 20) {
-  const rankedScores = usePlayerScoresStore
+  const rankedScores = useScoresaberScoresStore
     .getState()
     .players.find((p) => p.id === playerId)
     ?.scores?.scoresaber.filter((s) => s.score.pp !== undefined);

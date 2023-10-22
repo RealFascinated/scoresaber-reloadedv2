@@ -9,7 +9,7 @@ import Scores from "@/components/player/Scores";
 import { ScoresaberPlayer } from "@/schemas/scoresaber/player";
 import { useSettingsStore } from "@/store/settingsStore";
 import { SortType, SortTypes } from "@/types/SortTypes";
-import { getPlayerInfo } from "@/utils/scoresaber/api";
+import { ScoreSaberAPI } from "@/utils/scoresaber/api";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
@@ -59,7 +59,7 @@ export default function Player({ params }: { params: { id: string } }) {
       return;
     }
 
-    getPlayerInfo(params.id).then((playerResponse) => {
+    ScoreSaberAPI.getPlayerInfo(params.id).then((playerResponse) => {
       if (!playerResponse) {
         setError(true);
         setErrorMessage("Failed to fetch player. Is the ID correct?");

@@ -2,7 +2,7 @@
 
 import { ScoresaberPlayer } from "@/schemas/scoresaber/player";
 import { formatNumber } from "@/utils/number";
-import { getPlayerInfo, searchByName } from "@/utils/scoresaber/api";
+import { ScoreSaberAPI } from "@/utils/scoresaber/api";
 import { MagnifyingGlassIcon } from "@heroicons/react/20/solid";
 import clsx from "clsx";
 import { useEffect, useState } from "react";
@@ -27,14 +27,14 @@ export default function SearchPlayer() {
       const id = search.split("/").pop();
       if (id == undefined) return;
 
-      const player = await getPlayerInfo(id);
+      const player = await ScoreSaberAPI.getPlayerInfo(id);
       if (player == undefined) return;
 
       setPlayers([player]);
     }
 
     // Search by name
-    const players = await searchByName(search);
+    const players = await ScoreSaberAPI.searchByName(search);
     if (players == undefined) return;
 
     setPlayers(players);

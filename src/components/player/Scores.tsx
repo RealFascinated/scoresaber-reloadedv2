@@ -2,7 +2,7 @@ import { ScoresaberPlayer } from "@/schemas/scoresaber/player";
 import { ScoresaberPlayerScore } from "@/schemas/scoresaber/playerScore";
 import { useSettingsStore } from "@/store/settingsStore";
 import { SortType, SortTypes } from "@/types/SortTypes";
-import { fetchScores } from "@/utils/scoresaber/api";
+import { ScoreSaberAPI } from "@/utils/scoresaber/api";
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
 import Card from "../Card";
@@ -43,38 +43,40 @@ export default function Scores({ playerData, page, sortType }: ScoresProps) {
   const updateScoresPage = useCallback(
     (sortType: SortType, page: any) => {
       console.log(`Switching page to ${page} with sort ${sortType.value}`);
-      fetchScores(playerId, page, sortType.value, 10).then((scoresResponse) => {
-        if (!scoresResponse) {
-          setError(true);
-          setErrorMessage("No Scores");
-          setScores({ ...scores, loading: false });
-          return;
-        }
-        setScores({
-          ...scores,
-          scores: scoresResponse.scores,
-          totalPages: scoresResponse.pageInfo.totalPages,
-          loading: false,
-          page: page,
-          sortType: sortType,
-        });
-        useSettingsStore.setState({
-          lastUsedSortType: sortType,
-        });
-
-        if (page > 1) {
-          router.push(
-            `/player/${playerId}?page=${page}&sort=${sortType.value}`,
-            {
-              scroll: false,
-            },
-          );
-        } else {
-          router.push(`/player/${playerId}?sort=${sortType.value}`, {
-            scroll: false,
+      ScoreSaberAPI.fetchScores(playerId, page, sortType.value, 10).then(
+        (scoresResponse) => {
+          if (!scoresResponse) {
+            setError(true);
+            setErrorMessage("No Scores");
+            setScores({ ...scores, loading: false });
+            return;
+          }
+          setScores({
+            ...scores,
+            scores: scoresResponse.scores,
+            totalPages: scoresResponse.pageInfo.totalPages,
+            loading: false,
+            page: page,
+            sortType: sortType,
           });
-        }
-      });
+          useSettingsStore.setState({
+            lastUsedSortType: sortType,
+          });
+
+          if (page > 1) {
+            router.push(
+              `/player/${playerId}?page=${page}&sort=${sortType.value}`,
+              {
+                scroll: false,
+              },
+            );
+          } else {
+            router.push(`/player/${playerId}?sort=${sortType.value}`, {
+              scroll: false,
+            });
+          }
+        },
+      );
     },
     [playerId, router, scores],
   );
@@ -125,7 +127,12 @@ export default function Scores({ playerData, page, sortType }: ScoresProps) {
                 const { score, leaderboard } = scoreData;
 
                 return (
-                  <Score key={id} score={score} leaderboard={leaderboard} />
+                  <Score
+                    key={id}
+                    player={playerData}
+                    score={score}
+                    leaderboard={leaderboard}
+                  />
                 );
               })
             )}
