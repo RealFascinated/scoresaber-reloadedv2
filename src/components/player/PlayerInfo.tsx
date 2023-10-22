@@ -126,13 +126,21 @@ export default function PlayerInfo({ playerData }: PlayerInfoProps) {
         </div>
         <div className="mt-1 flex w-full flex-col items-center gap-2 md:items-start">
           {/* Name */}
-          <p className="text-2xl">{playerData.name}</p>
+          <p className="text-2xl leading-none">{playerData.name}</p>
 
-          <div className="flex gap-3 text-xl">
+          <div className="flex items-center gap-3 text-xl">
             {/* Global Rank */}
             <div className="flex items-center gap-1 text-gray-300">
               <GlobeAsiaAustraliaIcon width={32} height={32} />
-              <p>#{playerData.rank}</p>
+
+              <a
+                className="flex transform-gpu items-center gap-1 transition-all hover:text-blue-500"
+                href={`/ranking/global/?page=${Math.round(
+                  playerData.rank / 50,
+                )}`}
+              >
+                <p>#{playerData.rank}</p>
+              </a>
             </div>
 
             {/* Country Rank */}
