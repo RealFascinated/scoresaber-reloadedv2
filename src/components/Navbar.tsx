@@ -41,12 +41,7 @@ function NavbarButton({ text, icon, href, children }: ButtonProps) {
 }
 
 export default function Navbar() {
-  const settingsStore = useStore(useSettingsStore, (state) => {
-    return {
-      profilePicture: state.profilePicture,
-      userId: state.userId,
-    };
-  });
+  const settingsStore = useStore(useSettingsStore, (state) => state);
 
   return (
     <>

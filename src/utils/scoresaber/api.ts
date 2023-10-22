@@ -120,6 +120,7 @@ export async function fetchScores(
 export async function fetchAllScores(
   playerId: string,
   searchType: string,
+  callback?: (currentPage: number, totalPages: number) => void,
 ): Promise<ScoresaberPlayerScore[] | undefined> {
   const scores = new Array();
 
@@ -131,14 +132,20 @@ export async function fetchAllScores(
       done = true;
       break;
     }
-    const { scores } = response;
-    if (scores.length === 0) {
+    const { scores: scoresFetched } = response;
+    if (scoresFetched.length === 0) {
       done = true;
       break;
     }
-    scores.push(...scores);
+    scores.push(...scoresFetched);
+
+    if (callback) {
+      callback(page, response.pageInfo.totalPages);
+    }
     page++;
   } while (!done);
+
+  console.log(scores);
 
   return scores as ScoresaberPlayerScore[];
 }

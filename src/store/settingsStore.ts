@@ -22,7 +22,9 @@ export const useSettingsStore = create<SettingsStore>()(
       setUserId: (userId: string) => {
         set({ userId });
       },
+
       setProfilePicture: (profilePicture: string) => set({ profilePicture }),
+
       async refreshProfile() {
         const id = useSettingsStore.getState().userId;
         if (!id) return;

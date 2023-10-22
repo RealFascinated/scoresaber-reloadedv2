@@ -10,6 +10,7 @@ import Score from "@/components/Score";
 import { Spinner } from "@/components/Spinner";
 import { ScoresaberPlayer } from "@/schemas/scoresaber/player";
 import { ScoresaberPlayerScore } from "@/schemas/scoresaber/playerScore";
+import { usePlayerScoresStore } from "@/store/playerScoresStore";
 import { useSettingsStore } from "@/store/settingsStore";
 import { formatNumber } from "@/utils/number";
 import { fetchScores, getPlayerInfo } from "@/utils/scoresaber/api";
@@ -22,7 +23,7 @@ import {
 } from "@heroicons/react/20/solid";
 import Image from "next/image";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import ReactCountryFlag from "react-country-flag";
 import { toast } from "react-toastify";
 
@@ -60,13 +61,9 @@ const sortTypes: { [key: string]: SortType } = {
 const DEFAULT_SORT_TYPE = sortTypes.top;
 
 export default function Player({ params }: { params: { id: string } }) {
-  const settingsStore = useStore(useSettingsStore, (state) => {
-    return {
-      userId: state.userId,
-      setUserId: state.setUserId,
-      refreshProfile: state.refreshProfile,
-    };
-  });
+  const settingsStore = useStore(useSettingsStore, (store) => store);
+  const playerScoreStore = useStore(usePlayerScoresStore, (store) => store);
+
   const searchParams = useSearchParams();
   const router = useRouter();
 
@@ -141,9 +138,42 @@ export default function Player({ params }: { params: { id: string } }) {
     [params.id, router, scores],
   );
 
-  function claimProfile() {
+  const toastId: any = useRef(null);
+
+  async function claimProfile() {
     settingsStore?.setUserId(params.id);
     settingsStore?.refreshProfile();
+
+    const reponse = await playerScoreStore?.addPlayer(
+      params.id,
+      (page, totalPages) => {
+        const autoClose = page == totalPages ? 5000 : false;
+
+        if (page == 1) {
+          toastId.current = toast.info(
+            `Fetching scores ${page}/${totalPages}`,
+            {
+              autoClose: autoClose,
+              progress: page / totalPages,
+            },
+          );
+        } else {
+          toast.update(toastId.current, {
+            progress: page / totalPages,
+            render: `Fetching scores ${page}/${totalPages}`,
+            autoClose: autoClose,
+          });
+        }
+
+        console.log(`Fetching scores for ${params.id} (${page}/${totalPages})`);
+      },
+    );
+    if (reponse?.error) {
+      toast.error("Failed to claim profile");
+      console.log(reponse.message);
+      return;
+    }
+
     toast.success("Successfully claimed profile");
   }
 
