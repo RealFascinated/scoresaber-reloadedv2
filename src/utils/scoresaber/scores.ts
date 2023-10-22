@@ -168,3 +168,24 @@ export function getHighestPpPlay(playerId: string) {
 
   return rankedScorePps[0];
 }
+
+/**
+ * Gets the average pp of the player
+ *
+ * @param playerId the player id
+ * @param limit the amount of top scores to average (default: 20)
+ */
+export function getAveragePp(playerId: string, limit: number = 20) {
+  const rankedScores = usePlayerScoresStore
+    .getState()
+    .players.find((p) => p.id === playerId)
+    ?.scores?.filter((s) => s.score.pp !== undefined);
+  if (!rankedScores) return null;
+
+  const rankedScorePps = rankedScores
+    .map((s) => s.score.pp)
+    .sort((a, b) => b - a)
+    .slice(0, limit);
+
+  return getTotalPpFromSortedPps(rankedScorePps, 0) / limit;
+}

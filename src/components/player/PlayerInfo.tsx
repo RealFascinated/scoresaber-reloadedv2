@@ -2,7 +2,11 @@ import { ScoresaberPlayer } from "@/schemas/scoresaber/player";
 import { usePlayerScoresStore } from "@/store/playerScoresStore";
 import { useSettingsStore } from "@/store/settingsStore";
 import { formatNumber } from "@/utils/number";
-import { calcPpBoundary, getHighestPpPlay } from "@/utils/scoresaber/scores";
+import {
+  calcPpBoundary,
+  getAveragePp,
+  getHighestPpPlay,
+} from "@/utils/scoresaber/scores";
 import {
   GlobeAsiaAustraliaIcon,
   HomeIcon,
@@ -177,6 +181,14 @@ export default function PlayerInfo({ playerData }: PlayerInfoProps) {
                   hoverValue="Highest pp play"
                   value={`${formatNumber(
                     getHighestPpPlay(playerId)?.toFixed(2),
+                  )}pp`}
+                />
+                <Label
+                  title="Avg PP"
+                  className="bg-[#8992e8]"
+                  hoverValue="Average amount of pp per play (best 20 scores)"
+                  value={`${formatNumber(
+                    getAveragePp(playerId)?.toFixed(2),
                   )}pp`}
                 />
                 <Label
