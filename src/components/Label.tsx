@@ -2,7 +2,7 @@ import clsx from "clsx";
 
 type LabelProps = {
   title: string;
-  value: string;
+  value: any;
   className?: string;
 };
 
