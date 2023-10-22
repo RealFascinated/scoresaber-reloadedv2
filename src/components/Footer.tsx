@@ -1,3 +1,4 @@
+import { SSRSettings } from "@/ssrSettings";
 import { isProduction } from "@/utils/utils";
 
 const buttons = [
@@ -21,7 +22,7 @@ export default function Footer() {
             className="transform-gpu transition-all hover:text-blue-500"
             href="https://git.fascinated.cc/Fascinated/scoresaber-reloaded-v2"
           >
-            Scoresaber Reloaded
+            {SSRSettings.siteName}
           </a>
 
           {buttons.map((button, index) => {

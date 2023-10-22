@@ -1,4 +1,5 @@
 import AppProvider from "@/components/AppProvider";
+import { SSRSettings } from "@/ssrSettings";
 import { Metadata } from "next";
 import { Inter } from "next/font/google";
 import Image from "next/image";
@@ -9,13 +10,13 @@ const font = Inter({ subsets: ["latin-ext"], weight: "500" });
 
 export const metadata: Metadata = {
   title: {
-    template: "Scoresaber Reloaded - %s",
-    default: "Scoresaber Reloaded",
+    template: SSRSettings.siteName + " - %s",
+    default: SSRSettings.siteName,
   },
   openGraph: {
-    title: "Scoresaber Reloaded",
+    title: SSRSettings.siteName,
     description: "Aggregate your scores with other leaderboards together!",
-    url: "https://ssr.fascinated.cc",
+    url: SSRSettings.siteUrl,
     locale: "en_US",
     type: "website",
   },
