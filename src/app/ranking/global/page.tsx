@@ -6,9 +6,11 @@ import Error from "@/components/Error";
 import Pagination from "@/components/Pagination";
 import { Spinner } from "@/components/Spinner";
 import PlayerRanking from "@/components/player/PlayerRanking";
+import PlayerRankingMobile from "@/components/player/PlayerRankingMobile";
 import { ScoresaberPlayer } from "@/schemas/scoresaber/player";
 import { fetchTopPlayers } from "@/utils/scoresaber/api";
 import { GlobeAsiaAustraliaIcon } from "@heroicons/react/20/solid";
+import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
 
@@ -113,7 +115,7 @@ export default function RankingGlobal() {
                 <GlobeAsiaAustraliaIcon width={32} height={32} />
                 <p>You are viewing Global scores</p>
               </div>
-              <table className="w-full table-auto border-spacing-2 border-none text-left">
+              <table className="hidden w-full table-auto border-spacing-2 border-none text-left md:table">
                 <thead>
                   <tr>
                     <th className="px-4 py-2">Rank</th>
@@ -132,21 +134,34 @@ export default function RankingGlobal() {
                   ))}
                 </tbody>
               </table>
+
+              <div className="flex flex-col gap-2 md:hidden">
+                {players.map((player) => (
+                  <div
+                    key={player.rank}
+                    className="flex flex-col gap-2 rounded-md bg-gray-700 hover:bg-gray-600"
+                  >
+                    <Link href={`/player/${player.id}`}>
+                      <PlayerRankingMobile player={player} />
+                    </Link>
+                  </div>
+                ))}
+              </div>
+
+              {/* Pagination */}
+              <div className="flex w-full flex-row justify-center rounded-md bg-gray-800 md:flex-col">
+                <div className="p-3">
+                  <Pagination
+                    currentPage={pageInfo.page}
+                    totalPages={pageInfo.totalPages}
+                    onPageChange={(page) => {
+                      updatePage(page);
+                    }}
+                  />
+                </div>
+              </div>
             </div>
           )}
-
-          {/* Pagination */}
-          <div className="flex w-full flex-row justify-center rounded-md bg-gray-800 md:flex-col">
-            <div className="p-3">
-              <Pagination
-                currentPage={pageInfo.page}
-                totalPages={pageInfo.totalPages}
-                onPageChange={(page) => {
-                  updatePage(page);
-                }}
-              />
-            </div>
-          </div>
         </Card>
       </Container>
     </main>
