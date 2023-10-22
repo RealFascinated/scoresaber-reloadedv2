@@ -42,7 +42,7 @@ export default function Scores({ playerData, page, sortType }: ScoresProps) {
 
   const updateScoresPage = useCallback(
     (sortType: SortType, page: any) => {
-      console.log("Switching page to", page);
+      console.log(`Switching page to ${page} with sort ${sortType.value}`);
       fetchScores(playerId, page, sortType.value, 10).then((scoresResponse) => {
         if (!scoresResponse) {
           setError(true);

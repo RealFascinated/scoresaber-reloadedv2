@@ -21,9 +21,16 @@ type PlayerInfo = {
 const DEFAULT_SORT_TYPE = SortTypes.top;
 
 export default function Player({ params }: { params: { id: string } }) {
-  const [mounted, setMounted] = useState(false);
-
   const searchParams = useSearchParams();
+
+  const [mounted, setMounted] = useState(false);
+  const [error, setError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+
+  const [player, setPlayer] = useState<PlayerInfo>({
+    loading: true,
+    player: undefined,
+  });
 
   let page;
   const pageString = searchParams.get("page");
@@ -42,23 +49,8 @@ export default function Player({ params }: { params: { id: string } }) {
     sortType = SortTypes[sortTypeString] || DEFAULT_SORT_TYPE;
   }
 
-  const [error, setError] = useState(false);
-  const [errorMessage, setErrorMessage] = useState("");
-
-  const [player, setPlayer] = useState<PlayerInfo>({
-    loading: true,
-    player: undefined,
-  });
-
   useEffect(() => {
     setMounted(true);
-
-    if (!params.id) {
-      setError(true);
-      setErrorMessage("No player id");
-      setPlayer({ ...player, loading: false });
-      return;
-    }
     if (error || !player.loading) {
       return;
     }
@@ -70,7 +62,7 @@ export default function Player({ params }: { params: { id: string } }) {
     getPlayerInfo(params.id).then((playerResponse) => {
       if (!playerResponse) {
         setError(true);
-        setErrorMessage("Failed to fetch player");
+        setErrorMessage("Failed to fetch player. Is the ID correct?");
         setPlayer({ ...player, loading: false });
         return;
       }
