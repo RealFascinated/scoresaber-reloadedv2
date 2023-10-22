@@ -107,25 +107,30 @@ export default function RankingGlobal() {
               <Spinner />
             </div>
           ) : (
-            <table className="w-full table-auto border-spacing-2 border-none text-left">
-              <thead>
-                <tr>
-                  <th className="px-4 py-2">Rank</th>
-                  <th className="px-4 py-2">Profile</th>
-                  <th className="px-4 py-2">Performance Points</th>
-                  <th className="px-4 py-2">Total Plays</th>
-                  <th className="px-4 py-2">Total Ranked Plays</th>
-                  <th className="px-4 py-2">Avg Ranked Accuracy</th>
-                </tr>
-              </thead>
-              <tbody className="border-none">
-                {players.map((player) => (
-                  <tr key={player.rank} className="border-b border-gray-700">
-                    <PlayerRanking player={player} />
+            <div className="flex flex-col gap-2">
+              <div className="flex items-center gap-2 rounded-md bg-gray-700 p-2">
+                <p>You are viewing Global scores</p>
+              </div>
+              <table className="w-full table-auto border-spacing-2 border-none text-left">
+                <thead>
+                  <tr>
+                    <th className="px-4 py-2">Rank</th>
+                    <th className="px-4 py-2">Profile</th>
+                    <th className="px-4 py-2">Performance Points</th>
+                    <th className="px-4 py-2">Total Plays</th>
+                    <th className="px-4 py-2">Total Ranked Plays</th>
+                    <th className="px-4 py-2">Avg Ranked Accuracy</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody className="border-none">
+                  {players.map((player) => (
+                    <tr key={player.rank} className="border-b border-gray-700">
+                      <PlayerRanking player={player} />
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           )}
 
           {/* Pagination */}
