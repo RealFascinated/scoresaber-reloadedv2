@@ -3,7 +3,7 @@
 import { useScoresaberScoresStore } from "@/store/scoresaberScoresStore";
 import { useSettingsStore } from "@/store/settingsStore";
 import React from "react";
-const UPDATE_INTERVAL = 1000 * 60 * 15; // 15 minutes
+const UPDATE_INTERVAL = 1000 * 60 * 5; // 5 minutes
 
 export default class AppProvider extends React.Component {
   _state = {
