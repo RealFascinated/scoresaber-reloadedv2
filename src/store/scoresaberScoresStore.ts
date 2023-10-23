@@ -11,6 +11,7 @@ import { useSettingsStore } from "./settingsStore";
 
 type Player = {
   id: string;
+  lastUpdated: number;
   scores: ScoresaberSmallerPlayerScore[];
 };
 
@@ -48,7 +49,7 @@ interface ScoreSaberScoresStore {
    * @param callback a callback to call when a score page is fetched
    * @returns if the player was added successfully
    */
-  addPlayer: (
+  addOrUpdatePlayer: (
     playerId: string,
     callback?: (page: number, totalPages: number) => void,
   ) => Promise<{
@@ -84,10 +85,13 @@ export const useScoresaberScoresStore = create<ScoreSaberScoresStore>()(
         return players.find((player) => player.id == playerId);
       },
 
-      addPlayer: async (
+      addOrUpdatePlayer: async (
         playerId: string,
         callback?: (page: number, totalPages: number) => void,
-      ) => {
+      ): Promise<{
+        error: boolean;
+        message: string;
+      }> => {
         const players: Player[] = get().players;
 
         // Check if the player already exists
@@ -98,70 +102,106 @@ export const useScoresaberScoresStore = create<ScoreSaberScoresStore>()(
           };
         }
 
-        // Get all of the players scores
-        let scores = await ScoreSaberAPI.fetchAllScores(
-          playerId,
-          "recent",
-          (page, totalPages) => {
-            if (callback) callback(page, totalPages);
-          },
-        );
-        if (scores == undefined) {
+        if (playerId == undefined) {
           return {
             error: true,
-            message: "Could not fetch scores for player",
+            message: "Player id is undefined",
           };
         }
-        let smallerScores = new Array<ScoresaberSmallerPlayerScore>();
-        for (const score of scores) {
-          smallerScores.push({
-            score: {
-              id: score.score.id,
-              rank: score.score.rank,
-              baseScore: score.score.baseScore,
-              modifiedScore: score.score.modifiedScore,
-              pp: score.score.pp,
-              weight: score.score.weight,
-              modifiers: score.score.modifiers,
-              multiplier: score.score.multiplier,
-              badCuts: score.score.badCuts,
-              missedNotes: score.score.missedNotes,
-              maxCombo: score.score.maxCombo,
-              fullCombo: score.score.fullCombo,
-              hmd: score.score.hmd,
-              timeSet: score.score.timeSet,
-            },
-            leaderboard: {
-              id: score.leaderboard.id,
-              songHash: score.leaderboard.songHash,
-              difficulty: score.leaderboard.difficulty,
-              maxScore: score.leaderboard.maxScore,
-              createdDate: score.leaderboard.createdDate,
-              stars: score.leaderboard.stars,
-              plays: score.leaderboard.plays,
-              coverImage: score.leaderboard.coverImage,
-            },
-          });
+        console.log(`Updating scores for ${playerId}...`);
+
+        const player = players.find((player) => player.id == playerId);
+
+        let oldScores: ScoresaberSmallerPlayerScore[] = player
+          ? player.scores
+          : [];
+
+        // Sort the scores by date (newset to oldest), so we know when to stop searching for new scores
+        oldScores = oldScores.sort((a, b) => {
+          const aDate = new Date(a.score.timeSet);
+          const bDate = new Date(b.score.timeSet);
+          return bDate.getTime() - aDate.getTime();
+        });
+
+        const mostRecentScoreId =
+          oldScores.length > 0 ? oldScores[0].score.id : undefined;
+        let search = true;
+
+        let page = 0;
+        let newScoresCount = 0;
+        while (search) {
+          page++;
+          const newScores = await ScoreSaberAPI.fetchScores(playerId, page);
+          console.log("scanning page", page, "for", playerId);
+          if (newScores?.scores.length == 0 || newScores == undefined) break;
+
+          for (const score of newScores.scores) {
+            if (score.score.id == mostRecentScoreId) {
+              search = false;
+              break;
+            }
+
+            if (mostRecentScoreId) {
+              // remove the old score
+              const oldScoreIndex = oldScores.findIndex(
+                (score) => score.score.id == score.score.id,
+              );
+              if (oldScoreIndex != -1) {
+                oldScores = oldScores.splice(oldScoreIndex, 1);
+              }
+            }
+            oldScores.push({
+              score: {
+                id: score.score.id,
+                rank: score.score.rank,
+                baseScore: score.score.baseScore,
+                modifiedScore: score.score.modifiedScore,
+                pp: score.score.pp,
+                weight: score.score.weight,
+                modifiers: score.score.modifiers,
+                multiplier: score.score.multiplier,
+                badCuts: score.score.badCuts,
+                missedNotes: score.score.missedNotes,
+                maxCombo: score.score.maxCombo,
+                fullCombo: score.score.fullCombo,
+                hmd: score.score.hmd,
+                timeSet: score.score.timeSet,
+              },
+              leaderboard: {
+                id: score.leaderboard.id,
+                songHash: score.leaderboard.songHash,
+                difficulty: score.leaderboard.difficulty,
+                maxScore: score.leaderboard.maxScore,
+                createdDate: score.leaderboard.createdDate,
+                stars: score.leaderboard.stars,
+                plays: score.leaderboard.plays,
+                coverImage: score.leaderboard.coverImage,
+              },
+            });
+            newScoresCount++;
+          }
         }
 
-        // Remove scores that are already in the database
-        const player = get().get(playerId);
-        if (player) {
-          scores = scores.filter(
-            (score) =>
-              player.scores.findIndex((s) => s.score.id == score.score.id) ==
-              -1,
-          );
+        let newPlayers = players;
+        // Remove the player if they already exists
+        newPlayers = newPlayers.filter(
+          (playerr: Player) => playerr.id != playerId,
+        );
+        // Add the player
+        newPlayers.push({
+          id: playerId,
+          scores: oldScores,
+          lastUpdated: Date.now(),
+        });
+
+        console.log(oldScores);
+
+        if (newScoresCount > 0) {
+          console.log(`Found ${newScoresCount} new scores for ${playerId}`);
         }
 
         set({
-          players: [
-            ...players,
-            {
-              id: playerId,
-              scores: scores,
-            },
-          ],
+          players: newPlayers,
         });
         return {
           error: false,
@@ -196,7 +236,7 @@ export const useScoresaberScoresStore = create<ScoreSaberScoresStore>()(
                   : `Friend ${player.name} was`
               } missing from the ScoreSaber scores database, adding...`,
             );
-            await get().addPlayer(player.id);
+            await get().addOrUpdatePlayer(player.id);
             toast.success(
               `${
                 player.id == useSettingsStore.getState().player?.id
@@ -222,93 +262,7 @@ export const useScoresaberScoresStore = create<ScoreSaberScoresStore>()(
 
         // loop through all of the players and update their scores
         for (const player of players) {
-          if (player == undefined) continue;
-          console.log(`Updating scores for ${player.id}...`);
-
-          let oldScores: ScoresaberSmallerPlayerScore[] = player.scores;
-
-          // Sort the scores by date (newset to oldest), so we know when to stop searching for new scores
-          oldScores = oldScores.sort((a, b) => {
-            const aDate = new Date(a.score.timeSet);
-            const bDate = new Date(b.score.timeSet);
-            return bDate.getTime() - aDate.getTime();
-          });
-          if (!oldScores.length) continue;
-
-          const mostRecentScore = oldScores[0].score;
-          let search = true;
-
-          let page = 0;
-          let newScoresCount = 0;
-          while (search) {
-            page++;
-            const newScores = await ScoreSaberAPI.fetchScores(player.id, page);
-            if (newScores == undefined) continue;
-
-            for (const score of newScores.scores) {
-              if (mostRecentScore && score.score.id == mostRecentScore.id) {
-                search = false;
-                break;
-              }
-
-              // remove the old score
-              const oldScoreIndex = oldScores.findIndex(
-                (score) => score.score.id == score.score.id,
-              );
-              if (oldScoreIndex != -1) {
-                oldScores = oldScores.splice(oldScoreIndex, 1);
-              }
-              oldScores.push({
-                score: {
-                  id: score.score.id,
-                  rank: score.score.rank,
-                  baseScore: score.score.baseScore,
-                  modifiedScore: score.score.modifiedScore,
-                  pp: score.score.pp,
-                  weight: score.score.weight,
-                  modifiers: score.score.modifiers,
-                  multiplier: score.score.multiplier,
-                  badCuts: score.score.badCuts,
-                  missedNotes: score.score.missedNotes,
-                  maxCombo: score.score.maxCombo,
-                  fullCombo: score.score.fullCombo,
-                  hmd: score.score.hmd,
-                  timeSet: score.score.timeSet,
-                },
-                leaderboard: {
-                  id: score.leaderboard.id,
-                  songHash: score.leaderboard.songHash,
-                  difficulty: score.leaderboard.difficulty,
-                  maxScore: score.leaderboard.maxScore,
-                  createdDate: score.leaderboard.createdDate,
-                  stars: score.leaderboard.stars,
-                  plays: score.leaderboard.plays,
-                  coverImage: score.leaderboard.coverImage,
-                },
-              });
-              newScoresCount++;
-            }
-          }
-
-          let newPlayers = players;
-          // Remove the player if it already exists
-          newPlayers = newPlayers.filter(
-            (playerr: Player) => playerr.id != player.id,
-          );
-          // Add the player
-          newPlayers.push({
-            id: player.id,
-            scores: oldScores,
-          });
-
-          if (newScoresCount > 0) {
-            console.log(`Found ${newScoresCount} new scores for ${player.id}`);
-          }
-
-          set({
-            players: newPlayers,
-            lastUpdated: Date.now(),
-          });
+          get().addOrUpdatePlayer(player.id);
         }
       },
     }),

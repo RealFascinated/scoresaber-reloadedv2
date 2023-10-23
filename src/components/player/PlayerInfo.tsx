@@ -6,6 +6,7 @@ import {
   calcPpBoundary,
   getAveragePp,
   getHighestPpPlay,
+  getTotalScores,
 } from "@/utils/scoresaber/scores";
 import {
   GlobeAsiaAustraliaIcon,
@@ -53,7 +54,7 @@ export default function PlayerInfo({ playerData }: PlayerInfoProps) {
 
   async function addProfile(isFriend: boolean) {
     if (!useScoresaberScoresStore.getState().exists(playerId)) {
-      const reponse = await playerScoreStore?.addPlayer(
+      const reponse = await playerScoreStore?.addOrUpdatePlayer(
         playerId,
         (page, totalPages) => {
           const autoClose = page == totalPages ? 5000 : false;
@@ -192,6 +193,12 @@ export default function PlayerInfo({ playerData }: PlayerInfoProps) {
 
             {hasLocalScores && (
               <>
+                <Label
+                  title="Total Scores"
+                  className="bg-blue-500"
+                  hoverValue="Total amount of scores set"
+                  value={`${formatNumber(getTotalScores(playerId))}`}
+                />
                 <Label
                   title="Top PP"
                   className="bg-[#8992e8]"

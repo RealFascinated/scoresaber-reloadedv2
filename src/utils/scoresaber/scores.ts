@@ -189,3 +189,13 @@ export function getAveragePp(playerId: string, limit: number = 20) {
 
   return getTotalPpFromSortedPps(rankedScorePps, 0) / limit;
 }
+
+/**
+ * Returns the total amount of scores for the given player
+ *
+ * @param playerId the player id
+ * @returns the total amount of scores
+ */
+export function getTotalScores(playerId: string) {
+  return useScoresaberScoresStore.getState().get(playerId)?.scores?.length;
+}
