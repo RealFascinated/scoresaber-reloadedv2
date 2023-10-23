@@ -27,7 +27,7 @@ export default function SearchPlayer() {
       const id = search.split("/").pop();
       if (id == undefined) return;
 
-      const player = await ScoreSaberAPI.getPlayerInfo(id);
+      const player = await ScoreSaberAPI.fetchPlayerData(id);
       if (player == undefined) return;
 
       setPlayers([player]);

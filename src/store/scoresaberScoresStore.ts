@@ -314,7 +314,6 @@ export const useScoresaberScoresStore = create<ScoreSaberScoresStore>()(
             players: newPlayers,
             lastUpdated: Date.now(),
           });
-          console.log(friends);
         }
       },
     }),

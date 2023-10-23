@@ -59,7 +59,7 @@ export default function Player({ params }: { params: { id: string } }) {
       return;
     }
 
-    ScoreSaberAPI.getPlayerInfo(params.id).then((playerResponse) => {
+    ScoreSaberAPI.fetchPlayerData(params.id).then((playerResponse) => {
       if (!playerResponse) {
         setError(true);
         setErrorMessage("Failed to fetch player. Is the ID correct?");

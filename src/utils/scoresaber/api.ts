@@ -50,7 +50,7 @@ async function searchByName(
  * @param playerId the id of the player
  * @returns the player info
  */
-async function getPlayerInfo(
+async function fetchPlayerData(
   playerId: string,
 ): Promise<ScoresaberPlayer | undefined | null> {
   const response = await fetchQueue.fetch(
@@ -201,7 +201,7 @@ async function fetchTopPlayers(
 
 export const ScoreSaberAPI = {
   searchByName,
-  getPlayerInfo,
+  fetchPlayerData,
   fetchScores,
   fetchAllScores,
   fetchTopPlayers,

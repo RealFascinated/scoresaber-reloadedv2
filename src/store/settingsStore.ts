@@ -9,16 +9,16 @@ import { createJSONStorage, persist } from "zustand/middleware";
 
 interface SettingsStore {
   player: ScoresaberPlayer | undefined;
-  lastUsedSortType: SortType;
   friends: ScoresaberPlayer[];
+  lastUsedSortType: SortType;
   profilesLastUpdated: number;
 
   setProfile: (playerData: ScoresaberPlayer) => void;
-  setLastUsedSortType: (sortType: SortType) => void;
   addFriend: (friendId: string) => Promise<boolean>;
   removeFriend: (friendId: string) => void;
   isFriend: (friendId: string) => boolean;
   clearFriends: () => void;
+  setLastUsedSortType: (sortType: SortType) => void;
   setProfilesLastUpdated: (profilesLastUpdated: number) => void;
   refreshProfiles: () => void;
 }
@@ -39,16 +39,13 @@ export const useSettingsStore = create<SettingsStore>()(
         });
       },
 
-      setLastUsedSortType: (sortType: SortType) =>
-        set({ lastUsedSortType: sortType }),
-
       async addFriend(friendId: string) {
         const friends = useSettingsStore.getState().friends;
         if (friends.some((friend) => friend.id == friendId)) {
           return false;
         }
 
-        const friend = await ScoreSaberAPI.getPlayerInfo(friendId);
+        const friend = await ScoreSaberAPI.fetchPlayerData(friendId);
         if (friend == undefined || friend == null) return false;
 
         set({ friends: [...friends, friend] });
@@ -73,6 +70,10 @@ export const useSettingsStore = create<SettingsStore>()(
         set({ profilesLastUpdated });
       },
 
+      setLastUsedSortType: (sortType: SortType) => {
+        set({ lastUsedSortType: sortType });
+      },
+
       async refreshProfiles() {
         const timeUntilRefreshMs =
           UPDATE_INTERVAL -
@@ -86,6 +87,26 @@ export const useSettingsStore = create<SettingsStore>()(
           setTimeout(() => this.refreshProfiles(), timeUntilRefreshMs);
           return;
         }
+
+        const player = useSettingsStore.getState().player;
+        if (player != undefined) {
+          const newPlayer = await ScoreSaberAPI.fetchPlayerData(player.id);
+          if (newPlayer != undefined && newPlayer != null) {
+            console.log("Updated player data for", newPlayer.name);
+            set({ player: newPlayer });
+          }
+        }
+
+        const friends = useSettingsStore.getState().friends;
+        const newFriends = await Promise.all(
+          friends.map(async (friend) => {
+            const newFriend = await ScoreSaberAPI.fetchPlayerData(friend.id);
+            if (newFriend == undefined || newFriend == null) return friend;
+            console.log("Updated friend data for", newFriend.name);
+            return newFriend;
+          }),
+        );
+        set({ friends: newFriends });
 
         useSettingsStore.setState({ profilesLastUpdated: Date.now() });
       },
