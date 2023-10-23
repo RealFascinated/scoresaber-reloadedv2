@@ -18,7 +18,10 @@ export function formatTimeAgo(timestamp: string) {
   if (timeDifference === "less than a minute") {
     return "just now";
   } else {
-    return `${timeDifference.replace("about", "").replace("almost", "")} ago`;
+    return `${timeDifference
+      .replace("about", "")
+      .replace("almost", "")
+      .replace("over", "")} ago`;
   }
 }
 
