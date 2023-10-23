@@ -10,7 +10,7 @@ type RankingGlobalProps = {
 
 // Get data from API (server-sided)
 async function getData(page: number, country: string) {
-  const pageData = await ScoreSaberAPI.fetchTopPlayers(page);
+  const pageData = await ScoreSaberAPI.fetchTopPlayers(page, country);
   if (!pageData) {
     return undefined;
   }
