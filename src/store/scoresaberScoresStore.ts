@@ -132,7 +132,7 @@ export const useScoresaberScoresStore = create<ScoreSaberScoresStore>()(
         while (search) {
           page++;
           const newScores = await ScoreSaberAPI.fetchScores(playerId, page);
-          console.log("scanning page", page, "for", playerId);
+          console.log("Scanning page", page, "for", playerId);
           if (newScores?.scores.length == 0 || newScores == undefined) break;
 
           for (const score of newScores.scores) {
@@ -193,8 +193,6 @@ export const useScoresaberScoresStore = create<ScoreSaberScoresStore>()(
           scores: oldScores,
           lastUpdated: Date.now(),
         });
-
-        console.log(oldScores);
 
         if (newScoresCount > 0) {
           console.log(`Found ${newScoresCount} new scores for ${playerId}`);

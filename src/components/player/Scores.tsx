@@ -8,6 +8,7 @@ import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
 import Card from "../Card";
+import Error from "../Error";
 import Pagination from "../Pagination";
 import Score from "./Score";
 
@@ -33,6 +34,7 @@ export default function Scores({ playerData, page, sortType }: ScoresProps) {
 
   const router = useRouter();
 
+  const [mounted, setMounted] = useState(false);
   const [error, setError] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
 
@@ -46,7 +48,6 @@ export default function Scores({ playerData, page, sortType }: ScoresProps) {
 
   const updateScoresPage = useCallback(
     (sortType: SortType, page: any) => {
-      console.log(`Switching page to ${page} with sort ${sortType.value}`);
       ScoreSaberAPI.fetchScores(playerId, page, sortType.value, 10).then(
         (scoresResponse) => {
           if (!scoresResponse) {
@@ -77,6 +78,8 @@ export default function Scores({ playerData, page, sortType }: ScoresProps) {
               scroll: false,
             });
           }
+
+          console.log(`Switched page to ${page} with sort ${sortType.value}`);
         },
       );
     },
@@ -84,10 +87,25 @@ export default function Scores({ playerData, page, sortType }: ScoresProps) {
   );
 
   useEffect(() => {
-    if (!scores.loading || error) return;
+    if (mounted) return;
+    setMounted(true);
 
     updateScoresPage(scores.sortType, scores.page);
-  }, [error, playerId, updateScoresPage, scores]);
+  }, [mounted, updateScoresPage, scores.sortType, scores.page]);
+
+  if (error) {
+    return (
+      <Card className="mt-2">
+        <div className="p-3 text-center">
+          <div role="status">
+            <div className="flex flex-col items-center justify-center gap-2">
+              {error && <Error errorMessage={errorMessage} />}
+            </div>
+          </div>
+        </div>
+      </Card>
+    );
+  }
 
   return (
     <Card className="mt-2 w-full items-center md:flex-col">
