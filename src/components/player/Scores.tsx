@@ -30,9 +30,21 @@ export default function Scores({
 
   const router = useRouter();
 
+  const lastUsedSortType = settingsStore?.lastUsedSortType;
+  if (lastUsedSortType && lastUsedSortType != sortType) {
+    router.push(
+      `/player/${playerId}/scoresaber/${lastUsedSortType.value}/${page}`,
+      {
+        scroll: false,
+      },
+    );
+  }
+
   function setPage(page: number, sortTypee?: SortType) {
     if (sortTypee) {
-      settingsStore?.setLastUsedSortType(sortTypee);
+      if (sortTypee.value !== sortType.value) {
+        settingsStore?.setLastUsedSortType(sortTypee);
+      }
     }
     router.push(
       `/player/${playerId}/scoresaber/${
