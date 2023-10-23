@@ -86,7 +86,6 @@ export const useSettingsStore = create<SettingsStore>()(
             timeUntilRefreshMs / 1000,
             "to refresh profiles",
           );
-          setTimeout(() => this.refreshProfiles(), timeUntilRefreshMs);
           return;
         }
 

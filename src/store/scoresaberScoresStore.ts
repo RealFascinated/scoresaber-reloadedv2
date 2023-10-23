@@ -270,7 +270,6 @@ export const useScoresaberScoresStore = create<ScoreSaberScoresStore>()(
             timeUntilRefreshMs / 1000,
             "seconds to refresh scores for players",
           );
-          setTimeout(() => get().updatePlayerScores(), timeUntilRefreshMs);
           return;
         }
 
