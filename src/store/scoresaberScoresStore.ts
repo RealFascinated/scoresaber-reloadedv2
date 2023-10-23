@@ -9,6 +9,8 @@ import { createJSONStorage, persist } from "zustand/middleware";
 import { IDBStorage } from "./IndexedDBStorage";
 import { useSettingsStore } from "./settingsStore";
 
+const UPDATE_INTERVAL = 1000 * 60 * 30; // 30 minutes
+
 type Player = {
   id: string;
   lastUpdated: number;
@@ -62,8 +64,6 @@ interface ScoreSaberScoresStore {
   updatePlayerScores: () => Promise<void>;
 }
 
-const UPDATE_INTERVAL = 1000 * 60 * 30; // 30 minutes
-
 export const useScoresaberScoresStore = create<ScoreSaberScoresStore>()(
   persist(
     (set, get) => ({
@@ -88,14 +88,6 @@ export const useScoresaberScoresStore = create<ScoreSaberScoresStore>()(
         message: string;
       }> => {
         const players: Player[] = get().players;
-
-        // Check if the player already exists
-        if (get().exists(playerId)) {
-          return {
-            error: true,
-            message: "Player already exists",
-          };
-        }
 
         if (playerId == undefined) {
           return {
@@ -194,6 +186,8 @@ export const useScoresaberScoresStore = create<ScoreSaberScoresStore>()(
 
         if (newScoresCount > 0) {
           console.log(`Found ${newScoresCount} new scores for ${playerId}`);
+        } else {
+          console.log(`No new scores found for ${playerId}`);
         }
 
         set({
@@ -247,6 +241,10 @@ export const useScoresaberScoresStore = create<ScoreSaberScoresStore>()(
 
         // loop through all of the players and update their scores
         for (const player of players) {
+          if (player.lastUpdated == undefined) {
+            player.lastUpdated = Date.now();
+          }
+
           // Skip if we refreshed the scores recently
           const timeUntilRefreshMs =
             UPDATE_INTERVAL - (Date.now() - player.lastUpdated);
