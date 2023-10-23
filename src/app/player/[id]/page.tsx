@@ -1,5 +1,6 @@
 import PlayerPage from "@/components/player/PlayerPage";
 import { ssrSettings } from "@/ssrSettings";
+import { formatNumber } from "@/utils/number";
 import { ScoreSaberAPI } from "@/utils/scoresaber/api";
 import { Metadata } from "next";
 
@@ -19,15 +20,17 @@ export async function generateMetadata({
 
   const description =
     `View ${player.name}'s scores, top plays, and more.&#x0A;` +
-    `Rank: #${player.rank} (#${player.countryRank} - ${player.country})&#x0A;` +
+    `Rank: #${player.rank} (#${formatNumber(
+      player.countryRank,
+    )} - ${formatNumber(player.country)})&#x0A;` +
     `PP: ${player.pp}&#x0A;` +
-    `Play Count: ${player.scoreStats.totalPlayCount}`;
+    `Play Count: ${formatNumber(player.scoreStats.totalPlayCount)}`;
 
   return {
     title: `${player.name}`,
-    description: description,
+    description: `View ${player.name}'s scores, top plays, and more.`,
     openGraph: {
-      type: "website",
+      type: "article",
       title: `${ssrSettings.siteName} - ${player.name}`,
       description: description,
       images: [
