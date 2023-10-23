@@ -18,18 +18,17 @@ export async function generateMetadata({
 
   return {
     title: `${player.name}`,
-    description: `
-    View ${player.name}'s scores, top plays, and more.&#x0A;
-    Rank: #${player.rank} (#${player.countryRank} - ${player.country})&#x0A;
-    PP: ${player.pp}&#x0A;
-    Play Count: ${player.scoreStats.totalPlayCount}&#x0A;
-    `
-      .replaceAll("\n", "")
-      .trim(),
+    category: "article",
+    description:
+      `View ${player.name}'s scores, top plays, and more.&#x0A;` +
+      `Rank: #${player.rank} (#${player.countryRank} - ${player.country})&#x0A;` +
+      `PP: ${player.pp}&#x0A;` +
+      `Play Count: ${player.scoreStats.totalPlayCount}`,
     twitter: {
       images: [
         {
           url: player.profilePicture,
+          type: "article",
         },
       ],
     },
