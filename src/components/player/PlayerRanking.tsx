@@ -1,15 +1,17 @@
 import { ScoresaberPlayer } from "@/schemas/scoresaber/player";
 import { useSettingsStore } from "@/store/settingsStore";
 import { formatNumber } from "@/utils/number";
+import dynamic from "next/dynamic";
 import Link from "next/link";
-import ReactCountryFlag from "react-country-flag";
 import { useStore } from "zustand";
-import Avatar from "../Avatar";
 
 type PlayerRankingProps = {
   player: ScoresaberPlayer;
   showCountryFlag?: boolean;
 };
+
+const ReactCountryFlag = dynamic(() => import("react-country-flag"));
+const Avatar = dynamic(() => import("@/components/Avatar"));
 
 export default function PlayerRanking({
   player,

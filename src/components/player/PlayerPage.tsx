@@ -2,16 +2,18 @@
 
 import Card from "@/components/Card";
 import Container from "@/components/Container";
-import Error from "@/components/Error";
-import { Spinner } from "@/components/Spinner";
-import PlayerInfo from "@/components/player/PlayerInfo";
+import Spinner from "@/components/Spinner";
 import Scores from "@/components/player/Scores";
 import { ScoresaberPlayer } from "@/schemas/scoresaber/player";
 import { useSettingsStore } from "@/store/settingsStore";
 import { SortType, SortTypes } from "@/types/SortTypes";
 import { ScoreSaberAPI } from "@/utils/scoresaber/api";
+import dynamic from "next/dynamic";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
+import PlayerInfo from "./PlayerInfo";
+
+const Error = dynamic(() => import("@/components/Error"));
 
 type PlayerInfo = {
   loading: boolean;

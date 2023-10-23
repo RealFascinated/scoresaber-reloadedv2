@@ -3,12 +3,14 @@ import { ScoresaberPlayerScore } from "@/schemas/scoresaber/playerScore";
 import { useSettingsStore } from "@/store/settingsStore";
 import { SortType, SortTypes } from "@/types/SortTypes";
 import { ScoreSaberAPI } from "@/utils/scoresaber/api";
+import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
 import Card from "../Card";
 import Pagination from "../Pagination";
-import { Spinner } from "../Spinner";
 import Score from "./Score";
+
+const Spinner = dynamic(() => import("@/components/Spinner"));
 
 type PageInfo = {
   loading: boolean;

@@ -12,14 +12,16 @@ import {
   HomeIcon,
   UserIcon,
 } from "@heroicons/react/20/solid";
+import dynamic from "next/dynamic";
 import { useRef } from "react";
-import ReactCountryFlag from "react-country-flag";
 import { toast } from "react-toastify";
 import { useStore } from "zustand";
 import Avatar from "../Avatar";
 import Card from "../Card";
 import Label from "../Label";
 import PlayerChart from "./PlayerChart";
+
+const ReactCountryFlag = dynamic(() => import("react-country-flag"));
 
 type PlayerInfoProps = {
   playerData: ScoresaberPlayer;

@@ -3,17 +3,19 @@
 import { ScoresaberPlayer } from "@/schemas/scoresaber/player";
 import { ScoreSaberAPI } from "@/utils/scoresaber/api";
 import { normalizedRegionName } from "@/utils/utils";
+import dynamic from "next/dynamic";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
-import ReactCountryFlag from "react-country-flag";
 import Card from "../Card";
 import Container from "../Container";
-import Error from "../Error";
 import Pagination from "../Pagination";
-import { Spinner } from "../Spinner";
+import Spinner from "../Spinner";
 import PlayerRanking from "./PlayerRanking";
 import PlayerRankingMobile from "./PlayerRankingMobile";
+
+const ReactCountryFlag = dynamic(() => import("react-country-flag"));
+const Error = dynamic(() => import("@/components/Error"));
 
 type PageInfo = {
   loading: boolean;

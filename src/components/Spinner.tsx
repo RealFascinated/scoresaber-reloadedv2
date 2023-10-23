@@ -1,4 +1,4 @@
-export function Spinner() {
+export default function Spinner() {
   return (
     <>
       <svg

@@ -1,7 +1,7 @@
 import { ScoresaberPlayer } from "@/schemas/scoresaber/player";
 import { useSettingsStore } from "@/store/settingsStore";
 import { formatNumber } from "@/utils/number";
-import ReactCountryFlag from "react-country-flag";
+import dynamic from "next/dynamic";
 import { useStore } from "zustand";
 import Avatar from "../Avatar";
 import Label from "../Label";
@@ -10,6 +10,8 @@ type PlayerRankingProps = {
   player: ScoresaberPlayer;
   showCountryFlag?: boolean;
 };
+
+const ReactCountryFlag = dynamic(() => import("react-country-flag"));
 
 export default function PlayerRankingMobile({
   player,
