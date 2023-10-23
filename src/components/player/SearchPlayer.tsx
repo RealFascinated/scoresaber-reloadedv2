@@ -45,7 +45,7 @@ export default function SearchPlayer() {
 
     // Take the user to the first account
     if (players.length > 0) {
-      window.location.href = `/player/${players[0].id}`;
+      window.location.href = `/player/${players[0].id}/scoresaber/top/1`;
     }
   }
 
