@@ -1,3 +1,5 @@
+import { ReadonlyHeaders } from "next/dist/server/web/spec-extension/adapters/headers";
+
 let regionNames = new Intl.DisplayNames(["en"], { type: "region" });
 
 export function isProduction() {
@@ -12,4 +14,32 @@ export function isProduction() {
  */
 export function normalizedRegionName(region: string) {
   return regionNames.of(region);
+}
+
+/**
+ * Gets the page number from the search query
+ *
+ * @param query the query to get the page from
+ * @param defaultPage the default page to return if the page is not found
+ * @returns the page from the query
+ */
+export function getPageFromSearchQuery(
+  headers: ReadonlyHeaders,
+  defaultPage = 1,
+) {
+  const url = new URL(headers.get("x-url")!);
+  const searchParams = url.searchParams;
+
+  let page;
+  const pageString = searchParams.get("page");
+  if (pageString == null) {
+    page = defaultPage;
+  } else {
+    page = Number.parseInt(pageString);
+  }
+  if (Number.isNaN(page)) {
+    page = defaultPage;
+  }
+
+  return page;
 }
