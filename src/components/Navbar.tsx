@@ -70,7 +70,7 @@ export default function Navbar() {
                   key={friend.id}
                   className="mt-2 bg-gray-500"
                   text={friend.name}
-                  url={`/player/${friend.id}`}
+                  url={`/player/${friend.id}/scoresaber/top/1`}
                   icon={
                     <Avatar
                       url={friend.profilePicture}
