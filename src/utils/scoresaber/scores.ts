@@ -118,7 +118,7 @@ export function calcPpBoundary(playerId: string, expectedPp = 1) {
   const rankedScores = useScoresaberScoresStore
     .getState()
     .players.find((p) => p.id === playerId)
-    ?.scores?.scoresaber.filter((s) => s.score.pp !== undefined);
+    ?.scores?.filter((s) => s.score.pp !== undefined);
   if (!rankedScores) return null;
 
   const rankedScorePps = rankedScores
@@ -159,7 +159,7 @@ export function getHighestPpPlay(playerId: string) {
   const rankedScores = useScoresaberScoresStore
     .getState()
     .players.find((p) => p.id === playerId)
-    ?.scores?.scoresaber.filter((s) => s.score.pp !== undefined);
+    ?.scores?.filter((s) => s.score.pp !== undefined);
   if (!rankedScores) return null;
 
   const rankedScorePps = rankedScores
@@ -179,7 +179,7 @@ export function getAveragePp(playerId: string, limit: number = 20) {
   const rankedScores = useScoresaberScoresStore
     .getState()
     .players.find((p) => p.id === playerId)
-    ?.scores?.scoresaber.filter((s) => s.score.pp !== undefined);
+    ?.scores?.filter((s) => s.score.pp !== undefined);
   if (!rankedScores) return null;
 
   const rankedScorePps = rankedScores

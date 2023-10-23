@@ -1,4 +1,4 @@
-import { AppProvider } from "@/components/AppProvider";
+import AppProvider from "@/components/AppProvider";
 import { ssrSettings } from "@/ssrSettings";
 import { Metadata } from "next";
 import { Inter } from "next/font/google";

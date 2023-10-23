@@ -8,6 +8,7 @@ import { ScoresaberPlayer } from "@/schemas/scoresaber/player";
 import { useSettingsStore } from "@/store/settingsStore";
 import { SortType, SortTypes } from "@/types/SortTypes";
 import { ScoreSaberAPI } from "@/utils/scoresaber/api";
+import useStore from "@/utils/useStore";
 import dynamic from "next/dynamic";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -27,6 +28,7 @@ type PlayerPageProps = {
 const DEFAULT_SORT_TYPE = SortTypes.top;
 
 export default function PlayerPage({ id }: PlayerPageProps) {
+  const settingsStore = useStore(useSettingsStore, (store) => store);
   const searchParams = useSearchParams();
 
   const [mounted, setMounted] = useState(false);
@@ -49,8 +51,7 @@ export default function PlayerPage({ id }: PlayerPageProps) {
   let sortType: SortType;
   const sortTypeString = searchParams.get("sort");
   if (sortTypeString == null) {
-    sortType =
-      useSettingsStore.getState().lastUsedSortType || DEFAULT_SORT_TYPE;
+    sortType = settingsStore?.lastUsedSortType || DEFAULT_SORT_TYPE;
   } else {
     sortType = SortTypes[sortTypeString] || DEFAULT_SORT_TYPE;
   }

@@ -16,6 +16,7 @@
     "clsx": "^2.0.0",
     "date-fns": "^2.30.0",
     "encoding": "^0.1.13",
+    "idb-keyval": "^6.2.1",
     "next": "13.5.6",
     "next-build-id": "^3.0.0",
     "node-fetch-cache": "^3.1.3",

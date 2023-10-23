@@ -6,13 +6,12 @@ import { ScoreSaberAPI } from "@/utils/scoresaber/api";
 import { toast } from "react-toastify";
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
+import { IDBStorage } from "./IndexedDBStorage";
 import { useSettingsStore } from "./settingsStore";
 
 type Player = {
   id: string;
-  scores: {
-    scoresaber: ScoresaberSmallerPlayerScore[];
-  };
+  scores: ScoresaberSmallerPlayerScore[];
 };
 
 interface ScoreSaberScoresStore {
@@ -60,14 +59,14 @@ interface ScoreSaberScoresStore {
   /**
    * Refreshes the player scores and adds any new scores to the local database
    */
-  updatePlayerScores: () => void;
+  updatePlayerScores: () => Promise<void>;
 }
 
 const UPDATE_INTERVAL = 1000 * 60 * 30; // 30 minutes
 
 export const useScoresaberScoresStore = create<ScoreSaberScoresStore>()(
   persist(
-    (set) => ({
+    (set, get) => ({
       lastUpdated: 0,
       players: [],
 
@@ -76,12 +75,12 @@ export const useScoresaberScoresStore = create<ScoreSaberScoresStore>()(
       },
 
       exists: (playerId: string) => {
-        const players: Player[] = useScoresaberScoresStore.getState().players;
+        const players: Player[] = get().players;
         return players.some((player) => player.id == playerId);
       },
 
       get: (playerId: string) => {
-        const players: Player[] = useScoresaberScoresStore.getState().players;
+        const players: Player[] = get().players;
         return players.find((player) => player.id == playerId);
       },
 
@@ -89,10 +88,10 @@ export const useScoresaberScoresStore = create<ScoreSaberScoresStore>()(
         playerId: string,
         callback?: (page: number, totalPages: number) => void,
       ) => {
-        const players = useScoresaberScoresStore.getState().players;
+        const players: Player[] = get().players;
 
         // Check if the player already exists
-        if (useScoresaberScoresStore.getState().exists(playerId)) {
+        if (get().exists(playerId)) {
           return {
             error: true,
             message: "Player already exists",
@@ -146,13 +145,12 @@ export const useScoresaberScoresStore = create<ScoreSaberScoresStore>()(
         }
 
         // Remove scores that are already in the database
-        const player = useScoresaberScoresStore.getState().get(playerId);
+        const player = get().get(playerId);
         if (player) {
           scores = scores.filter(
             (score) =>
-              player.scores.scoresaber.findIndex(
-                (s) => s.score.id == score.score.id,
-              ) == -1,
+              player.scores.findIndex((s) => s.score.id == score.score.id) ==
+              -1,
           );
         }
 
@@ -161,9 +159,7 @@ export const useScoresaberScoresStore = create<ScoreSaberScoresStore>()(
             ...players,
             {
               id: playerId,
-              scores: {
-                scoresaber: scores,
-              },
+              scores: scores,
             },
           ],
         });
@@ -174,7 +170,7 @@ export const useScoresaberScoresStore = create<ScoreSaberScoresStore>()(
       },
 
       updatePlayerScores: async () => {
-        const players = useScoresaberScoresStore.getState().players;
+        const players = get().players;
         const friends = useSettingsStore.getState().friends;
 
         let allPlayers = new Array<ScoresaberPlayer>();
@@ -188,7 +184,11 @@ export const useScoresaberScoresStore = create<ScoreSaberScoresStore>()(
 
         // add local player and friends if they don't exist
         for (const player of allPlayers) {
-          if (useScoresaberScoresStore.getState().get(player.id) == undefined) {
+          if (get().lastUpdated == 0) {
+            set({ lastUpdated: Date.now() });
+          }
+
+          if (get().get(player.id) == undefined) {
             toast.info(
               `${
                 player.id == localPlayer?.id
@@ -196,7 +196,7 @@ export const useScoresaberScoresStore = create<ScoreSaberScoresStore>()(
                   : `Friend ${player.name} was`
               } missing from the ScoreSaber scores database, adding...`,
             );
-            await useScoresaberScoresStore.getState().addPlayer(player.id);
+            await get().addPlayer(player.id);
             toast.success(
               `${
                 player.id == useSettingsStore.getState().player?.id
@@ -209,18 +209,14 @@ export const useScoresaberScoresStore = create<ScoreSaberScoresStore>()(
 
         // Skip if we refreshed the scores recently
         const timeUntilRefreshMs =
-          UPDATE_INTERVAL -
-          (Date.now() - useScoresaberScoresStore.getState().lastUpdated);
+          UPDATE_INTERVAL - (Date.now() - get().lastUpdated);
         if (timeUntilRefreshMs > 0) {
           console.log(
             "Waiting",
             timeUntilRefreshMs / 1000,
             "seconds to refresh scores for players",
           );
-          setTimeout(
-            () => useScoresaberScoresStore.getState().updatePlayerScores(),
-            timeUntilRefreshMs,
-          );
+          setTimeout(() => get().updatePlayerScores(), timeUntilRefreshMs);
           return;
         }
 
@@ -229,7 +225,7 @@ export const useScoresaberScoresStore = create<ScoreSaberScoresStore>()(
           if (player == undefined) continue;
           console.log(`Updating scores for ${player.id}...`);
 
-          let oldScores = player.scores.scoresaber;
+          let oldScores: ScoresaberSmallerPlayerScore[] = player.scores;
 
           // Sort the scores by date (newset to oldest), so we know when to stop searching for new scores
           oldScores = oldScores.sort((a, b) => {
@@ -296,13 +292,13 @@ export const useScoresaberScoresStore = create<ScoreSaberScoresStore>()(
 
           let newPlayers = players;
           // Remove the player if it already exists
-          newPlayers = newPlayers.filter((playerr) => playerr.id != player.id);
+          newPlayers = newPlayers.filter(
+            (playerr: Player) => playerr.id != player.id,
+          );
           // Add the player
           newPlayers.push({
             id: player.id,
-            scores: {
-              scoresaber: oldScores,
-            },
+            scores: oldScores,
           });
 
           if (newScoresCount > 0) {
@@ -318,23 +314,8 @@ export const useScoresaberScoresStore = create<ScoreSaberScoresStore>()(
     }),
     {
       name: "scoresaberScores",
-      storage: createJSONStorage(() => localStorage),
+      storage: createJSONStorage(() => IDBStorage),
       version: 1,
-
-      migrate: (state: any, version: number) => {
-        if (version == 1) {
-          state.players = state.players.map((player: any) => {
-            return {
-              id: player.id,
-              scores: {
-                scoresaber: player.scores,
-              },
-            };
-          });
-
-          return state;
-        }
-      },
     },
   ),
 );

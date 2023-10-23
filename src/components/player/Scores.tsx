@@ -3,6 +3,7 @@ import { ScoresaberPlayerScore } from "@/schemas/scoresaber/playerScore";
 import { useSettingsStore } from "@/store/settingsStore";
 import { SortType, SortTypes } from "@/types/SortTypes";
 import { ScoreSaberAPI } from "@/utils/scoresaber/api";
+import useStore from "@/utils/useStore";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
@@ -27,6 +28,7 @@ type ScoresProps = {
 };
 
 export default function Scores({ playerData, page, sortType }: ScoresProps) {
+  const settingsStore = useStore(useSettingsStore, (store) => store);
   const playerId = playerData.id;
 
   const router = useRouter();
@@ -61,9 +63,7 @@ export default function Scores({ playerData, page, sortType }: ScoresProps) {
             page: page,
             sortType: sortType,
           });
-          useSettingsStore.setState({
-            lastUsedSortType: sortType,
-          });
+          settingsStore?.setLastUsedSortType(sortType);
 
           if (page > 1) {
             router.push(
@@ -80,7 +80,7 @@ export default function Scores({ playerData, page, sortType }: ScoresProps) {
         },
       );
     },
-    [playerId, router, scores],
+    [playerId, router, scores, settingsStore],
   );
 
   useEffect(() => {

@@ -5,6 +5,7 @@ import { SortType, SortTypes } from "@/types/SortTypes";
 import { ScoreSaberAPI } from "@/utils/scoresaber/api";
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
+import { IDBStorage } from "./IndexedDBStorage";
 
 interface SettingsStore {
   player: ScoresaberPlayer | undefined;
@@ -19,14 +20,14 @@ interface SettingsStore {
   clearFriends: () => void;
   setLastUsedSortType: (sortType: SortType) => void;
   setProfilesLastUpdated: (profilesLastUpdated: number) => void;
-  refreshProfiles: () => void;
+  refreshProfiles: () => Promise<void>;
 }
 
 const UPDATE_INTERVAL = 1000 * 60 * 10; // 10 minutes
 
 export const useSettingsStore = create<SettingsStore>()(
   persist(
-    (set) => ({
+    (set, get) => ({
       player: undefined,
       lastUsedSortType: SortTypes.top,
       friends: [],
@@ -39,7 +40,7 @@ export const useSettingsStore = create<SettingsStore>()(
       },
 
       async addFriend(friendId: string) {
-        const friends = useSettingsStore.getState().friends;
+        const friends = this.friends;
         if (friends.some((friend) => friend.id == friendId)) {
           return false;
         }
@@ -52,7 +53,7 @@ export const useSettingsStore = create<SettingsStore>()(
       },
 
       removeFriend: (friendId: string) => {
-        const friends = useSettingsStore.getState().friends;
+        const friends = get().friends;
         set({ friends: friends.filter((friend) => friend.id != friendId) });
 
         return friendId;
@@ -61,7 +62,7 @@ export const useSettingsStore = create<SettingsStore>()(
       clearFriends: () => set({ friends: [] }),
 
       isFriend: (friendId: string) => {
-        const friends: ScoresaberPlayer[] = useSettingsStore.getState().friends;
+        const friends: ScoresaberPlayer[] = get().friends;
         return friends.some((friend) => friend.id == friendId);
       },
 
@@ -75,8 +76,7 @@ export const useSettingsStore = create<SettingsStore>()(
 
       async refreshProfiles() {
         const timeUntilRefreshMs =
-          UPDATE_INTERVAL -
-          (Date.now() - useSettingsStore.getState().profilesLastUpdated);
+          UPDATE_INTERVAL - (Date.now() - get().profilesLastUpdated);
         if (timeUntilRefreshMs > 0) {
           console.log(
             "Waiting",
@@ -87,7 +87,7 @@ export const useSettingsStore = create<SettingsStore>()(
           return;
         }
 
-        const player = useSettingsStore.getState().player;
+        const player = get().player;
         if (player != undefined) {
           const newPlayer = await ScoreSaberAPI.fetchPlayerData(player.id);
           if (newPlayer != undefined && newPlayer != null) {
@@ -96,7 +96,7 @@ export const useSettingsStore = create<SettingsStore>()(
           }
         }
 
-        const friends = useSettingsStore.getState().friends;
+        const friends = get().friends;
         const newFriends = await Promise.all(
           friends.map(async (friend) => {
             const newFriend = await ScoreSaberAPI.fetchPlayerData(friend.id);
@@ -105,21 +105,12 @@ export const useSettingsStore = create<SettingsStore>()(
             return newFriend;
           }),
         );
-        set({ friends: newFriends });
-
-        useSettingsStore.setState({ profilesLastUpdated: Date.now() });
+        set({ profilesLastUpdated: Date.now(), friends: newFriends });
       },
     }),
     {
       name: "settings",
-      storage: createJSONStorage(() => localStorage),
+      storage: createJSONStorage(() => IDBStorage),
     },
   ),
-);
-
-// Refresh profiles every 10 minutes
-useSettingsStore.getState().refreshProfiles();
-setInterval(
-  () => useSettingsStore.getState().refreshProfiles(),
-  UPDATE_INTERVAL,
 );
