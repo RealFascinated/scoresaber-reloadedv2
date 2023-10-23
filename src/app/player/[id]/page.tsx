@@ -18,7 +18,6 @@ export async function generateMetadata({
 
   return {
     title: `${player.name}`,
-    category: "article",
     description:
       `View ${player.name}'s scores, top plays, and more.&#x0A;` +
       `Rank: #${player.rank} (#${player.countryRank} - ${player.country})&#x0A;` +
