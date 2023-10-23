@@ -22,10 +22,10 @@ export async function generateMetadata({
   const description = `
     View ${player.name}'s scores, top plays, and more.
     
-    Rank: #${player.rank} (#${formatNumber(
+    Rank: #${formatNumber(player.rank)} (#${formatNumber(
       player.countryRank,
     )} - ${normalizedRegionName(player.country)})
-    PP: ${player.pp}
+    PP: ${formatNumber(player.pp)}
     Play Count: ${formatNumber(player.scoreStats.totalPlayCount)}`;
 
   return {

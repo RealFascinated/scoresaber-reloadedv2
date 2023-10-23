@@ -171,7 +171,7 @@ export default function PlayerInfo({ playerData }: PlayerInfoProps) {
                   playerData.rank / 50,
                 )}`}
               >
-                <p>#{playerData.rank}</p>
+                <p>#{formatNumber(playerData.rank)}</p>
               </a>
             </div>
 
@@ -188,7 +188,7 @@ export default function PlayerInfo({ playerData }: PlayerInfoProps) {
                   svg
                   className="!h-7 !w-7"
                 />
-                <p>#{playerData.countryRank}</p>
+                <p>#{formatNumber(playerData.countryRank)}</p>
               </a>
             </div>
 

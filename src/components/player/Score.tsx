@@ -26,7 +26,7 @@ export default function Score({ score, player, leaderboard }: ScoreProps) {
       <div className="ml-3 flex flex-col items-start justify-center">
         <div className="hidden w-fit flex-row items-center justify-start gap-1 md:flex">
           <GlobeAsiaAustraliaIcon width={20} height={20} />
-          <p>#{score.rank}</p>
+          <p>#{formatNumber(score.rank)}</p>
         </div>
         <p
           className="hidden text-sm text-gray-200 md:block"
@@ -58,7 +58,7 @@ export default function Score({ score, player, leaderboard }: ScoreProps) {
           {/* Score rank */}
           <div className="flex items-center gap-1">
             <GlobeAsiaAustraliaIcon width={20} height={20} />
-            <p>#{score.rank}</p>
+            <p>#{formatNumber(score.rank)}</p>
           </div>
 
           {/* Time Set (Mobile) */}
