@@ -133,13 +133,10 @@ export const useScoresaberScoresStore = create<ScoreSaberScoresStore>()(
             }
 
             if (mostRecentScoreId) {
-              // remove the old score
-              const oldScoreIndex = oldScores.findIndex(
-                (score) => score.score.id == score.score.id,
+              // remove the score if it already exists
+              oldScores = oldScores.filter(
+                (oldScore) => oldScore.score.id != score.score.id,
               );
-              if (oldScoreIndex != -1) {
-                oldScores = oldScores.splice(oldScoreIndex, 1);
-              }
             }
             oldScores.push({
               score: {
