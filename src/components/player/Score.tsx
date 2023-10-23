@@ -47,7 +47,7 @@ export default function Score({ score, player, leaderboard }: ScoreProps) {
         {/* Song Info */}
         <div className="w-fit truncate text-blue-500">
           <p>{leaderboard.songName}</p>
-          <p>
+          <p className="text-blue-300">
             {leaderboard.songAuthorName}{" "}
             <span className="text-gray-200">{leaderboard.levelAuthorName}</span>
           </p>
