@@ -93,7 +93,7 @@ export default async function Player({
       <main>
         <Container>
           <Card className="mt-2">
-            <Error errorMessage="Failed to load player. Is the is valid?" />
+            <Error errorMessage="Failed to load player. Is the ID valid?" />
           </Card>
         </Container>
       </main>
