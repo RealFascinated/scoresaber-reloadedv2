@@ -6,6 +6,7 @@ import { ScoreSaberAPI } from "@/utils/scoresaber/api";
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
 import { IDBStorage } from "./IndexedDBStorage";
+import { useScoresaberScoresStore } from "./scoresaberScoresStore";
 
 interface SettingsStore {
   player: ScoresaberPlayer | undefined;
@@ -54,6 +55,8 @@ export const useSettingsStore = create<SettingsStore>()(
 
       removeFriend: (friendId: string) => {
         const friends = get().friends;
+
+        useScoresaberScoresStore.getState().removePlayer(friendId);
         set({ friends: friends.filter((friend) => friend.id != friendId) });
 
         return friendId;

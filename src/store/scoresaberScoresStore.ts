@@ -58,6 +58,13 @@ interface ScoreSaberScoresStore {
   }>;
 
   /**
+   * Removes a player and clears their scores from the local database
+   *
+   * @param playerId the player id
+   */
+  removePlayer: (playerId: string) => void;
+
+  /**
    * Refreshes the player scores and adds any new scores to the local database
    */
   updatePlayerScores: () => Promise<void>;
@@ -135,14 +142,14 @@ export const useScoresaberScoresStore = create<ScoreSaberScoresStore>()(
           console.log("Scanning page", page, "for", playerId);
           if (newScores?.scores.length == 0 || newScores == undefined) break;
 
+          // Call the callback if it exists
+          callback?.(page, newScores.pageInfo.totalPages);
+
           for (const score of newScores.scores) {
             if (score.score.id == mostRecentScoreId) {
               search = false;
               break;
             }
-
-            // Call the callback if it exists
-            callback?.(page, newScores.pageInfo.totalPages);
 
             if (mostRecentScoreId) {
               // remove the old score
@@ -208,6 +215,12 @@ export const useScoresaberScoresStore = create<ScoreSaberScoresStore>()(
           error: false,
           message: "Player added successfully",
         };
+      },
+
+      removePlayer: (playerId: string) => {
+        let players: Player[] = get().players;
+        players = players.filter((player) => player.id != playerId);
+        set({ players });
       },
 
       updatePlayerScores: async () => {

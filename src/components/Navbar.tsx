@@ -68,7 +68,7 @@ export default function Navbar() {
               return (
                 <Button
                   key={friend.id}
-                  className="mt-2 bg-gray-600"
+                  className="mt-2 bg-gray-500"
                   text={friend.name}
                   url={`/player/${friend.id}`}
                   icon={

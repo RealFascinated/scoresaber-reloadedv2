@@ -12,6 +12,7 @@ import {
   GlobeAsiaAustraliaIcon,
   HomeIcon,
   UserIcon,
+  XMarkIcon,
 } from "@heroicons/react/20/solid";
 import dynamic from "next/dynamic";
 import { useRef } from "react";
@@ -52,8 +53,20 @@ export default function PlayerInfo({ playerData }: PlayerInfoProps) {
     addProfile(true);
   }
 
+  async function removeFriend() {
+    settingsStore?.removeFriend(playerData.id);
+
+    toast.success(`Successfully removed ${playerData.name} as a friend`);
+  }
+
   async function addProfile(isFriend: boolean) {
     if (!useScoresaberScoresStore.getState().exists(playerId)) {
+      if (!isFriend) {
+        toast.success(`Successfully set ${playerData.name} as your profile`);
+      } else {
+        toast.success(`Successfully added ${playerData.name} as a friend`);
+      }
+
       const reponse = await playerScoreStore?.addOrUpdatePlayer(
         playerId,
         (page, totalPages) => {
@@ -61,18 +74,27 @@ export default function PlayerInfo({ playerData }: PlayerInfoProps) {
 
           if (page == 1) {
             toastId.current = toast.info(
-              `Fetching scores ${page}/${totalPages}`,
+              `Fetching scores for ${playerData.name} page ${page}/${totalPages}`,
               {
                 autoClose: autoClose,
                 progress: page / totalPages,
               },
             );
           } else {
-            toast.update(toastId.current, {
-              progress: page / totalPages,
-              render: `Fetching scores ${page}/${totalPages}`,
-              autoClose: autoClose,
-            });
+            if (page != totalPages) {
+              toast.update(toastId.current, {
+                progress: page / totalPages,
+                render: `Fetching scores for ${playerData.name} page ${page}/${totalPages}`,
+                autoClose: autoClose,
+              });
+            } else {
+              toast.update(toastId.current, {
+                progress: 0,
+                render: `Successfully fetched scores for ${playerData.name}`,
+                autoClose: autoClose,
+                type: "success",
+              });
+            }
           }
 
           console.log(
@@ -85,12 +107,6 @@ export default function PlayerInfo({ playerData }: PlayerInfoProps) {
         console.log(reponse.message);
         return;
       }
-    }
-
-    if (!isFriend) {
-      toast.success(`Successfully set ${playerData.name} as your profile`);
-    } else {
-      toast.success(`Successfully added ${playerData.name} as a friend`);
     }
   }
 
@@ -117,13 +133,26 @@ export default function PlayerInfo({ playerData }: PlayerInfoProps) {
               </button>
             )}
 
-            {!settingsStore?.isFriend(playerId) && !isOwnProfile && (
-              <button
-                className="rounded-md bg-blue-500 p-1 hover:bg-blue-600"
-                onClick={addFriend}
-              >
-                <UserIcon title="Add as Friend" width={24} height={24} />
-              </button>
+            {!isOwnProfile && (
+              <>
+                {!settingsStore?.isFriend(playerId) && (
+                  <button
+                    className="rounded-md bg-blue-500 p-1 hover:opacity-80"
+                    onClick={addFriend}
+                  >
+                    <UserIcon title="Add as Friend" width={24} height={24} />
+                  </button>
+                )}
+
+                {settingsStore.isFriend(playerId) && (
+                  <button
+                    className="rounded-md bg-red-500 p-1 hover:opacity-80"
+                    onClick={removeFriend}
+                  >
+                    <XMarkIcon title="Remove Friend" width={24} height={24} />
+                  </button>
+                )}
+              </>
             )}
           </div>
         </div>
