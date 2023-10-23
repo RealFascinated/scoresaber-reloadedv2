@@ -1,4 +1,4 @@
-import PlayerPage from "@/components/player/PlayerPage";
+import PlayerPage from "@/components/player/Player";
 import { ssrSettings } from "@/ssrSettings";
 import { formatNumber } from "@/utils/number";
 import { ScoreSaberAPI } from "@/utils/scoresaber/api";

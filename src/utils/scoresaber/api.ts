@@ -5,17 +5,18 @@ import { FetchQueue } from "../fetchWithQueue";
 import { formatString } from "../string";
 
 // Create a fetch instance with a cache
-const fetchQueue = new FetchQueue();
+export const ScoresaberFetchQueue = new FetchQueue();
 
 // Api endpoints
-const API_URL = ssrSettings.proxy + "/https://scoresaber.com/api";
-const SEARCH_PLAYER_URL =
-  API_URL + "/players?search={}&page=1&withMetadata=false";
-const PLAYER_SCORES =
-  API_URL + "/player/{}/scores?limit={}&sort={}&page={}&withMetadata=true";
-const GET_PLAYER_DATA_FULL = API_URL + "/player/{}/full";
-const GET_PLAYERS_URL = API_URL + "/players?page={}";
-const GET_PLAYERS_BY_COUNTRY_URL = API_URL + "/players?page={}&countries={}";
+const SS_API_URL = ssrSettings.proxy + "/https://scoresaber.com/api";
+export const SS_SEARCH_PLAYER_URL =
+  SS_API_URL + "/players?search={}&page=1&withMetadata=false";
+export const SS_PLAYER_SCORES =
+  SS_API_URL + "/player/{}/scores?limit={}&sort={}&page={}&withMetadata=true";
+export const SS_GET_PLAYER_DATA_FULL = SS_API_URL + "/player/{}/full";
+export const SS_GET_PLAYERS_URL = SS_API_URL + "/players?page={}";
+export const SS_GET_PLAYERS_BY_COUNTRY_URL =
+  SS_API_URL + "/players?page={}&countries={}";
 
 const SearchType = {
   RECENT: "recent",
@@ -31,8 +32,8 @@ const SearchType = {
 async function searchByName(
   name: string,
 ): Promise<ScoresaberPlayer[] | undefined> {
-  const response = await fetchQueue.fetch(
-    formatString(SEARCH_PLAYER_URL, true, name),
+  const response = await ScoresaberFetchQueue.fetch(
+    formatString(SS_SEARCH_PLAYER_URL, true, name),
   );
   const json = await response.json();
 
@@ -53,8 +54,8 @@ async function searchByName(
 async function fetchPlayerData(
   playerId: string,
 ): Promise<ScoresaberPlayer | undefined | null> {
-  const response = await fetchQueue.fetch(
-    formatString(GET_PLAYER_DATA_FULL, true, playerId),
+  const response = await ScoresaberFetchQueue.fetch(
+    formatString(SS_GET_PLAYER_DATA_FULL, true, playerId),
   );
   const json = await response.json();
 
@@ -94,8 +95,8 @@ async function fetchScores(
   if (limit > 100) {
     throw new Error("Limit cannot be greater than 100");
   }
-  const response = await fetchQueue.fetch(
-    formatString(PLAYER_SCORES, true, playerId, limit, searchType, page),
+  const response = await ScoresaberFetchQueue.fetch(
+    formatString(SS_PLAYER_SCORES, true, playerId, limit, searchType, page),
   );
   const json = await response.json();
 
@@ -177,9 +178,9 @@ async function fetchTopPlayers(
   | undefined
 > {
   const url = country
-    ? formatString(GET_PLAYERS_BY_COUNTRY_URL, true, page, country)
-    : formatString(GET_PLAYERS_URL, true, page);
-  const response = await fetchQueue.fetch(url);
+    ? formatString(SS_GET_PLAYERS_BY_COUNTRY_URL, true, page, country)
+    : formatString(SS_GET_PLAYERS_URL, true, page);
+  const response = await ScoresaberFetchQueue.fetch(url);
   const json = await response.json();
 
   // Check if there was an error fetching the user data

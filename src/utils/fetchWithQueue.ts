@@ -23,7 +23,11 @@ export class FetchQueue {
       );
     }
 
-    const response = await fetch(url);
+    const response = await fetch(url, {
+      next: {
+        revalidate: 3600, // Keep the data for 1 hour, then fetch new data
+      },
+    });
     if (response.status === 429) {
       const hasRetryAfter = response.headers.has("retry-after");
       let retryAfter =

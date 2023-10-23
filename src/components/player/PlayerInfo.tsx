@@ -6,7 +6,6 @@ import {
   calcPpBoundary,
   getAveragePp,
   getHighestPpPlay,
-  getTotalScores,
 } from "@/utils/scoresaber/scores";
 import {
   GlobeAsiaAustraliaIcon,
@@ -167,9 +166,7 @@ export default function PlayerInfo({ playerData }: PlayerInfoProps) {
 
               <a
                 className="flex transform-gpu items-center gap-1 transition-all hover:text-blue-500"
-                href={`/ranking/global/?page=${Math.round(
-                  playerData.rank / 50,
-                )}`}
+                href={`/ranking/global/${Math.ceil(playerData.rank / 50)}`}
               >
                 <p>#{formatNumber(playerData.rank)}</p>
               </a>
@@ -179,7 +176,7 @@ export default function PlayerInfo({ playerData }: PlayerInfoProps) {
             <div className="text-gray-300">
               <a
                 className="flex transform-gpu items-center gap-1 transition-all hover:text-blue-500"
-                href={`/ranking/country/${playerData.country}?page=${Math.round(
+                href={`/ranking/country/${playerData.country}/${Math.ceil(
                   playerData.countryRank / 50,
                 )}`}
               >

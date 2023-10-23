@@ -1,3 +1,5 @@
+"use client";
+
 import { ScoresaberPlayer } from "@/schemas/scoresaber/player";
 import { useSettingsStore } from "@/store/settingsStore";
 import { formatNumber } from "@/utils/number";
