@@ -3,6 +3,7 @@
 import { ScoresaberPlayer } from "@/schemas/scoresaber/player";
 import { ScoresaberSmallerPlayerScore } from "@/schemas/scoresaber/smaller/smallerPlayerScore";
 import { ScoreSaberAPI } from "@/utils/scoresaber/api";
+import { formatMsToTime } from "@/utils/timeUtils";
 import { toast } from "react-toastify";
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
@@ -244,15 +245,16 @@ export const useScoresaberScoresStore = create<ScoreSaberScoresStore>()(
           if (player.lastUpdated == undefined) {
             player.lastUpdated = Date.now();
           }
+          const playerData = useSettingsStore.getState().getProfile(player.id);
 
           // Skip if we refreshed the scores recently
           const timeUntilRefreshMs =
             UPDATE_INTERVAL - (Date.now() - player.lastUpdated);
           if (timeUntilRefreshMs > 0) {
             console.log(
-              "Waiting",
-              timeUntilRefreshMs / 1000,
-              "seconds to refresh scores for " + player.id,
+              `Waiting ${formatMsToTime(
+                timeUntilRefreshMs,
+              )} to refresh player: ${playerData?.name}`,
             );
             continue;
           }

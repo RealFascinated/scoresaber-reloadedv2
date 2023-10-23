@@ -3,6 +3,7 @@
 import { ScoresaberPlayer } from "@/schemas/scoresaber/player";
 import { SortType, SortTypes } from "@/types/SortTypes";
 import { ScoreSaberAPI } from "@/utils/scoresaber/api";
+import { formatMsToTime } from "@/utils/timeUtils";
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
 import { IDBStorage } from "./IndexedDBStorage";
@@ -22,6 +23,7 @@ interface SettingsStore {
   setLastUsedSortType: (sortType: SortType) => void;
   setProfilesLastUpdated: (profilesLastUpdated: number) => void;
   refreshProfiles: () => Promise<void>;
+  getProfile(playerId: string): ScoresaberPlayer | undefined;
 }
 
 const UPDATE_INTERVAL = 1000 * 60 * 10; // 10 minutes
@@ -82,9 +84,9 @@ export const useSettingsStore = create<SettingsStore>()(
           UPDATE_INTERVAL - (Date.now() - get().profilesLastUpdated);
         if (timeUntilRefreshMs > 0) {
           console.log(
-            "Waiting",
-            timeUntilRefreshMs / 1000,
-            "to refresh profiles",
+            `Waiting ${formatMsToTime(
+              timeUntilRefreshMs,
+            )} to refresh player profiles`,
           );
           return;
         }
@@ -108,6 +110,11 @@ export const useSettingsStore = create<SettingsStore>()(
           }),
         );
         set({ profilesLastUpdated: Date.now(), friends: newFriends });
+      },
+
+      getProfile(playerId: string) {
+        const allProfiles = [get().player, ...get().friends];
+        return allProfiles.find((profile) => profile?.id == playerId);
       },
     }),
     {
