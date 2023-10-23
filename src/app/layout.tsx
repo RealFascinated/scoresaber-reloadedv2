@@ -13,6 +13,7 @@ export const metadata: Metadata = {
     template: ssrSettings.siteName + " - %s",
     default: ssrSettings.siteName,
   },
+  metadataBase: new URL(ssrSettings.siteUrl),
   openGraph: {
     title: ssrSettings.siteName,
     description: "Aggregate your scores with other leaderboards together!",

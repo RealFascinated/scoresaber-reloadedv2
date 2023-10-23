@@ -27,12 +27,12 @@ export async function generateMetadata({
     title: `${player.name}`,
     description: description,
     openGraph: {
+      type: "website",
       title: `${ssrSettings.siteName} - ${player.name}`,
       description: description,
       images: [
         {
           url: player.profilePicture,
-          type: "article",
         },
       ],
     },
