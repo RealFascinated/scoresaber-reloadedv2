@@ -56,7 +56,7 @@ export default function Navbar() {
                 size={32}
               />
             }
-            href={`/player/${settingsStore.player.id}`}
+            href={`/player/${settingsStore.player.id}/scoresaber/top/1`}
           />
         )}
 

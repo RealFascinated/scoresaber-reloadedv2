@@ -25,7 +25,7 @@ export class FetchQueue {
 
     const response = await fetch(url, {
       next: {
-        revalidate: 3600, // Keep the data for 1 hour, then fetch new data
+        revalidate: 60 * 5, // Keep the data for 5 minutes
       },
     });
     if (response.status === 429) {
