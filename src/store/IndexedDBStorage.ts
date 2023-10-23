@@ -1,9 +1,12 @@
 "use client";
 
-import { createStore, del, get, set } from "idb-keyval";
+import { createStore, del, get, set, UseStore } from "idb-keyval";
 import { StateStorage } from "zustand/middleware";
 
-const storage = createStore("scoresaber-reloaded", "storage");
+let storage: UseStore | undefined = undefined;
+if (typeof window !== "undefined") {
+  storage = createStore("scoresaber-reloaded", "scoresaber");
+}
 
 export const IDBStorage: StateStorage = {
   getItem: async (name: string): Promise<string | null> => {
