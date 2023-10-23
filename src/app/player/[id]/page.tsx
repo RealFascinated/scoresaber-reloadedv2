@@ -20,11 +20,13 @@ export async function generateMetadata({
     title: `${player.name}`,
     description: `
     View ${player.name}'s scores, top plays, and more.&#x0A;
-    Rank: #${player.rank} (${player.countryRank} - ${player.country})&#x0A;
+    Rank: #${player.rank} (#${player.countryRank} - ${player.country})&#x0A;
     PP: ${player.pp}&#x0A;
     Play Count: ${player.scoreStats.totalPlayCount}&#x0A;
-    `,
-    openGraph: {
+    `
+      .replaceAll("\n", "")
+      .trim(),
+    twitter: {
       images: [
         {
           url: player.profilePicture,
