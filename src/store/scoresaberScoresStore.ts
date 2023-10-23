@@ -120,7 +120,7 @@ export const useScoresaberScoresStore = create<ScoreSaberScoresStore>()(
         while (search) {
           page++;
           const newScores = await ScoreSaberAPI.fetchScores(playerId, page);
-          console.log("Scanning page", page, "for", playerId);
+          console.log(`Fetched page ${page} for ${playerId}...`);
           if (newScores?.scores.length == 0 || newScores == undefined) break;
 
           // Call the callback if it exists

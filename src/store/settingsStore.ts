@@ -26,7 +26,7 @@ interface SettingsStore {
   getProfile(playerId: string): ScoresaberPlayer | undefined;
 }
 
-const UPDATE_INTERVAL = 1000 * 60 * 10; // 10 minutes
+const UPDATE_INTERVAL = 1000 * 60 * 60; // 1 hour
 
 export const useSettingsStore = create<SettingsStore>()(
   persist(
