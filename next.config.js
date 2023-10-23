@@ -1,4 +1,7 @@
 const nextBuildId = require("next-build-id");
+const withBundleAnalyzer = require("@next/bundle-analyzer")({
+  enabled: false,
+});
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
@@ -26,10 +29,9 @@ const nextConfig = {
   },
 };
 
-module.exports = nextConfig;
+module.exports = withBundleAnalyzer(nextConfig);
 
-
-// Injected content via Sentry wizard below
+// // Injected content via Sentry wizard below
 
 const { withSentryConfig } = require("@sentry/nextjs");
 
@@ -43,17 +45,17 @@ module.exports = withSentryConfig(
     silent: true,
     org: "sentry",
     project: "scoresaber-reloaded",
-    url: "https://sentry.fascinated.cc/"
+    url: "https://sentry.fascinated.cc/",
   },
   {
     // For all available options, see:
     // https://docs.sentry.io/platforms/javascript/guides/nextjs/manual-setup/
 
     // Upload a larger set of source maps for prettier stack traces (increases build time)
-    widenClientFileUpload: true,
+    widenClientFileUpload: false,
 
     // Transpiles SDK to be compatible with IE11 (increases bundle size)
-    transpileClientSDK: true,
+    transpileClientSDK: false,
 
     // Routes browser requests to Sentry through a Next.js rewrite to circumvent ad-blockers (increases server load)
     tunnelRoute: "/monitoring",
@@ -63,5 +65,5 @@ module.exports = withSentryConfig(
 
     // Automatically tree-shake Sentry logger statements to reduce bundle size
     disableLogger: true,
-  }
+  },
 );

@@ -2,13 +2,13 @@ import { ScoresaberLeaderboardInfo } from "@/schemas/scoresaber/leaderboard";
 import { ScoresaberPlayer } from "@/schemas/scoresaber/player";
 import { ScoresaberScore } from "@/schemas/scoresaber/score";
 import { formatNumber } from "@/utils/number";
+import { formatDate, formatTimeAgo } from "@/utils/timeUtils";
 import {
   CheckIcon,
   GlobeAsiaAustraliaIcon,
   XMarkIcon,
 } from "@heroicons/react/20/solid";
 import clsx from "clsx";
-import moment from "moment";
 import Image from "next/image";
 import ScoreStatLabel from "./ScoreStatLabel";
 
@@ -28,8 +28,11 @@ export default function Score({ score, player, leaderboard }: ScoreProps) {
           <GlobeAsiaAustraliaIcon width={20} height={20} />
           <p>#{score.rank}</p>
         </div>
-        <p className="hidden text-sm text-gray-200 md:block">
-          {moment(score.timeSet).fromNow()}
+        <p
+          className="hidden text-sm text-gray-200 md:block"
+          title={formatDate(score.timeSet)}
+        >
+          {formatTimeAgo(score.timeSet)}
         </p>
       </div>
       {/* Song Image */}
@@ -60,9 +63,11 @@ export default function Score({ score, player, leaderboard }: ScoreProps) {
 
           {/* Time Set (Mobile) */}
           <div>
-            {" "}
-            <p className="block text-sm text-gray-200 md:hidden">
-              {moment(score.timeSet).fromNow()}
+            <p
+              className="block text-sm text-gray-200 md:hidden"
+              title={formatDate(score.timeSet)}
+            >
+              {formatTimeAgo(score.timeSet)}
             </p>
           </div>
         </div>

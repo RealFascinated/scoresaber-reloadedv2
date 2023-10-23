@@ -3,7 +3,6 @@
 import { ScoresaberPlayer } from "@/schemas/scoresaber/player";
 import { SortType, SortTypes } from "@/types/SortTypes";
 import { ScoreSaberAPI } from "@/utils/scoresaber/api";
-import moment from "moment";
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
 
@@ -81,7 +80,7 @@ export const useSettingsStore = create<SettingsStore>()(
         if (timeUntilRefreshMs > 0) {
           console.log(
             "Waiting",
-            moment.duration(timeUntilRefreshMs).humanize(),
+            timeUntilRefreshMs / 1000,
             "to refresh profiles",
           );
           setTimeout(() => this.refreshProfiles(), timeUntilRefreshMs);

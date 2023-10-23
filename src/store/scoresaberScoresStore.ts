@@ -3,7 +3,6 @@
 import { ScoresaberPlayer } from "@/schemas/scoresaber/player";
 import { ScoresaberSmallerPlayerScore } from "@/schemas/scoresaber/smaller/smallerPlayerScore";
 import { ScoreSaberAPI } from "@/utils/scoresaber/api";
-import moment from "moment";
 import { toast } from "react-toastify";
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
@@ -215,8 +214,8 @@ export const useScoresaberScoresStore = create<ScoreSaberScoresStore>()(
         if (timeUntilRefreshMs > 0) {
           console.log(
             "Waiting",
-            moment.duration(timeUntilRefreshMs).humanize(),
-            "to refresh scores for players",
+            timeUntilRefreshMs / 1000,
+            "seconds to refresh scores for players",
           );
           setTimeout(
             () => useScoresaberScoresStore.getState().updatePlayerScores(),
