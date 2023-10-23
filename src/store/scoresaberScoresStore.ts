@@ -141,6 +141,9 @@ export const useScoresaberScoresStore = create<ScoreSaberScoresStore>()(
               break;
             }
 
+            // Call the callback if it exists
+            callback?.(page, newScores.pageInfo.totalPages);
+
             if (mostRecentScoreId) {
               // remove the old score
               const oldScoreIndex = oldScores.findIndex(
