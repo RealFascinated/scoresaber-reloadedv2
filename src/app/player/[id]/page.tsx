@@ -21,6 +21,7 @@ export async function generateMetadata({
 
   const description = `
     View ${player.name}'s scores, top plays, and more.
+    
     Rank: #${player.rank} (#${formatNumber(
       player.countryRank,
     )} - ${normalizedRegionName(player.country)})
