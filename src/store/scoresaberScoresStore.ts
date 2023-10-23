@@ -16,15 +16,7 @@ type Player = {
 };
 
 interface ScoreSaberScoresStore {
-  lastUpdated: number;
   players: Player[];
-
-  /**
-   * Sets when the player scores were last updated
-   *
-   * @param lastUpdated when the player scores were last updated
-   */
-  setLastUpdated: (lastUpdated: number) => void;
 
   /**
    * Checks if the player exists
@@ -77,10 +69,6 @@ export const useScoresaberScoresStore = create<ScoreSaberScoresStore>()(
     (set, get) => ({
       lastUpdated: 0,
       players: [],
-
-      setLastUpdated: (lastUpdated: number) => {
-        set({ lastUpdated });
-      },
 
       exists: (playerId: string) => {
         const players: Player[] = get().players;
@@ -238,10 +226,6 @@ export const useScoresaberScoresStore = create<ScoreSaberScoresStore>()(
 
         // add local player and friends if they don't exist
         for (const player of allPlayers) {
-          if (get().lastUpdated == 0) {
-            set({ lastUpdated: Date.now() });
-          }
-
           if (get().get(player.id) == undefined) {
             toast.info(
               `${
@@ -261,20 +245,20 @@ export const useScoresaberScoresStore = create<ScoreSaberScoresStore>()(
           }
         }
 
-        // Skip if we refreshed the scores recently
-        const timeUntilRefreshMs =
-          UPDATE_INTERVAL - (Date.now() - get().lastUpdated);
-        if (timeUntilRefreshMs > 0) {
-          console.log(
-            "Waiting",
-            timeUntilRefreshMs / 1000,
-            "seconds to refresh scores for players",
-          );
-          return;
-        }
-
         // loop through all of the players and update their scores
         for (const player of players) {
+          // Skip if we refreshed the scores recently
+          const timeUntilRefreshMs =
+            UPDATE_INTERVAL - (Date.now() - player.lastUpdated);
+          if (timeUntilRefreshMs > 0) {
+            console.log(
+              "Waiting",
+              timeUntilRefreshMs / 1000,
+              "seconds to refresh scores for " + player.id,
+            );
+            continue;
+          }
+
           get().addOrUpdatePlayer(player.id);
         }
       },
