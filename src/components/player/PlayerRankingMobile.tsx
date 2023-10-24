@@ -1,5 +1,3 @@
-"use client";
-
 import { ScoresaberPlayer } from "@/schemas/scoresaber/player";
 import { useSettingsStore } from "@/store/settingsStore";
 import { formatNumber } from "@/utils/number";
@@ -24,7 +22,7 @@ export default function PlayerRankingMobile({
   return (
     <div>
       <div className="m-3 flex flex-col gap-2">
-        <div className="flex items-center gap-2">
+        <p className="flex items-center gap-2">
           <p>#{formatNumber(player.rank)}</p>
           <Avatar url={player.profilePicture} label="Avatar" size={24} />
           {showCountryFlag && (
@@ -43,7 +41,7 @@ export default function PlayerRankingMobile({
           >
             {player.name}
           </p>
-        </div>
+        </p>
         <div className="flex flex-wrap justify-center gap-2">
           <Label
             title="PP"

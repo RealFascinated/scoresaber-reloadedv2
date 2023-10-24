@@ -1,5 +1,3 @@
-"use client";
-
 import { ScoresaberPlayer } from "@/schemas/scoresaber/player";
 import { useScoresaberScoresStore } from "@/store/scoresaberScoresStore";
 import { useSettingsStore } from "@/store/settingsStore";
@@ -8,6 +6,7 @@ import {
   calcPpBoundary,
   getAveragePp,
   getHighestPpPlay,
+  getTotalScores,
 } from "@/utils/scoresaber/scores";
 import {
   GlobeAsiaAustraliaIcon,
@@ -20,6 +19,7 @@ import { useRef } from "react";
 import { toast } from "react-toastify";
 import { useStore } from "zustand";
 import Avatar from "../Avatar";
+import Card from "../Card";
 import Label from "../Label";
 
 const PlayerChart = dynamic(() => import("./PlayerChart"));
@@ -96,6 +96,10 @@ export default function PlayerInfo({ playerData }: PlayerInfoProps) {
               });
             }
           }
+
+          console.log(
+            `Fetching scores for ${playerId} (${page}/${totalPages})`,
+          );
         },
       );
       if (reponse?.error) {
@@ -109,138 +113,147 @@ export default function PlayerInfo({ playerData }: PlayerInfoProps) {
   const isOwnProfile = settingsStore.player?.id == playerId;
 
   return (
-    <div className="flex flex-col items-center gap-3 md:flex-row md:items-start">
-      <div className="min-w-fit">
-        {/* Avatar */}
-        <div className="flex flex-col items-center gap-2">
-          <Avatar url={playerData.profilePicture} label="Avatar" />
+    <Card className="mt-2">
+      {/* Player Info */}
+      <div className="flex flex-col items-center gap-3 md:flex-row md:items-start">
+        <div className="min-w-fit">
+          {/* Avatar */}
+          <div className="flex flex-col items-center gap-2">
+            <Avatar url={playerData.profilePicture} label="Avatar" />
+          </div>
+
+          {/* Settings Buttons */}
+          <div className="absolute right-3 top-20 flex flex-col justify-end gap-2 md:relative md:right-0 md:top-0 md:mt-2 md:flex-row md:justify-center">
+            {!isOwnProfile && (
+              <button
+                className="h-fit w-fit rounded-md bg-blue-500 p-1 hover:bg-blue-600"
+                onClick={claimProfile}
+              >
+                <HomeIcon title="Set as your Profile" width={24} height={24} />
+              </button>
+            )}
+
+            {!isOwnProfile && (
+              <>
+                {!settingsStore?.isFriend(playerId) && (
+                  <button
+                    className="rounded-md bg-blue-500 p-1 hover:opacity-80"
+                    onClick={addFriend}
+                  >
+                    <UserIcon title="Add as Friend" width={24} height={24} />
+                  </button>
+                )}
+
+                {settingsStore.isFriend(playerId) && (
+                  <button
+                    className="rounded-md bg-red-500 p-1 hover:opacity-80"
+                    onClick={removeFriend}
+                  >
+                    <XMarkIcon title="Remove Friend" width={24} height={24} />
+                  </button>
+                )}
+              </>
+            )}
+          </div>
         </div>
+        <div className="mt-1 flex w-full flex-col items-center gap-2 md:items-start">
+          {/* Name */}
+          <p className="text-2xl leading-none">{playerData.name}</p>
 
-        {/* Settings Buttons */}
-        <div className="absolute right-3 top-20 flex flex-col justify-end gap-2 md:relative md:right-0 md:top-0 md:mt-2 md:flex-row md:justify-center">
-          {!isOwnProfile && (
-            <button
-              className="h-fit w-fit rounded-md bg-blue-500 p-1 hover:bg-blue-600"
-              onClick={claimProfile}
-            >
-              <HomeIcon title="Set as your Profile" width={24} height={24} />
-            </button>
-          )}
+          <div className="flex items-center gap-3 text-xl">
+            {/* Global Rank */}
+            <div className="flex items-center gap-1 text-gray-300">
+              <GlobeAsiaAustraliaIcon width={32} height={32} />
 
-          {!isOwnProfile && (
-            <>
-              {!settingsStore?.isFriend(playerId) && (
-                <button
-                  className="rounded-md bg-blue-500 p-1 hover:opacity-80"
-                  onClick={addFriend}
-                >
-                  <UserIcon title="Add as Friend" width={24} height={24} />
-                </button>
-              )}
+              <a
+                className="flex transform-gpu items-center gap-1 transition-all hover:text-blue-500"
+                href={`/ranking/global/?page=${Math.round(
+                  playerData.rank / 50,
+                )}`}
+              >
+                <p>#{formatNumber(playerData.rank)}</p>
+              </a>
+            </div>
 
-              {settingsStore.isFriend(playerId) && (
-                <button
-                  className="rounded-md bg-red-500 p-1 hover:opacity-80"
-                  onClick={removeFriend}
-                >
-                  <XMarkIcon title="Remove Friend" width={24} height={24} />
-                </button>
-              )}
-            </>
-          )}
+            {/* Country Rank */}
+            <div className="text-gray-300">
+              <a
+                className="flex transform-gpu items-center gap-1 transition-all hover:text-blue-500"
+                href={`/ranking/country/${playerData.country}?page=${Math.round(
+                  playerData.countryRank / 50,
+                )}`}
+              >
+                <ReactCountryFlag
+                  countryCode={playerData.country}
+                  svg
+                  className="!h-7 !w-7"
+                />
+                <p>#{formatNumber(playerData.countryRank)}</p>
+              </a>
+            </div>
+
+            {/* PP */}
+            <div className="flex items-center text-gray-300">
+              <p>{formatNumber(playerData.pp)}pp</p>
+            </div>
+          </div>
+          {/* Labels */}
+          <div className="flex flex-wrap justify-center gap-2 md:justify-start">
+            <Label
+              title="Total play count"
+              className="bg-blue-500"
+              hoverValue="Total ranked song play count"
+              value={formatNumber(playerData.scoreStats.totalPlayCount)}
+            />
+            <Label
+              title="Total score"
+              className="bg-blue-500"
+              hoverValue="Total score of all your plays"
+              value={formatNumber(playerData.scoreStats.totalScore)}
+            />
+            <Label
+              title="Avg ranked acc"
+              className="bg-blue-500"
+              hoverValue="Average accuracy of all your ranked plays"
+              value={`${playerData.scoreStats.averageRankedAccuracy.toFixed(
+                2,
+              )}%`}
+            />
+
+            {hasLocalScores && (
+              <>
+                <Label
+                  title="Top PP"
+                  className="bg-[#8992e8]"
+                  hoverValue="Highest pp play"
+                  value={`${formatNumber(
+                    getHighestPpPlay(playerId)?.toFixed(2),
+                  )}pp`}
+                />
+                <Label
+                  title="Avg PP"
+                  className="bg-[#8992e8]"
+                  hoverValue="Average amount of pp per play (best 20 scores)"
+                  value={`${formatNumber(
+                    getAveragePp(playerId)?.toFixed(2),
+                  )}pp`}
+                />
+                <Label
+                  title="+ 1pp"
+                  className="bg-[#8992e8]"
+                  hoverValue="Amount of raw pp required to increase your global pp by 1pp"
+                  value={`${formatNumber(
+                    calcPpBoundary(playerId, 1)?.toFixed(2),
+                  )}pp raw per global`}
+                />
+              </>
+            )}
+          </div>
+
+          {/* Chart */}
+          <PlayerChart scoresaber={playerData} />
         </div>
       </div>
-      <div className="mt-1 flex w-full flex-col items-center gap-2 md:items-start">
-        {/* Name */}
-        <p className="text-2xl leading-none">{playerData.name}</p>
-
-        <div className="flex items-center gap-3 text-xl">
-          {/* Global Rank */}
-          <div className="flex items-center gap-1 text-gray-300">
-            <GlobeAsiaAustraliaIcon width={32} height={32} />
-
-            <a
-              className="flex transform-gpu items-center gap-1 transition-all hover:text-blue-500"
-              href={`/ranking/global/${Math.ceil(playerData.rank / 50)}`}
-            >
-              <p>#{formatNumber(playerData.rank)}</p>
-            </a>
-          </div>
-
-          {/* Country Rank */}
-          <div className="text-gray-300">
-            <a
-              className="flex transform-gpu items-center gap-1 transition-all hover:text-blue-500"
-              href={`/ranking/country/${playerData.country}/${Math.ceil(
-                playerData.countryRank / 50,
-              )}`}
-            >
-              <ReactCountryFlag
-                countryCode={playerData.country}
-                svg
-                className="!h-7 !w-7"
-              />
-              <p>#{formatNumber(playerData.countryRank)}</p>
-            </a>
-          </div>
-
-          {/* PP */}
-          <div className="flex items-center text-gray-300">
-            <p>{formatNumber(playerData.pp)}pp</p>
-          </div>
-        </div>
-        {/* Labels */}
-        <div className="flex flex-wrap justify-center gap-2 md:justify-start">
-          <Label
-            title="Total play count"
-            className="bg-blue-500"
-            hoverValue="Total ranked song play count"
-            value={formatNumber(playerData.scoreStats.totalPlayCount)}
-          />
-          <Label
-            title="Total score"
-            className="bg-blue-500"
-            hoverValue="Total score of all your plays"
-            value={formatNumber(playerData.scoreStats.totalScore)}
-          />
-          <Label
-            title="Avg ranked acc"
-            className="bg-blue-500"
-            hoverValue="Average accuracy of all your ranked plays"
-            value={`${playerData.scoreStats.averageRankedAccuracy.toFixed(2)}%`}
-          />
-
-          {hasLocalScores && (
-            <>
-              <Label
-                title="Top PP"
-                className="bg-[#8992e8]"
-                hoverValue="Highest pp play"
-                value={`${formatNumber(
-                  getHighestPpPlay(playerId)?.toFixed(2),
-                )}pp`}
-              />
-              <Label
-                title="Avg PP"
-                className="bg-[#8992e8]"
-                hoverValue="Average amount of pp per play (best 20 scores)"
-                value={`${formatNumber(getAveragePp(playerId)?.toFixed(2))}pp`}
-              />
-              <Label
-                title="+ 1pp"
-                className="bg-[#8992e8]"
-                hoverValue="Amount of raw pp required to increase your global pp by 1pp"
-                value={`${formatNumber(
-                  calcPpBoundary(playerId, 1)?.toFixed(2),
-                )}pp raw per global`}
-              />
-            </>
-          )}
-        </div>
-
-        {/* Chart */}
-        <PlayerChart scoresaber={playerData} />
-      </div>
-    </div>
+    </Card>
   );
 }

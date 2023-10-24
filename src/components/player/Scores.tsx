@@ -1,110 +1,173 @@
-"use client";
-
 import { ScoresaberPlayer } from "@/schemas/scoresaber/player";
 import { ScoresaberPlayerScore } from "@/schemas/scoresaber/playerScore";
 import { useSettingsStore } from "@/store/settingsStore";
 import { SortType, SortTypes } from "@/types/SortTypes";
+import { ScoreSaberAPI } from "@/utils/scoresaber/api";
 import useStore from "@/utils/useStore";
+import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";
+import { useCallback, useEffect, useState } from "react";
 import Card from "../Card";
+import Error from "../Error";
 import Pagination from "../Pagination";
 import Score from "./Score";
 
-type ScoresProps = {
-  playerData: ScoresaberPlayer;
+const Spinner = dynamic(() => import("@/components/Spinner"));
+
+type PageInfo = {
+  loading: boolean;
   page: number;
   totalPages: number;
   sortType: SortType;
   scores: ScoresaberPlayerScore[];
 };
 
-export default function Scores({
-  playerData,
-  page,
-  totalPages,
-  sortType,
-  scores,
-}: ScoresProps) {
+type ScoresProps = {
+  playerData: ScoresaberPlayer;
+  page: number;
+  sortType: SortType;
+};
+
+export default function Scores({ playerData, page, sortType }: ScoresProps) {
   const settingsStore = useStore(useSettingsStore, (store) => store);
   const playerId = playerData.id;
 
   const router = useRouter();
 
-  const lastUsedSortType = settingsStore?.lastUsedSortType;
-  if (lastUsedSortType && lastUsedSortType != sortType) {
-    router.push(
-      `/player/${playerId}/scoresaber/${lastUsedSortType.value}/${page}`,
-      {
-        scroll: false,
-      },
-    );
-  }
+  const [mounted, setMounted] = useState(false);
+  const [error, setError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
 
-  function setPage(page: number, sortTypee?: SortType) {
-    if (sortTypee) {
-      if (sortTypee.value !== sortType.value) {
-        settingsStore?.setLastUsedSortType(sortTypee);
-      }
-    }
-    router.push(
-      `/player/${playerId}/scoresaber/${
-        sortTypee ? sortTypee.value : sortType.value
-      }/${page}`,
-      {
-        scroll: false,
-      },
+  const [scores, setScores] = useState<PageInfo>({
+    loading: true,
+    page: page,
+    totalPages: 1,
+    sortType: sortType,
+    scores: [],
+  });
+
+  const updateScoresPage = useCallback(
+    (sortType: SortType, page: any) => {
+      ScoreSaberAPI.fetchScores(playerId, page, sortType.value, 10).then(
+        (scoresResponse) => {
+          if (!scoresResponse) {
+            setError(true);
+            setErrorMessage("No Scores");
+            setScores({ ...scores, loading: false });
+            return;
+          }
+          setScores({
+            ...scores,
+            scores: scoresResponse.scores,
+            totalPages: scoresResponse.pageInfo.totalPages,
+            loading: false,
+            page: page,
+            sortType: sortType,
+          });
+          settingsStore?.setLastUsedSortType(sortType);
+
+          if (page > 1) {
+            router.push(
+              `/player/${playerId}?page=${page}&sort=${sortType.value}`,
+              {
+                scroll: false,
+              },
+            );
+          } else {
+            router.push(`/player/${playerId}?sort=${sortType.value}`, {
+              scroll: false,
+            });
+          }
+
+          console.log(`Switched page to ${page} with sort ${sortType.value}`);
+        },
+      );
+    },
+    [playerId, router, scores, settingsStore],
+  );
+
+  useEffect(() => {
+    if (mounted) return;
+    setMounted(true);
+
+    updateScoresPage(scores.sortType, scores.page);
+  }, [mounted, updateScoresPage, scores.sortType, scores.page]);
+
+  if (error) {
+    return (
+      <Card className="mt-2">
+        <div className="p-3 text-center">
+          <div role="status">
+            <div className="flex flex-col items-center justify-center gap-2">
+              {error && <Error errorMessage={errorMessage} />}
+            </div>
+          </div>
+        </div>
+      </Card>
     );
   }
 
   return (
-    <Card className="w-full items-center md:flex-col">
+    <Card className="mt-2 w-full items-center md:flex-col">
       {/* Sort */}
-      <div className="w-full text-sm">
+      <div className="m-2 w-full text-sm">
         <div className="flex justify-center gap-2">
-          {Object.values(SortTypes).map((sortTypee) => {
+          {Object.values(SortTypes).map((sortType) => {
             return (
               <button
                 key={sortType.value}
                 className={`flex transform-gpu flex-row items-center gap-1 rounded-md p-[0.35rem] transition-all hover:opacity-80 ${
-                  sortType.value === sortTypee.value
+                  scores.sortType.value === sortType.value
                     ? "bg-blue-500"
                     : "bg-gray-500"
                 }`}
                 onClick={() => {
-                  setPage(1, sortTypee);
+                  updateScoresPage(sortType, 1);
                 }}
               >
-                {sortTypee.icon}
-                <p>{sortTypee.name}</p>
+                {sortType.icon}
+                <p>{sortType.name}</p>
               </button>
             );
           })}
         </div>
       </div>
 
-      <div className="mt-4 grid grid-cols-1 divide-y divide-gray-500">
-        {scores.map((scoreData, id) => {
-          const { score, leaderboard } = scoreData;
+      <div className="w-full p-1">
+        {scores.loading ? (
+          <div className="flex justify-center">
+            <Spinner />
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 divide-y divide-gray-500">
+            {!scores.loading && scores.scores.length == 0 ? (
+              <p className="text-red-400">{errorMessage}</p>
+            ) : (
+              scores.scores.map((scoreData, id) => {
+                const { score, leaderboard } = scoreData;
 
-          return (
-            <Score
-              key={id}
-              player={playerData}
-              score={score}
-              leaderboard={leaderboard}
-            />
-          );
-        })}
+                return (
+                  <Score
+                    key={id}
+                    player={playerData}
+                    score={score}
+                    leaderboard={leaderboard}
+                  />
+                );
+              })
+            )}
+          </div>
+        )}
       </div>
 
       {/* Pagination */}
       <div className="flex w-full flex-row justify-center rounded-md bg-gray-800 md:flex-col">
         <div className="p-3">
           <Pagination
-            currentPage={page}
-            totalPages={totalPages}
+            currentPage={scores.page}
+            totalPages={scores.totalPages}
             onPageChange={(page) => {
-              setPage(page);
+              updateScoresPage(scores.sortType, page);
             }}
           />
         </div>
