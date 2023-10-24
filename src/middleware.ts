@@ -9,10 +9,7 @@ export function middleware(request: NextRequest) {
   if (pathname == "/") {
     if (playerIdCookie) {
       return NextResponse.redirect(
-        new URL(
-          `/player/${playerIdCookie.value}/scoresaber/top/1`,
-          request.url,
-        ),
+        new URL(`/player/${playerIdCookie.value}`, request.url),
       );
     } else {
       return NextResponse.redirect(new URL("/search", request.url));
@@ -20,7 +17,7 @@ export function middleware(request: NextRequest) {
   }
 
   if (pathname == "/ranking/global") {
-    return NextResponse.redirect(new URL("/ranking/global/1", request.url));
+    return NextResponse.redirect(new URL("/ranking/global", request.url));
   }
   const requestHeaders = new Headers(request.headers);
   requestHeaders.set("x-url", request.url);
