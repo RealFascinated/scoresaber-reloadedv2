@@ -10,14 +10,15 @@ import "./globals.css";
 const font = Inter({ subsets: ["latin-ext"], weight: "500" });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(ssrSettings.siteUrl),
   title: {
     template: ssrSettings.siteName + " - %s",
     default: ssrSettings.siteName,
   },
-  metadataBase: new URL(ssrSettings.siteUrl),
+  description: ssrSettings.description,
   openGraph: {
     title: ssrSettings.siteName,
-    description: "Aggregate your scores with other leaderboards together!",
+    description: ssrSettings.description,
     url: ssrSettings.siteUrl,
     locale: "en_US",
     type: "website",
