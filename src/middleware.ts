@@ -16,9 +16,6 @@ export function middleware(request: NextRequest) {
     }
   }
 
-  if (pathname == "/ranking/global") {
-    return NextResponse.redirect(new URL("/ranking/global", request.url));
-  }
   const requestHeaders = new Headers(request.headers);
   requestHeaders.set("x-url", request.url);
   return NextResponse.next({
