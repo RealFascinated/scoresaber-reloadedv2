@@ -6,7 +6,6 @@ import {
   calcPpBoundary,
   getAveragePp,
   getHighestPpPlay,
-  getTotalScores,
 } from "@/utils/scoresaber/scores";
 import {
   GlobeAsiaAustraliaIcon,
@@ -21,8 +20,8 @@ import { useStore } from "zustand";
 import Avatar from "../Avatar";
 import Card from "../Card";
 import Label from "../Label";
+import PlayerChart from "./PlayerChart";
 
-const PlayerChart = dynamic(() => import("./PlayerChart"));
 const ReactCountryFlag = dynamic(() => import("react-country-flag"));
 
 type PlayerInfoProps = {
