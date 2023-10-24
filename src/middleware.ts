@@ -3,10 +3,17 @@ import { NextResponse } from "next/server";
 
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
+  const cookies = request.cookies;
 
-  // todo: make this redirect to the users profile if they have a profile selected
+  const playerIdCookie = cookies.get("playerId");
   if (pathname == "/") {
-    return NextResponse.redirect(new URL("/search", request.url));
+    if (playerIdCookie) {
+      return NextResponse.redirect(
+        new URL(`/player/${playerIdCookie}`, request.url),
+      );
+    } else {
+      return NextResponse.redirect(new URL("/search", request.url));
+    }
   }
 
   if (pathname == "/ranking/global") {

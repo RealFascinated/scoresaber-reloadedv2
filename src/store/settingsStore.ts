@@ -9,6 +9,9 @@ import { createJSONStorage, persist } from "zustand/middleware";
 import { IDBStorage } from "./IndexedDBStorage";
 import { useScoresaberScoresStore } from "./scoresaberScoresStore";
 
+// it has no typescript support
+const cookieCutter = require("@boiseitguru/cookie-cutter");
+
 interface SettingsStore {
   player: ScoresaberPlayer | undefined;
   friends: ScoresaberPlayer[];
@@ -40,6 +43,8 @@ export const useSettingsStore = create<SettingsStore>()(
         set({
           player: playerData,
         });
+
+        cookieCutter.set("playerId", playerData.id);
       },
 
       async addFriend(friendId: string) {
@@ -97,6 +102,7 @@ export const useSettingsStore = create<SettingsStore>()(
           if (newPlayer != undefined && newPlayer != null) {
             console.log("Updated player data for", newPlayer.name);
             set({ player: newPlayer });
+            cookieCutter.set("playerId", newPlayer.id);
           }
         }
 

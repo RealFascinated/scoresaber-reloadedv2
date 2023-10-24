@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@boiseitguru/cookie-cutter": "^0.2.1",
     "@heroicons/react": "^2.0.18",
     "@sentry/nextjs": "^7.74.1",
     "bluebird": "^3.7.2",
