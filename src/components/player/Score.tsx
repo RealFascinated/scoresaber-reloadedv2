@@ -43,6 +43,8 @@ export default function Score({ score, player, leaderboard }: ScoreProps) {
           className="h-fit rounded-md"
           width={60}
           height={60}
+          loading="lazy"
+          placeholder="blur"
         />
         {/* Song Info */}
         <div className="w-fit truncate text-blue-500">
