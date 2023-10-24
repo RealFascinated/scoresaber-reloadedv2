@@ -49,7 +49,9 @@ export default function Pagination(props: PaginationProps) {
                   1
                 </button>
               </li>
-              <p>...</p>
+              <li>
+                <p>...</p>
+              </li>
             </>
           )}
 
@@ -71,7 +73,9 @@ export default function Pagination(props: PaginationProps) {
 
           {currentPage !== totalPages && currentPage + 2 < totalPages && (
             <>
-              <p>...</p>
+              <li>
+                <p>...</p>
+              </li>
 
               <li>
                 <button
