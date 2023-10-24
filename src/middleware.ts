@@ -9,7 +9,10 @@ export function middleware(request: NextRequest) {
   if (pathname == "/") {
     if (playerIdCookie) {
       return NextResponse.redirect(
-        new URL(`/player/${playerIdCookie.value}`, request.url),
+        new URL(
+          `/player/${playerIdCookie.value}/scoresaber/top/1`,
+          request.url,
+        ),
       );
     } else {
       return NextResponse.redirect(new URL("/search", request.url));
