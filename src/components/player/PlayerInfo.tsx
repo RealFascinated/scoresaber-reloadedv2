@@ -127,6 +127,7 @@ export default function PlayerInfo({ playerData }: PlayerInfoProps) {
               <button
                 className="h-fit w-fit rounded-md bg-blue-500 p-1 hover:bg-blue-600"
                 onClick={claimProfile}
+                aria-label="Set as your Profile"
               >
                 <HomeIcon title="Set as your Profile" width={24} height={24} />
               </button>
@@ -138,6 +139,7 @@ export default function PlayerInfo({ playerData }: PlayerInfoProps) {
                   <button
                     className="rounded-md bg-blue-500 p-1 hover:opacity-80"
                     onClick={addFriend}
+                    aria-label="Add as Friend"
                   >
                     <UserIcon title="Add as Friend" width={24} height={24} />
                   </button>
@@ -147,6 +149,7 @@ export default function PlayerInfo({ playerData }: PlayerInfoProps) {
                   <button
                     className="rounded-md bg-red-500 p-1 hover:opacity-80"
                     onClick={removeFriend}
+                    aria-label="Remove Friend"
                   >
                     <XMarkIcon title="Remove Friend" width={24} height={24} />
                   </button>

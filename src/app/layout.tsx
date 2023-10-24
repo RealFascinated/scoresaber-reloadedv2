@@ -3,6 +3,7 @@ import { ssrSettings } from "@/ssrSettings";
 import { Metadata } from "next";
 import { Inter } from "next/font/google";
 import Image from "next/image";
+import Script from "next/script";
 import "react-toastify/dist/ReactToastify.css";
 import "./globals.css";
 
@@ -31,6 +32,13 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
+      <Script
+        id="plausible"
+        defer
+        data-domain="ssr.fascinated.cc"
+        src="https://analytics.fascinated.cc/js/script.js"
+      />
+
       <body className={font.className}>
         <div className="fixed left-0 top-0 z-0 h-full w-full blur-sm">
           <Image
