@@ -58,7 +58,10 @@ export default function SearchPlayer() {
         value={search}
         onChange={(e) => setSearch(e.target.value)}
       />
-      <button className="transform-gpu rounded-md bg-blue-600 p-1 transition-all hover:opacity-80">
+      <button
+        className="transform-gpu rounded-md bg-blue-600 p-1 transition-all hover:opacity-80"
+        aria-label="Go to first player"
+      >
         <MagnifyingGlassIcon className="font-black" width={18} height={18} />
       </button>
 
