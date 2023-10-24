@@ -57,9 +57,9 @@ export default function Scores({
   }
 
   return (
-    <Card className="mt-2 w-full items-center md:flex-col">
+    <Card className="w-full items-center md:flex-col">
       {/* Sort */}
-      <div className="m-2 w-full text-sm">
+      <div className="w-full text-sm">
         <div className="flex justify-center gap-2">
           {Object.values(SortTypes).map((sortTypee) => {
             return (
@@ -82,21 +82,19 @@ export default function Scores({
         </div>
       </div>
 
-      <div className="w-full p-1">
-        <div className="grid grid-cols-1 divide-y divide-gray-500">
-          {scores.map((scoreData, id) => {
-            const { score, leaderboard } = scoreData;
+      <div className="mt-4 grid grid-cols-1 divide-y divide-gray-500">
+        {scores.map((scoreData, id) => {
+          const { score, leaderboard } = scoreData;
 
-            return (
-              <Score
-                key={id}
-                player={playerData}
-                score={score}
-                leaderboard={leaderboard}
-              />
-            );
-          })}
-        </div>
+          return (
+            <Score
+              key={id}
+              player={playerData}
+              score={score}
+              leaderboard={leaderboard}
+            />
+          );
+        })}
       </div>
 
       {/* Pagination */}
