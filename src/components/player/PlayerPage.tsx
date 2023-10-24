@@ -5,12 +5,9 @@ import Container from "@/components/Container";
 import Spinner from "@/components/Spinner";
 import Scores from "@/components/player/Scores";
 import { ScoresaberPlayer } from "@/schemas/scoresaber/player";
-import { useSettingsStore } from "@/store/settingsStore";
-import { SortType, SortTypes } from "@/types/SortTypes";
+import { SortTypes } from "@/types/SortTypes";
 import { ScoreSaberAPI } from "@/utils/scoresaber/api";
-import useStore from "@/utils/useStore";
 import dynamic from "next/dynamic";
-import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import PlayerInfo from "./PlayerInfo";
 
@@ -23,14 +20,13 @@ type PlayerInfo = {
 
 type PlayerPageProps = {
   id: string;
+  sort: string;
+  page: string;
 };
 
 const DEFAULT_SORT_TYPE = SortTypes.top;
 
-export default function PlayerPage({ id }: PlayerPageProps) {
-  const settingsStore = useStore(useSettingsStore, (store) => store);
-  const searchParams = useSearchParams();
-
+export default function PlayerPage({ id, sort, page }: PlayerPageProps) {
   const [mounted, setMounted] = useState(false);
   const [error, setError] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
@@ -40,21 +36,7 @@ export default function PlayerPage({ id }: PlayerPageProps) {
     player: undefined,
   });
 
-  let page;
-  const pageString = searchParams.get("page");
-  if (pageString == null) {
-    page = 1;
-  } else {
-    page = Number.parseInt(pageString) || 1;
-  }
-
-  let sortType: SortType;
-  const sortTypeString = searchParams.get("sort");
-  if (sortTypeString == null) {
-    sortType = settingsStore?.lastUsedSortType || DEFAULT_SORT_TYPE;
-  } else {
-    sortType = SortTypes[sortTypeString] || DEFAULT_SORT_TYPE;
-  }
+  const sortType = SortTypes[sort] || DEFAULT_SORT_TYPE;
 
   useEffect(() => {
     setMounted(true);
@@ -102,7 +84,11 @@ export default function PlayerPage({ id }: PlayerPageProps) {
     <main>
       <Container>
         <PlayerInfo playerData={playerData} />
-        <Scores playerData={playerData} page={page} sortType={sortType} />
+        <Scores
+          playerData={playerData}
+          page={Number(page)}
+          sortType={sortType}
+        />
       </Container>
     </main>
   );

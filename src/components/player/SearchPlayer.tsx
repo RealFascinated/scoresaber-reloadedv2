@@ -45,7 +45,7 @@ export default function SearchPlayer() {
 
     // Take the user to the first account
     if (players.length > 0) {
-      window.location.href = `/player/${players[0].id}`;
+      window.location.href = `/player/${players[0].id}/top/1`;
     }
   }
 
@@ -72,7 +72,7 @@ export default function SearchPlayer() {
           <a
             key={player.id}
             className="flex min-w-[14rem] items-center gap-2 rounded-md p-2 transition-all hover:bg-gray-600"
-            href={`/player/${player.id}`}
+            href={`/player/${player.id}/top/1`}
           >
             <Avatar label="Account" size={40} url={player.profilePicture} />
 

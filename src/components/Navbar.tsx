@@ -56,7 +56,7 @@ export default function Navbar() {
                 size={32}
               />
             }
-            href={`/player/${settingsStore.player.id}`}
+            href={`/player/${settingsStore.player.id}/top/1`}
           />
         )}
 
@@ -70,7 +70,7 @@ export default function Navbar() {
                   key={friend.id}
                   className="mt-2 bg-gray-500"
                   text={friend.name}
-                  url={`/player/${friend.id}`}
+                  url={`/player/${friend.id}/top/1`}
                   icon={
                     <Avatar
                       url={friend.profilePicture}
@@ -93,7 +93,7 @@ export default function Navbar() {
         <NavbarButton
           text="Ranking"
           icon={<GlobeAltIcon height={20} width={20} />}
-          href="/ranking/global"
+          href="/ranking/global/1"
         />
 
         <div className="m-auto" />

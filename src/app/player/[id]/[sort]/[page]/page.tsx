@@ -6,7 +6,7 @@ import { normalizedRegionName } from "@/utils/utils";
 import { Metadata } from "next";
 
 type Props = {
-  params: { id: string };
+  params: { id: string; sort: string; page: string };
 };
 
 export async function generateMetadata({
@@ -47,6 +47,6 @@ export async function generateMetadata({
   };
 }
 
-export default function Player({ params: { id } }: Props) {
-  return <PlayerPage id={id} />;
+export default function Player({ params: { id, sort, page } }: Props) {
+  return <PlayerPage id={id} sort={sort} page={page} />;
 }

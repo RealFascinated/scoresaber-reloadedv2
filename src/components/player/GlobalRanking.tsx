@@ -59,18 +59,11 @@ export default function GlobalRanking({ page, country }: GlobalRankingProps) {
           loading: false,
           page: page,
         });
-        const urlBase = country
-          ? `/ranking/country/${country}`
-          : "/ranking/global";
-        if (page > 1) {
-          router.push(`${urlBase}?page=${page}`, {
-            scroll: false,
-          });
-        } else {
-          router.push(`${urlBase}`, {
-            scroll: false,
-          });
-        }
+        router.push(
+          country
+            ? `/ranking/country/${country}/${page}`
+            : `/ranking/global/${page}`,
+        );
       });
     },
     [country, pageInfo, router],
