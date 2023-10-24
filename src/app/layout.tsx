@@ -16,6 +16,9 @@ export const metadata: Metadata = {
     default: ssrSettings.siteName,
   },
   description: ssrSettings.description,
+  keywords:
+    "scoresaber, score saber, scoresaber stats, score saber stats, beatleader, beat leader, " +
+    "scoresaber reloaded, ssr, github, score aggregation, scoresaber api, score saber api, scoresaber api",
   openGraph: {
     title: ssrSettings.siteName,
     description: ssrSettings.description,
