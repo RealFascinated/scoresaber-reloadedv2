@@ -43,20 +43,23 @@ function NavbarButton({ text, icon, href, children }: ButtonProps) {
 export default function Navbar() {
   const settingsStore = useStore(useSettingsStore, (state) => state);
 
+  const player = settingsStore?.player;
+  const lastUsedSortType = settingsStore?.lastUsedSortType.value;
+
   return (
     <>
       <div className="flex h-fit w-full rounded-md bg-gray-800">
-        {settingsStore !== undefined && settingsStore.player && (
+        {settingsStore !== undefined && player && (
           <NavbarButton
             text="You"
             icon={
               <Avatar
-                url={settingsStore.player.profilePicture}
+                url={player.profilePicture}
                 label="Your avatar"
                 size={32}
               />
             }
-            href={`/player/${settingsStore.player.id}/scoresaber/top/1`}
+            href={`/player/${player?.id}/scoresaber/${lastUsedSortType}/1`}
           />
         )}
 
@@ -70,7 +73,7 @@ export default function Navbar() {
                   key={friend.id}
                   className="mt-2 bg-gray-500"
                   text={friend.name}
-                  url={`/player/${friend.id}/scoresaber/top/1`}
+                  url={`/player/${friend.id}/scoresaber/${lastUsedSortType}/1`}
                   icon={
                     <Avatar
                       url={friend.profilePicture}
