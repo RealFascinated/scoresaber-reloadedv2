@@ -21,19 +21,23 @@ export default class AppProvider extends React.Component {
     }
     this._state.mounted = true;
 
-    // Load data from async storage
-    await useSettingsStore.persist.rehydrate();
-    await useScoresaberScoresStore.persist.rehydrate();
+    const initUpdater = async () => {
+      // Load data from async storage
+      await useSettingsStore.persist.rehydrate();
+      await useScoresaberScoresStore.persist.rehydrate();
 
-    await useSettingsStore.getState().refreshProfiles();
-    setInterval(() => {
-      useSettingsStore.getState().refreshProfiles();
-    }, UPDATE_INTERVAL);
+      await useSettingsStore.getState().refreshProfiles();
+      setInterval(() => {
+        useSettingsStore.getState().refreshProfiles();
+      }, UPDATE_INTERVAL);
 
-    await useScoresaberScoresStore.getState().updatePlayerScores();
-    setInterval(() => {
-      useScoresaberScoresStore.getState().updatePlayerScores();
-    }, UPDATE_INTERVAL);
+      await useScoresaberScoresStore.getState().updatePlayerScores();
+      setInterval(() => {
+        useScoresaberScoresStore.getState().updatePlayerScores();
+      }, UPDATE_INTERVAL);
+    };
+
+    initUpdater();
   }
 
   constructor(props: any) {
