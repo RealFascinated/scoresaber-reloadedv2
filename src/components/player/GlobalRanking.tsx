@@ -5,7 +5,6 @@ import { ScoreSaberAPI } from "@/utils/scoresaber/api";
 import { normalizedRegionName } from "@/utils/utils";
 import dynamic from "next/dynamic";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
 import Card from "../Card";
 import Container from "../Container";
@@ -30,8 +29,6 @@ type GlobalRankingProps = {
 };
 
 export default function GlobalRanking({ page, country }: GlobalRankingProps) {
-  const router = useRouter();
-
   const [error, setError] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
 
@@ -59,14 +56,16 @@ export default function GlobalRanking({ page, country }: GlobalRankingProps) {
           loading: false,
           page: page,
         });
-        router.push(
+        window.history.pushState(
+          {},
+          "",
           country
             ? `/ranking/country/${country}/${page}`
             : `/ranking/global/${page}`,
         );
       });
     },
-    [country, pageInfo, router],
+    [country, pageInfo],
   );
 
   useEffect(() => {
@@ -151,7 +150,7 @@ export default function GlobalRanking({ page, country }: GlobalRankingProps) {
                     key={player.rank}
                     className="flex flex-col gap-2 rounded-md bg-gray-700 hover:bg-gray-600"
                   >
-                    <Link href={`/player/${player.id}`}>
+                    <Link href={`/player/${player.id}/top/1`}>
                       <PlayerRankingMobile player={player} />
                     </Link>
                   </div>

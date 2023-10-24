@@ -5,7 +5,6 @@ import { SortType, SortTypes } from "@/types/SortTypes";
 import { ScoreSaberAPI } from "@/utils/scoresaber/api";
 import useStore from "@/utils/useStore";
 import dynamic from "next/dynamic";
-import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
 import Card from "../Card";
 import Error from "../Error";
@@ -31,8 +30,6 @@ type ScoresProps = {
 export default function Scores({ playerData, page, sortType }: ScoresProps) {
   const settingsStore = useStore(useSettingsStore, (store) => store);
   const playerId = playerData.id;
-
-  const router = useRouter();
 
   const [mounted, setMounted] = useState(false);
   const [error, setError] = useState(false);
@@ -65,16 +62,17 @@ export default function Scores({ playerData, page, sortType }: ScoresProps) {
             sortType: sortType,
           });
           settingsStore?.setLastUsedSortType(sortType);
-
-          router.push(`/player/${playerId}/${sortType.value}/${page}`, {
-            scroll: false,
-          });
+          window.history.pushState(
+            {},
+            "",
+            `/player/${playerId}/${sortType.value}/${page}`,
+          );
 
           console.log(`Switched page to ${page} with sort ${sortType.value}`);
         },
       );
     },
-    [playerId, router, scores, settingsStore],
+    [playerId, scores, settingsStore],
   );
 
   useEffect(() => {

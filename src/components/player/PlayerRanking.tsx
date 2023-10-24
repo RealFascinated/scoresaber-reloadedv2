@@ -33,7 +33,7 @@ export default function PlayerRanking({
         )}
         <Link
           className="transform-gpu transition-all hover:text-blue-500"
-          href={"/player/" + player.id}
+          href={`/player/${player.id}/top/1`}
         >
           <p
             className={
