@@ -44,7 +44,9 @@ export const useSettingsStore = create<SettingsStore>()(
           player: playerData,
         });
 
-        cookieCutter.set("playerId", playerData.id);
+        cookieCutter.set("playerId", playerData.id, {
+          path: "/",
+        });
       },
 
       async addFriend(friendId: string) {
