@@ -38,7 +38,7 @@ export const options: any = {
     y: {
       ticks: {
         autoSkip: true,
-        maxTicksLimit: 4,
+        maxTicksLimit: 8,
       },
       reverse: true,
     },
@@ -103,7 +103,7 @@ export default function PlayerChart({
     labels,
     datasets: [
       {
-        lineTension: 0.4,
+        lineTension: 0.5,
         data: history,
         label: "Rank",
         borderColor: "#3e95cd",
@@ -114,7 +114,7 @@ export default function PlayerChart({
   };
 
   return (
-    <div className="h-[280px] w-full">
+    <div className="h-[310px] w-full">
       <Line className={className} options={options} data={data} />
     </div>
   );
