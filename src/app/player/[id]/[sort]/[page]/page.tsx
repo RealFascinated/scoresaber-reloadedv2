@@ -25,7 +25,7 @@ export async function generateMetadata({
     Rank: #${formatNumber(player.rank)} (#${formatNumber(
       player.countryRank,
     )} - ${normalizedRegionName(player.country)})
-    PP: ${formatNumber(player.pp)}
+    PP: ${formatNumber(player.pp)}pp
     Play Count: ${formatNumber(player.scoreStats.totalPlayCount)}`;
 
   return {
