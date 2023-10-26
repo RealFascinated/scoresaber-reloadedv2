@@ -46,7 +46,7 @@ export default function PlayerRanking({
           </p>
         </Link>
       </td>
-      <td className="px-4 py-2">{formatNumber(player.pp)}pp</td>
+      <td className="text-pp-blue px-4 py-2">{formatNumber(player.pp)}pp</td>
       <td className="px-4 py-2">
         {formatNumber(player.scoreStats.totalPlayCount)}
       </td>

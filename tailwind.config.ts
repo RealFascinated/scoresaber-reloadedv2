@@ -15,6 +15,9 @@ const config: Config = {
         "gradient-conic":
           "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
       },
+      textColor: {
+        "pp-blue": "#9fa8f3",
+      },
     },
     screens: {
       ...defaultTheme.screens,

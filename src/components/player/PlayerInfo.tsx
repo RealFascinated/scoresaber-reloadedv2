@@ -193,7 +193,7 @@ export default function PlayerInfo({ playerData }: PlayerInfoProps) {
             </div>
 
             {/* PP */}
-            <div className="flex items-center text-gray-300">
+            <div className="text-pp-blue flex items-center">
               <p>{formatNumber(playerData.pp)}pp</p>
             </div>
           </div>
