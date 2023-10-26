@@ -31,7 +31,8 @@ export default function Score({ score, player, leaderboard }: ScoreProps) {
   const diffColor = songDifficultyToColor(diffName);
 
   return (
-    <div className="grid grid-cols-1 pb-2 pt-2 first:pt-0 last:pb-0 md:grid-cols-[1.2fr_6fr_3fr] xl:grid-cols-[1fr_6fr_3fr]">
+    // <div className="grid grid-cols-1 pb-2 pt-2 first:pt-0 last:pb-0 md:grid-cols-[1fr_6fr_0.4fr_1.3fr]">
+    <div className="grid grid-cols-1 pb-2 pt-2 first:pt-0 last:pb-0 md:grid-cols-[0.8fr_6fr_1.3fr]">
       <div className="ml-3 flex flex-col items-start justify-center">
         <div className="hidden w-fit flex-row items-center justify-start gap-1 md:flex">
           <GlobeAsiaAustraliaIcon width={20} height={20} />
@@ -56,32 +57,40 @@ export default function Score({ score, player, leaderboard }: ScoreProps) {
             loading="lazy"
           />
           <div
-            className="absolute mt-12 cursor-default divide-x divide-y rounded-sm pl-[3px] pr-[3px] text-[0.8rem] opacity-90"
+            className="absolute mt-12 flex w-[55px] cursor-default items-center justify-center divide-x divide-y rounded-sm pl-[3px] pr-[3px] text-[0.8rem] opacity-90"
             style={{
               backgroundColor: diffColor,
             }}
           >
-            <p className="text-white" title={diffName}>
-              {leaderboard.ranked ? (
-                <div className="flex items-center justify-center gap-[2px]">
-                  <StarIcon width={13} height={13} />
-                  {leaderboard.stars.toFixed(2)}
-                </div>
-              ) : (
-                diffName
-              )}
-            </p>
+            {leaderboard.ranked ? (
+              <div className="flex items-center justify-center gap-[2px]">
+                <StarIcon width={13} height={13} />
+                {leaderboard.stars.toFixed(2)}
+              </div>
+            ) : (
+              <p>{diffName}</p>
+            )}
           </div>
         </div>
         {/* Song Info */}
         <div className="w-fit truncate text-blue-500">
-          <p>{leaderboard.songName}</p>
+          <p className="font-bold">{leaderboard.songName}</p>
           <p className="text-blue-300">
             {leaderboard.songAuthorName}{" "}
             <span className="text-gray-200">{leaderboard.levelAuthorName}</span>
           </p>
         </div>
       </div>
+
+      {/* Score Buttons */}
+      {/* <div className="flex items-center justify-between p-1 md:items-start md:justify-end">
+        <button className="rounded-md bg-gray-500">
+          <Link href={`https://beatsaver.com/maps/${leaderboard.songHash}`}>
+            <BeatSaverLogo size={24} className="p-[2.5px]" />
+          </Link>
+        </button>
+      </div> */}
+
       <div className="flex items-center justify-between p-1 md:items-start md:justify-end">
         <div className="flex flex-col md:hidden">
           {/* Score rank */}
