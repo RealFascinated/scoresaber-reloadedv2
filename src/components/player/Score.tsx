@@ -2,6 +2,10 @@ import { ScoresaberLeaderboardInfo } from "@/schemas/scoresaber/leaderboard";
 import { ScoresaberPlayer } from "@/schemas/scoresaber/player";
 import { ScoresaberScore } from "@/schemas/scoresaber/score";
 import { formatNumber } from "@/utils/number";
+import {
+  scoresaberDifficultyNumberToName,
+  songDifficultyToColor,
+} from "@/utils/songUtils";
 import { formatDate, formatTimeAgo } from "@/utils/timeUtils";
 import {
   CheckIcon,
@@ -20,6 +24,9 @@ type ScoreProps = {
 
 export default function Score({ score, player, leaderboard }: ScoreProps) {
   const isFullCombo = score.missedNotes + score.badCuts === 0;
+  const diffName = scoresaberDifficultyNumberToName(
+    leaderboard.difficulty.difficulty,
+  );
 
   return (
     <div className="grid grid-cols-1 pb-2 pt-2 first:pt-0 last:pb-0 md:grid-cols-[1.2fr_6fr_3fr] xl:grid-cols-[1fr_6fr_3fr]">
@@ -37,15 +44,29 @@ export default function Score({ score, player, leaderboard }: ScoreProps) {
       </div>
       {/* Song Image */}
       <div className="flex w-full items-center gap-2">
-        <Image
-          src={leaderboard.coverImage}
-          alt={leaderboard.songName}
-          className="h-fit rounded-md"
-          width={60}
-          height={60}
-          loading="lazy"
-          placeholder="blur"
-        />
+        <div className="flex justify-end">
+          <Image
+            src={leaderboard.coverImage}
+            alt={leaderboard.songName}
+            className="h-fit rounded-md"
+            width={60}
+            height={60}
+            loading="lazy"
+          />
+          <div
+            className="absolute mt-9 cursor-default divide-x divide-y rounded-sm p-[1px] text-sm opacity-90"
+            style={{
+              backgroundColor: songDifficultyToColor(diffName),
+            }}
+          >
+            <p className="text-white" title={diffName}>
+              {scoresaberDifficultyNumberToName(
+                leaderboard.difficulty.difficulty,
+                true,
+              )}
+            </p>
+          </div>
+        </div>
         {/* Song Info */}
         <div className="w-fit truncate text-blue-500">
           <p>{leaderboard.songName}</p>

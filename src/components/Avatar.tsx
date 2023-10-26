@@ -22,8 +22,6 @@ export default function Avatar({
         src={url}
         width={size}
         height={size}
-        loading="lazy"
-        placeholder="blur"
         priority
       />
     </>
