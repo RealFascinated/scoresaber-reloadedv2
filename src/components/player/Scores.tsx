@@ -150,7 +150,7 @@ export default function Scores({ playerData, page, sortType }: ScoresProps) {
       </div>
 
       {/* Pagination */}
-      <div className="flex w-full flex-row justify-center rounded-md bg-gray-800 md:flex-col">
+      <div>
         <div className="p-3">
           <Pagination
             currentPage={scores.page}
