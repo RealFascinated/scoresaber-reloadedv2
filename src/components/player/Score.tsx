@@ -28,10 +28,6 @@ export default function Score({ score, player, leaderboard }: ScoreProps) {
   const diffName = scoresaberDifficultyNumberToName(
     leaderboard.difficulty.difficulty,
   );
-  const diffNameShort = scoresaberDifficultyNumberToName(
-    leaderboard.difficulty.difficulty,
-    true,
-  );
   const diffColor = songDifficultyToColor(diffName);
 
   return (
@@ -50,7 +46,7 @@ export default function Score({ score, player, leaderboard }: ScoreProps) {
       </div>
       {/* Song Image */}
       <div className="flex w-full items-center gap-2">
-        <div className="flex justify-end">
+        <div className="flex justify-center">
           <Image
             src={leaderboard.coverImage}
             alt={leaderboard.songName}
@@ -60,7 +56,7 @@ export default function Score({ score, player, leaderboard }: ScoreProps) {
             loading="lazy"
           />
           <div
-            className="absolute ml-3 mt-12 cursor-default divide-x divide-y rounded-sm pl-[3px] pr-[3px] text-[0.8rem] opacity-90"
+            className="absolute mt-12 cursor-default divide-x divide-y rounded-sm pl-[3px] pr-[3px] text-[0.8rem] opacity-90"
             style={{
               backgroundColor: diffColor,
             }}
@@ -72,7 +68,7 @@ export default function Score({ score, player, leaderboard }: ScoreProps) {
                   {leaderboard.stars.toFixed(2)}
                 </div>
               ) : (
-                diffNameShort
+                diffName
               )}
             </p>
           </div>
