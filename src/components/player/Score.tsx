@@ -10,6 +10,7 @@ import { formatDate, formatTimeAgo } from "@/utils/timeUtils";
 import {
   CheckIcon,
   GlobeAsiaAustraliaIcon,
+  StarIcon,
   XMarkIcon,
 } from "@heroicons/react/20/solid";
 import clsx from "clsx";
@@ -27,6 +28,11 @@ export default function Score({ score, player, leaderboard }: ScoreProps) {
   const diffName = scoresaberDifficultyNumberToName(
     leaderboard.difficulty.difficulty,
   );
+  const diffNameShort = scoresaberDifficultyNumberToName(
+    leaderboard.difficulty.difficulty,
+    true,
+  );
+  const diffColor = songDifficultyToColor(diffName);
 
   return (
     <div className="grid grid-cols-1 pb-2 pt-2 first:pt-0 last:pb-0 md:grid-cols-[1.2fr_6fr_3fr] xl:grid-cols-[1fr_6fr_3fr]">
@@ -54,15 +60,19 @@ export default function Score({ score, player, leaderboard }: ScoreProps) {
             loading="lazy"
           />
           <div
-            className="absolute mt-9 cursor-default divide-x divide-y rounded-sm p-[1px] text-sm opacity-90"
+            className="absolute mt-9 cursor-default divide-y rounded-sm pl-[3px] pr-[3px] text-[0.8rem] opacity-90"
             style={{
-              backgroundColor: songDifficultyToColor(diffName),
+              backgroundColor: diffColor,
             }}
           >
             <p className="text-white" title={diffName}>
-              {scoresaberDifficultyNumberToName(
-                leaderboard.difficulty.difficulty,
-                true,
+              {leaderboard.ranked ? (
+                <div className="flex items-center justify-center gap-[2px]">
+                  <StarIcon width={13} height={13} />
+                  {leaderboard.stars.toFixed(2)}
+                </div>
+              ) : (
+                diffNameShort
               )}
             </p>
           </div>
