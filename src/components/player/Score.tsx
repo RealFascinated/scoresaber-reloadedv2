@@ -60,7 +60,7 @@ export default function Score({ score, player, leaderboard }: ScoreProps) {
             loading="lazy"
           />
           <div
-            className="absolute mt-9 cursor-default divide-y rounded-sm pl-[3px] pr-[3px] text-[0.8rem] opacity-90"
+            className="absolute ml-3 mt-12 cursor-default divide-x divide-y rounded-sm pl-[3px] pr-[3px] text-[0.8rem] opacity-90"
             style={{
               backgroundColor: diffColor,
             }}
