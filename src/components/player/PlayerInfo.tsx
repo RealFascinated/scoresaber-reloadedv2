@@ -7,6 +7,7 @@ import {
   getAveragePp,
   getHighestPpPlay,
 } from "@/utils/scoresaber/scores";
+import { normalizedRegionName } from "@/utils/utils";
 import {
   GlobeAsiaAustraliaIcon,
   HomeIcon,
@@ -182,6 +183,9 @@ export default function PlayerInfo({ playerData }: PlayerInfoProps) {
                 className="flex transform-gpu items-center gap-1 transition-all hover:text-blue-500"
                 href={`/ranking/country/${playerData.country}/${Math.round(
                   playerData.countryRank / 50,
+                )}`}
+                title={`${playerData.name} is from ${normalizedRegionName(
+                  playerData.country,
                 )}`}
               >
                 <ReactCountryFlag
