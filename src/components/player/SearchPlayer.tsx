@@ -67,7 +67,7 @@ export default function SearchPlayer() {
 
       <div
         className={clsx(
-          "absolute z-20 mt-7 flex max-h-[400px] min-w-[14rem] flex-col divide-y overflow-y-auto rounded-md bg-gray-700 shadow-sm",
+          "absolute z-20 mt-7 flex max-h-[200px] min-w-[14rem] flex-col divide-y overflow-y-auto rounded-md bg-gray-700 shadow-sm md:max-h-[300px]",
           players.length > 0 ? "flex" : "hidden",
         )}
       >
