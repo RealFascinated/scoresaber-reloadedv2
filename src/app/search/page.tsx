@@ -1,6 +1,6 @@
-import Avatar from "@/components/Avatar";
 import Card from "@/components/Card";
 import Container from "@/components/Container";
+import UnknownAvatar from "@/components/UnknownAvatar";
 
 import SearchPlayer from "@/components/player/SearchPlayer";
 import { Metadata } from "next";
@@ -17,11 +17,7 @@ export default function Home() {
           className="mt-2 w-full rounded-md bg-gray-800"
           innerClassName="flex flex-col items-center justify-center"
         >
-          <Avatar
-            className="m-6"
-            label="Player Avatar"
-            url="https://cdn.fascinated.cc/yb4fgdc1.jpg"
-          />
+          <UnknownAvatar />
 
           <p className="text-xl">Stranger</p>
           <p className="text mt-2">Find a player profile</p>
