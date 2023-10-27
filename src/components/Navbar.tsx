@@ -16,13 +16,15 @@ interface ButtonProps {
   text: string;
   icon?: JSX.Element;
   href?: string;
+  ariaLabel: string;
   children?: React.ReactNode;
 }
 
-function NavbarButton({ text, icon, href, children }: ButtonProps) {
+function NavbarButton({ text, icon, href, ariaLabel, children }: ButtonProps) {
   return (
     <div className="group">
       <a
+        aria-label={ariaLabel}
         className="flex h-full w-fit transform-gpu items-center justify-center gap-1 rounded-md p-3 transition-all hover:cursor-pointer hover:bg-blue-500"
         href={href}
       >
@@ -49,6 +51,7 @@ export default function Navbar() {
       <div className="flex h-fit w-full rounded-md bg-gray-800">
         {settingsStore !== undefined && settingsStore.player && (
           <NavbarButton
+            ariaLabel="Your profile"
             text="You"
             icon={
               <Avatar
@@ -61,7 +64,11 @@ export default function Navbar() {
           />
         )}
 
-        <NavbarButton text="Friends" icon={<UserIcon height={20} width={20} />}>
+        <NavbarButton
+          ariaLabel="View your friends"
+          text="Friends"
+          icon={<UserIcon height={20} width={20} />}
+        >
           {settingsStore?.friends.length == 0 ? (
             <p className="text-sm font-bold">No friends, add someone!</p>
           ) : (
@@ -92,11 +99,13 @@ export default function Navbar() {
           />
         </NavbarButton>
         <NavbarButton
+          ariaLabel="View the global ranking"
           text="Ranking"
           icon={<GlobeAltIcon height={20} width={20} />}
           href="/ranking/global/1"
         />
         <NavbarButton
+          ariaLabel="View analytics for Scoresaber"
           text="Analytics"
           icon={<ServerIcon height={20} width={20} />}
           href="/analytics"
@@ -105,11 +114,13 @@ export default function Navbar() {
         <div className="m-auto" />
 
         <NavbarButton
+          ariaLabel="Search for a player"
           text="Search"
           icon={<MagnifyingGlassIcon height={20} width={20} />}
           href="/search"
         />
         <NavbarButton
+          ariaLabel="View your settings"
           text="Settings"
           icon={<CogIcon height={20} width={20} />}
           href="/settings"
