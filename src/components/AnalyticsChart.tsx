@@ -1,6 +1,6 @@
 "use client";
 
-import { ScoresaberPlayerCountHistory } from "@/schemas/fascinated/scoresaberPlayerCountHistory";
+import { ScoresaberMetricsHistory } from "@/schemas/fascinated/scoresaberMetricsHistory";
 import { formatTimeAgo } from "@/utils/timeUtils";
 import {
   CategoryScale,
@@ -26,7 +26,7 @@ ChartJS.register(
 
 type PlayerChartProps = {
   className?: string;
-  playerCountHistoryData: ScoresaberPlayerCountHistory;
+  historyData: ScoresaberMetricsHistory;
 };
 
 export const options: any = {
@@ -65,32 +65,20 @@ export const options: any = {
     title: {
       display: false,
     },
-    tooltip: {
-      callbacks: {
-        label(context: any) {
-          switch (
-            context.dataset.label
-            // case "Rank": {
-            //   return `Rank #${formatNumber(context.parsed.y.toFixed(0))}`;
-            // }
-          ) {
-          }
-        },
-      },
-    },
   },
 };
 
 export default function AnalyticsChart({
   className,
-  playerCountHistoryData,
+  historyData,
 }: PlayerChartProps) {
-  const playerCountHistory = playerCountHistoryData.history;
+  const playerCountHistory = historyData.activePlayersHistory;
+  const scoreCountHistory = historyData.scoreCountHistory;
 
   let labels = [];
   for (let i = 0; i < playerCountHistory.length; i++) {
     if (i == playerCountHistory.length - 1) {
-      labels.push("now");
+      labels.push("today");
       continue;
     }
     labels.push(formatTimeAgo(playerCountHistory[i].time));
@@ -104,6 +92,14 @@ export default function AnalyticsChart({
         data: playerCountHistory.map((count) => count.value || "0"),
         label: "Active Players",
         borderColor: "#3e95cd",
+        fill: false,
+        color: "#fff",
+      },
+      {
+        lineTension: 0.5,
+        data: scoreCountHistory.map((count) => count.value || "0"),
+        label: "Scores Set",
+        borderColor: "#8e5ea2",
         fill: false,
         color: "#fff",
       },

@@ -1,9 +1,10 @@
 import AnalyticsChart from "@/components/AnalyticsChart";
 import Card from "@/components/Card";
 import Container from "@/components/Container";
-import { ScoresaberPlayerCountHistory } from "@/schemas/fascinated/scoresaberPlayerCountHistory";
+import { ScoresaberMetricsHistory } from "@/schemas/fascinated/scoresaberMetricsHistory";
 import { ssrSettings } from "@/ssrSettings";
 import { formatNumber } from "@/utils/number";
+import { isProduction } from "@/utils/utils";
 import { Metadata } from "next";
 
 async function getData() {
@@ -11,20 +12,28 @@ async function getData() {
     "https://bs-tracker.fascinated.cc/analytics?time=30d",
     {
       next: {
-        revalidate: 600, // 10 minutes
+        revalidate: isProduction() ? 600 : 0, // 10 minutes (0 seconds in dev)
       },
     },
   );
 
   const json = await response.json();
-  return json as ScoresaberPlayerCountHistory;
+  return json as ScoresaberMetricsHistory;
 }
 
 export async function generateMetadata(): Promise<Metadata> {
-  const data = await getData();
+  const historyData = await getData();
 
   const description =
     "View Scoresaber metrics and statistics over the last 30 days.";
+
+  const lastActivePlayers =
+    historyData.activePlayersHistory[
+      historyData.activePlayersHistory.length - 1
+    ].value;
+  const lastScoreCount =
+    historyData.scoreCountHistory[historyData.scoreCountHistory.length - 1]
+      .value;
 
   return {
     title: `Analytics`,
@@ -35,15 +44,14 @@ export async function generateMetadata(): Promise<Metadata> {
       description:
         description +
         `
-      Players currently online: ${formatNumber(
-        data.history[data.history.length - 1].value,
-      )}`,
+      Players currently online: ${formatNumber(lastActivePlayers)}
+      Scores set: ${formatNumber(lastScoreCount)}`,
     },
   };
 }
 
 export default async function Analytics() {
-  const playerCountHistory = await getData();
+  const historyData = await getData();
 
   return (
     <main>
@@ -57,7 +65,7 @@ export default async function Analytics() {
             Scoresaber metrics and statistics over the last 30 days.
           </p>
           <div className="mt-3 h-[400px] w-full">
-            <AnalyticsChart playerCountHistoryData={playerCountHistory} />
+            <AnalyticsChart historyData={historyData} />
           </div>
         </Card>
       </Container>

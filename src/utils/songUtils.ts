@@ -1,5 +1,4 @@
 export function songDifficultyToColor(diff: string) {
-  console.log(diff);
   switch (diff.toLowerCase()) {
     case "easy":
       return "#3cb371";
