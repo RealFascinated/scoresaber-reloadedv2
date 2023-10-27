@@ -6,6 +6,7 @@ import { ssrSettings } from "@/ssrSettings";
 import { formatNumber } from "@/utils/number";
 import { isProduction } from "@/utils/utils";
 import { Metadata } from "next";
+import Link from "next/link";
 
 async function getData() {
   const response = await fetch(
@@ -64,6 +65,18 @@ export default async function Analytics() {
           <h1 className="text-center text-3xl font-bold">Analytics</h1>
           <p className="text-center text-gray-300">
             Scoresaber metrics and statistics over the last 30 days.
+          </p>
+          <p className="text-gray-300">
+            Want more in-depth data? Click{" "}
+            <span className="text-pp-blue">
+              <Link
+                href="https://grafana.fascinated.cc/d/c40febe5-6779-4f91-b85e-0a46b3865041/beatsaber-metrics"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                here
+              </Link>
+            </span>
           </p>
           <div className="mt-3 h-[400px] w-full">
             <AnalyticsChart historyData={historyData} />
