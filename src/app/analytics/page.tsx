@@ -44,8 +44,9 @@ export async function generateMetadata(): Promise<Metadata> {
       description:
         description +
         `
-      Players currently online: ${formatNumber(lastActivePlayers)}
-      Scores set Today: ${formatNumber(lastScoreCount)}`,
+
+        Players currently online: ${formatNumber(lastActivePlayers)}
+        Scores set Today: ${formatNumber(lastScoreCount)}`,
     },
   };
 }
