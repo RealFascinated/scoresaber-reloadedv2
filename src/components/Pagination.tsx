@@ -31,7 +31,7 @@ export default function Pagination(props: PaginationProps) {
               <button
                 className="px-3 py-1"
                 onClick={() => onPageChange(currentPage - 1)}
-                aria-label="Previous Page"
+                aria-label={`Page ${currentPage - 1} (previous page)`}
               >
                 <ArrowUturnLeftIcon width={20} height={20} />
               </button>
@@ -44,7 +44,7 @@ export default function Pagination(props: PaginationProps) {
                 <button
                   className="rounded-md bg-neutral-700 px-3 py-1 hover:opacity-80"
                   onClick={() => onPageChange(1)}
-                  aria-label="First Page"
+                  aria-label="Page 1 (first page)"
                 >
                   1
                 </button>
@@ -81,7 +81,7 @@ export default function Pagination(props: PaginationProps) {
                 <button
                   className="rounded-md bg-neutral-700 px-3 py-1 hover:opacity-80"
                   onClick={() => onPageChange(totalPages)}
-                  aria-label="Last Page"
+                  aria-label={`Page ${totalPages} (last page)`}
                 >
                   {totalPages}
                 </button>
@@ -94,7 +94,7 @@ export default function Pagination(props: PaginationProps) {
               <button
                 className="px-3 py-1"
                 onClick={() => onPageChange(currentPage + 1)}
-                aria-label="Next Page"
+                aria-label={`Page ${currentPage + 1} (next page)`}
               >
                 <ArrowUturnRightIcon width={20} height={20} />
               </button>

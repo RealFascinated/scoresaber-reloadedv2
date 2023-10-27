@@ -192,13 +192,14 @@ export default function PlayerInfo({ playerData }: PlayerInfoProps) {
                   countryCode={playerData.country}
                   svg
                   className="!h-7 !w-7"
+                  alt="Country Flag"
                 />
                 <p>#{formatNumber(playerData.countryRank)}</p>
               </a>
             </div>
 
             {/* PP */}
-            <div className="text-pp-blue flex items-center">
+            <div className="flex items-center text-pp-blue">
               <p>{formatNumber(playerData.pp)}pp</p>
             </div>
           </div>
@@ -237,7 +238,7 @@ export default function PlayerInfo({ playerData }: PlayerInfoProps) {
               <>
                 <Label
                   title="Top PP"
-                  className="bg-[#8992e8]"
+                  className="bg-pp-blue"
                   hoverValue="Highest pp play"
                   value={`${formatNumber(
                     getHighestPpPlay(playerId)?.toFixed(2),
@@ -245,7 +246,7 @@ export default function PlayerInfo({ playerData }: PlayerInfoProps) {
                 />
                 <Label
                   title="Avg PP"
-                  className="bg-[#8992e8]"
+                  className="bg-pp-blue"
                   hoverValue="Average amount of pp per play (best 20 scores)"
                   value={`${formatNumber(
                     getAveragePp(playerId)?.toFixed(2),
@@ -253,7 +254,7 @@ export default function PlayerInfo({ playerData }: PlayerInfoProps) {
                 />
                 <Label
                   title="+ 1pp"
-                  className="bg-[#8992e8]"
+                  className="bg-pp-blue"
                   hoverValue="Amount of raw pp required to increase your global pp by 1pp"
                   value={`${formatNumber(
                     calcPpBoundary(playerId, 1)?.toFixed(2),

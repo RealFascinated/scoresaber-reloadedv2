@@ -22,6 +22,7 @@ export default function Avatar({
         src={url}
         width={size}
         height={size}
+        priority
       />
     </>
   );
