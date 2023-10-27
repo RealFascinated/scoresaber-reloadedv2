@@ -54,7 +54,7 @@ export default async function Analytics() {
         >
           <h1 className="text-center text-3xl font-bold">Analytics</h1>
           <p className="text-center text-gray-300">
-            Scoresaber metrics and statistics over time.
+            Scoresaber metrics and statistics over the last 30 days.
           </p>
           <div className="mt-3 h-[400px] w-full">
             <AnalyticsChart playerCountHistoryData={playerCountHistory} />
