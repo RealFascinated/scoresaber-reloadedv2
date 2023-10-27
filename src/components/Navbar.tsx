@@ -68,6 +68,7 @@ export default function Navbar() {
           ariaLabel="View your friends"
           text="Friends"
           icon={<UserIcon height={20} width={20} />}
+          href="/search"
         >
           {settingsStore?.friends.length == 0 ? (
             <p className="text-sm font-bold">No friends, add someone!</p>
