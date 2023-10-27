@@ -7,8 +7,11 @@ import Scores from "@/components/player/Scores";
 import { ScoresaberPlayer } from "@/schemas/scoresaber/player";
 import { SortTypes } from "@/types/SortTypes";
 import { ScoreSaberAPI } from "@/utils/scoresaber/api";
+import clsx from "clsx";
 import dynamic from "next/dynamic";
+import Image from "next/image";
 import { useEffect, useState } from "react";
+import PlayerChart from "./PlayerChart";
 import PlayerInfo from "./PlayerInfo";
 
 const Error = dynamic(() => import("@/components/Error"));
@@ -79,11 +82,38 @@ export default function PlayerPage({ id, sort, page }: PlayerPageProps) {
   }
 
   const playerData = player.player;
+  const badges = playerData.badges;
 
   return (
     <main>
       <Container>
         <PlayerInfo playerData={playerData} />
+        {/* Chart */}
+        <Card className="mt-2">
+          {/* Badges */}
+          <div
+            className={clsx(
+              "mb-2 mt-2 flex flex-wrap items-center justify-center gap-2",
+              badges.length > 0 ? "block" : "hidden",
+            )}
+          >
+            {badges.map((badge) => {
+              return (
+                <Image
+                  key={badge.image}
+                  src={badge.image}
+                  alt={badge.description}
+                  title={badge.description}
+                  width={80}
+                  height={30}
+                />
+              );
+            })}
+          </div>
+          <div className="h-[320px] w-full">
+            <PlayerChart scoresaber={playerData} />
+          </div>
+        </Card>
         <Scores
           playerData={playerData}
           page={Number(page)}

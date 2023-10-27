@@ -20,7 +20,6 @@ import { useStore } from "zustand";
 import Avatar from "../Avatar";
 import Card from "../Card";
 import Label from "../Label";
-import PlayerChart from "./PlayerChart";
 
 const ReactCountryFlag = dynamic(() => import("react-country-flag"));
 
@@ -158,6 +157,7 @@ export default function PlayerInfo({ playerData }: PlayerInfoProps) {
             )}
           </div>
         </div>
+
         <div className="mt-1 flex w-full flex-col items-center gap-2 md:items-start">
           {/* Name */}
           <p className="text-2xl leading-none">{playerData.name}</p>
@@ -249,9 +249,6 @@ export default function PlayerInfo({ playerData }: PlayerInfoProps) {
               </>
             )}
           </div>
-
-          {/* Chart */}
-          <PlayerChart scoresaber={playerData} />
         </div>
       </div>
     </Card>

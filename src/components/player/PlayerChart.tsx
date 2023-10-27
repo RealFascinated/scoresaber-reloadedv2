@@ -113,9 +113,5 @@ export default function PlayerChart({
     ],
   };
 
-  return (
-    <div className="h-[310px] w-full">
-      <Line className={className} options={options} data={data} />
-    </div>
-  );
+  return <Line className={className} options={options} data={data} />;
 }
