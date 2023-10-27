@@ -206,7 +206,9 @@ export function getAveragePp(playerId: string, limit: number = 20) {
     .sort((a, b) => b - a)
     .slice(0, limit);
 
-  return getTotalPpFromSortedPps(rankedScorePps, 0) / limit;
+  return (
+    rankedScorePps.reduce((cum, pp) => cum + pp, 0) / rankedScorePps.length
+  );
 }
 
 /**
