@@ -243,7 +243,7 @@ export default function PlayerInfo({ playerData }: PlayerInfoProps) {
                 <Label
                   title="Avg PP"
                   className="bg-pp-blue"
-                  hoverValue="Average amount of pp per play (best 20 scores)"
+                  hoverValue="Average amount of pp per play (best 50 scores)"
                   value={`${formatNumber(
                     getAveragePp(playerId)?.toFixed(2),
                   )}pp`}

@@ -192,9 +192,9 @@ export function getHighestPpPlay(playerId: string) {
  * Gets the average pp of the player
  *
  * @param playerId the player id
- * @param limit the amount of top scores to average (default: 20)
+ * @param limit the amount of top scores to average (default: 50)
  */
-export function getAveragePp(playerId: string, limit: number = 20) {
+export function getAveragePp(playerId: string, limit: number = 50) {
   const rankedScores = useScoresaberScoresStore
     .getState()
     .players.find((p) => p.id === playerId)
