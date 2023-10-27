@@ -119,39 +119,53 @@ function calcRawPpAtIdx(
  * @param expectedPp the expected pp
  * @returns the pp boundary (+ per raw pp)
  */
+/**
+ * Gets the amount of raw pp needed to gain the expected pp
+ *
+ * @param playerId the player id
+ * @param expectedPp the expected pp
+ * @returns the pp boundary (+ per raw pp)
+ */
 export function calcPpBoundary(playerId: string, expectedPp = 1) {
-  const rankedScores = useScoresaberScoresStore
-    .getState()
-    .players.find((p) => p.id === playerId)
-    ?.scores?.filter((s) => s.score.pp !== undefined);
-  if (!rankedScores) return null;
+  const state = useScoresaberScoresStore.getState();
+  const player = state.players.find((p) => p.id === playerId);
+  if (!player || !player.scores) return null;
 
-  const rankedScorePps = rankedScores
+  const rankedScorePps = player.scores
+    .filter((s) => s.score.pp !== undefined)
     .map((s) => s.score.pp)
     .sort((a, b) => b - a);
 
-  let idx = rankedScorePps.length - 1;
+  let left = 0;
+  let right = rankedScorePps.length - 1;
+  let boundaryIdx = -1;
 
-  while (idx >= 0) {
-    const bottomSlice = rankedScorePps.slice(idx);
-    const bottomPp = getTotalPpFromSortedPps(bottomSlice, idx);
+  while (left <= right) {
+    const mid = Math.floor((left + right) / 2);
+    const bottomSlice = rankedScorePps.slice(mid);
+    const bottomPp = getTotalPpFromSortedPps(bottomSlice, mid);
 
-    bottomSlice.unshift(rankedScorePps[idx]);
-    const modifiedBottomPp = getTotalPpFromSortedPps(bottomSlice, idx);
+    bottomSlice.unshift(rankedScorePps[mid]);
+    const modifiedBottomPp = getTotalPpFromSortedPps(bottomSlice, mid);
     const diff = modifiedBottomPp - bottomPp;
 
     if (diff > expectedPp) {
-      const ppBoundary = calcRawPpAtIdx(
-        rankedScorePps.slice(idx + 1),
-        idx + 1,
-        expectedPp,
-      );
-      return ppBoundary;
+      boundaryIdx = mid;
+      left = mid + 1;
+    } else {
+      right = mid - 1;
     }
-
-    idx--;
   }
-  return calcRawPpAtIdx(rankedScorePps, 0, expectedPp);
+
+  if (boundaryIdx === -1) {
+    return calcRawPpAtIdx(rankedScorePps, 0, expectedPp);
+  } else {
+    return calcRawPpAtIdx(
+      rankedScorePps.slice(boundaryIdx + 1),
+      boundaryIdx + 1,
+      expectedPp,
+    );
+  }
 }
 
 /**
