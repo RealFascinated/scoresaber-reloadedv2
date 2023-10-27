@@ -6,6 +6,10 @@ const buttons = [
     name: "Privacy",
     url: "/privacy",
   },
+  {
+    name: "Credits",
+    url: "/credits",
+  },
 ];
 
 const buildId = process.env.NEXT_PUBLIC_BUILD_ID

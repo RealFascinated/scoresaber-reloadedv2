@@ -1,4 +1,9 @@
 import GlobalRanking from "@/components/player/GlobalRanking";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Global Ranking",
+};
 
 type Props = {
   params: { page: string };
