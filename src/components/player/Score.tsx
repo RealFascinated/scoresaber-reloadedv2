@@ -138,6 +138,7 @@ export default function Score({ score, player, leaderboard }: ScoreProps) {
                 "min-w-[2rem]",
                 isFullCombo ? "bg-green-500" : "bg-red-500",
               )}
+              title={isFullCombo ? "Full Combo" : `${score.missedNotes}x Missed Notes`}
               icon={
                 isFullCombo ? (
                   <CheckIcon width={20} height={20} />
