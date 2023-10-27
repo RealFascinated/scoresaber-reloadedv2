@@ -8,12 +8,12 @@ import Link from "next/link";
 import { useCallback, useEffect, useState } from "react";
 import Card from "../Card";
 import Container from "../Container";
+import CountyFlag from "../CountryFlag";
 import Pagination from "../Pagination";
 import Spinner from "../Spinner";
 import PlayerRanking from "./PlayerRanking";
 import PlayerRankingMobile from "./PlayerRankingMobile";
 
-const ReactCountryFlag = dynamic(() => import("react-country-flag"));
 const Error = dynamic(() => import("@/components/Error"));
 
 type PageInfo = {
@@ -107,11 +107,7 @@ export default function GlobalRanking({ page, country }: GlobalRankingProps) {
             <div className="flex flex-col gap-2">
               <div className="flex items-center gap-2 rounded-md bg-gray-700 p-2">
                 {country && (
-                  <ReactCountryFlag
-                    countryCode={country}
-                    svg
-                    className="!h-8 !w-8"
-                  />
+                  <CountyFlag countryCode={country} className="!h-8 !w-8" />
                 )}
                 <p>
                   You are viewing{" "}

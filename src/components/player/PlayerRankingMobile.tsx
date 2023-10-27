@@ -1,17 +1,15 @@
 import { ScoresaberPlayer } from "@/schemas/scoresaber/player";
 import { useSettingsStore } from "@/store/settingsStore";
 import { formatNumber } from "@/utils/number";
-import dynamic from "next/dynamic";
 import { useStore } from "zustand";
 import Avatar from "../Avatar";
+import CountyFlag from "../CountryFlag";
 import Label from "../Label";
 
 type PlayerRankingProps = {
   player: ScoresaberPlayer;
   showCountryFlag?: boolean;
 };
-
-const ReactCountryFlag = dynamic(() => import("react-country-flag"));
 
 export default function PlayerRankingMobile({
   player,
@@ -26,11 +24,7 @@ export default function PlayerRankingMobile({
           <p>#{formatNumber(player.rank)}</p>
           <Avatar url={player.profilePicture} label="Avatar" size={24} />
           {showCountryFlag && (
-            <ReactCountryFlag
-              countryCode={player.country}
-              svg
-              className="!h-5 !w-5"
-            />
+            <CountyFlag countryCode={player.country} className="!h-5 !w-5" />
           )}
           <p
             className={

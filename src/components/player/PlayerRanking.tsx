@@ -4,13 +4,13 @@ import { formatNumber } from "@/utils/number";
 import dynamic from "next/dynamic";
 import Link from "next/link";
 import { useStore } from "zustand";
+import CountyFlag from "../CountryFlag";
 
 type PlayerRankingProps = {
   player: ScoresaberPlayer;
   showCountryFlag?: boolean;
 };
 
-const ReactCountryFlag = dynamic(() => import("react-country-flag"));
 const Avatar = dynamic(() => import("@/components/Avatar"));
 
 export default function PlayerRanking({
@@ -25,11 +25,7 @@ export default function PlayerRanking({
       <td className="flex items-center gap-2 px-4 py-2">
         <Avatar url={player.profilePicture} label="Avatar" size={24} />
         {showCountryFlag && (
-          <ReactCountryFlag
-            countryCode={player.country}
-            svg
-            className="!h-5 !w-5"
-          />
+          <CountyFlag countryCode={player.country} className="!h-5 !w-5" />
         )}
         <Link
           className="transform-gpu transition-all hover:text-blue-500"
@@ -46,7 +42,7 @@ export default function PlayerRanking({
           </p>
         </Link>
       </td>
-      <td className="text-pp-blue px-4 py-2">{formatNumber(player.pp)}pp</td>
+      <td className="px-4 py-2 text-pp-blue">{formatNumber(player.pp)}pp</td>
       <td className="px-4 py-2">
         {formatNumber(player.scoreStats.totalPlayCount)}
       </td>

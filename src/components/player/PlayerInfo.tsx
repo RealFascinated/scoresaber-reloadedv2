@@ -14,15 +14,13 @@ import {
   UserIcon,
   XMarkIcon,
 } from "@heroicons/react/20/solid";
-import dynamic from "next/dynamic";
 import { useRef } from "react";
 import { toast } from "react-toastify";
 import { useStore } from "zustand";
 import Avatar from "../Avatar";
 import Card from "../Card";
+import CountyFlag from "../CountryFlag";
 import Label from "../Label";
-
-const ReactCountryFlag = dynamic(() => import("react-country-flag"));
 
 type PlayerInfoProps = {
   playerData: ScoresaberPlayer;
@@ -188,11 +186,9 @@ export default function PlayerInfo({ playerData }: PlayerInfoProps) {
                   playerData.country,
                 )}`}
               >
-                <ReactCountryFlag
+                <CountyFlag
                   countryCode={playerData.country}
-                  svg
                   className="!h-7 !w-7"
-                  alt="Country Flag"
                 />
                 <p>#{formatNumber(playerData.countryRank)}</p>
               </a>
