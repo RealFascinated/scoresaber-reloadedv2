@@ -24,7 +24,6 @@ export class FetchQueue {
     }
 
     const response = await fetch(url, options);
-
     if (response.status === 429) {
       const hasRetryAfterHeader = response.headers.has("retry-after");
       let retryAfter = hasRetryAfterHeader
