@@ -8,7 +8,7 @@ export const metadata: Metadata = {
   title: "Search",
 };
 
-export async function getData() {
+async function getData() {
   const response = await fetch(
     "https://bs-tracker.fascinated.cc/analytics?time=30d",
     {
@@ -22,7 +22,7 @@ export async function getData() {
   return json;
 }
 
-export default async function Home() {
+export default async function Analytics() {
   const playerCountHistory = await getData();
 
   return (
