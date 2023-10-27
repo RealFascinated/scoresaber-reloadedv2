@@ -5,6 +5,7 @@ import { ScoreSaberAPI } from "@/utils/scoresaber/api";
 import { normalizedRegionName } from "@/utils/utils";
 import dynamic from "next/dynamic";
 import Link from "next/link";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
 import Card from "../Card";
 import Container from "../Container";
@@ -29,6 +30,10 @@ type GlobalRankingProps = {
 };
 
 export default function GlobalRanking({ page, country }: GlobalRankingProps) {
+  const router = useRouter();
+  const searchQuery = useSearchParams();
+  const isMobile = searchQuery.get("mobile") == "true";
+
   const [error, setError] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
 
@@ -41,6 +46,13 @@ export default function GlobalRanking({ page, country }: GlobalRankingProps) {
 
   const updatePage = useCallback(
     (page: any) => {
+      const windowSize = document.documentElement.clientWidth;
+      if (windowSize < 768 && !isMobile) {
+        router.push(`/ranking/global/${page}?mobile=true`);
+        router.refresh();
+        return;
+      }
+
       console.log("Switching page to", page);
       ScoreSaberAPI.fetchTopPlayers(page, country).then((response) => {
         if (!response) {
@@ -65,7 +77,7 @@ export default function GlobalRanking({ page, country }: GlobalRankingProps) {
         );
       });
     },
-    [country, pageInfo],
+    [country, isMobile, pageInfo, router],
   );
 
   useEffect(() => {
@@ -117,41 +129,48 @@ export default function GlobalRanking({ page, country }: GlobalRankingProps) {
                 </p>
               </div>
 
-              <table className="hidden w-full table-auto border-spacing-2 border-none text-left md:table">
-                <thead>
-                  <tr>
-                    <th className="px-4 py-2">Rank</th>
-                    <th className="px-4 py-2">Profile</th>
-                    <th className="px-4 py-2">Performance Points</th>
-                    <th className="px-4 py-2">Total Plays</th>
-                    <th className="px-4 py-2">Total Ranked Plays</th>
-                    <th className="px-4 py-2">Avg Ranked Accuracy</th>
-                  </tr>
-                </thead>
-                <tbody className="border-none">
-                  {players.map((player) => (
-                    <tr key={player.rank} className="border-b border-gray-700">
-                      <PlayerRanking
-                        showCountryFlag={country ? false : true}
-                        player={player}
-                      />
+              {!isMobile && (
+                <table className="table w-full table-auto border-spacing-2 border-none text-left">
+                  <thead>
+                    <tr>
+                      <th className="px-4 py-2">Rank</th>
+                      <th className="px-4 py-2">Profile</th>
+                      <th className="px-4 py-2">Performance Points</th>
+                      <th className="px-4 py-2">Total Plays</th>
+                      <th className="px-4 py-2">Total Ranked Plays</th>
+                      <th className="px-4 py-2">Avg Ranked Accuracy</th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
+                  </thead>
+                  <tbody className="border-none">
+                    {players.map((player) => (
+                      <tr
+                        key={player.rank}
+                        className="border-b border-gray-700"
+                      >
+                        <PlayerRanking
+                          showCountryFlag={country ? false : true}
+                          player={player}
+                        />
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              )}
 
-              <div className="flex flex-col gap-2 md:hidden">
-                {players.map((player) => (
-                  <div
-                    key={player.rank}
-                    className="flex flex-col gap-2 rounded-md bg-gray-700 hover:bg-gray-600"
-                  >
-                    <Link href={`/player/${player.id}/top/1`}>
-                      <PlayerRankingMobile player={player} />
-                    </Link>
-                  </div>
-                ))}
-              </div>
+              {isMobile && (
+                <div className="flex flex-col gap-2">
+                  {players.map((player) => (
+                    <div
+                      key={player.rank}
+                      className="flex flex-col gap-2 rounded-md bg-gray-700 hover:bg-gray-600"
+                    >
+                      <Link href={`/player/${player.id}/top/1`}>
+                        <PlayerRankingMobile player={player} />
+                      </Link>
+                    </div>
+                  ))}
+                </div>
+              )}
 
               {/* Pagination */}
               <div className="flex w-full flex-row justify-center rounded-md bg-gray-800 md:flex-col">
