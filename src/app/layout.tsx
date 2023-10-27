@@ -56,7 +56,6 @@ export default function RootLayout({
             alt="Background image"
             src={"/assets/background.webp"}
             fill
-            quality={100}
           />
         </div>
 
