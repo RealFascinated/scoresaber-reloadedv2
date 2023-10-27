@@ -29,6 +29,7 @@ export default function Score({ score, player, leaderboard }: ScoreProps) {
     leaderboard.difficulty.difficulty,
   );
   const diffColor = songDifficultyToColor(diffName);
+  const accuracy = ((score.baseScore / leaderboard.maxScore) * 100).toFixed(2);
 
   return (
     // <div className="grid grid-cols-1 pb-2 pt-2 first:pt-0 last:pb-0 md:grid-cols-[1fr_6fr_0.4fr_1.3fr]">
@@ -125,9 +126,7 @@ export default function Score({ score, player, leaderboard }: ScoreProps) {
               value={
                 !leaderboard.maxScore
                   ? formatNumber(score.baseScore)
-                  : ((score.baseScore / leaderboard.maxScore) * 100).toFixed(
-                      2,
-                    ) + "%"
+                  : accuracy + "%"
               }
             />
           </div>

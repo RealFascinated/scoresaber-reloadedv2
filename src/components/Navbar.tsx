@@ -5,6 +5,7 @@ import useStore from "@/utils/useStore";
 import {
   CogIcon,
   MagnifyingGlassIcon,
+  ServerIcon,
   UserIcon,
 } from "@heroicons/react/20/solid";
 import { GlobeAltIcon } from "@heroicons/react/24/outline";
@@ -94,6 +95,11 @@ export default function Navbar() {
           text="Ranking"
           icon={<GlobeAltIcon height={20} width={20} />}
           href="/ranking/global/1"
+        />
+        <NavbarButton
+          text="Analytics"
+          icon={<ServerIcon height={20} width={20} />}
+          href="/analytics"
         />
 
         <div className="m-auto" />
