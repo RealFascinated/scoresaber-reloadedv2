@@ -101,7 +101,7 @@ export default function AnalyticsChart({
     datasets: [
       {
         lineTension: 0.5,
-        data: playerCountHistory.map((count) => count.value),
+        data: playerCountHistory.map((count) => count.value || "0"),
         label: "Active Players",
         borderColor: "#3e95cd",
         fill: false,
