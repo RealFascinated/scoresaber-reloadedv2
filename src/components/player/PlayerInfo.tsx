@@ -109,6 +109,7 @@ export default function PlayerInfo({ playerData }: PlayerInfoProps) {
   }
 
   const isOwnProfile = settingsStore.player?.id == playerId;
+  const scoreStats = playerData.scoreStats;
 
   return (
     <Card className="mt-2">
@@ -202,22 +203,30 @@ export default function PlayerInfo({ playerData }: PlayerInfoProps) {
             <Label
               title="Total play count"
               className="bg-blue-500"
-              hoverValue="Total ranked song play count"
-              value={formatNumber(playerData.scoreStats.totalPlayCount)}
+              hoverValue={`Total ranked song play count | Total plays: ${formatNumber(
+                scoreStats.totalPlayCount,
+              )} | Ranked plays: ${formatNumber(scoreStats.rankedPlayCount)}`}
+              value={formatNumber(scoreStats.totalPlayCount)}
             />
             <Label
               title="Total score"
               className="bg-blue-500"
-              hoverValue="Total score of all your plays"
-              value={formatNumber(playerData.scoreStats.totalScore)}
+              hoverValue={`Total score of all your plays | Unranked score: ${formatNumber(
+                scoreStats.totalScore,
+              )} | Ranked score: ${formatNumber(scoreStats.totalRankedScore)} `}
+              value={formatNumber(scoreStats.totalScore)}
             />
             <Label
               title="Avg ranked acc"
               className="bg-blue-500"
               hoverValue="Average accuracy of all your ranked plays"
-              value={`${playerData.scoreStats.averageRankedAccuracy.toFixed(
-                2,
-              )}%`}
+              value={`${scoreStats.averageRankedAccuracy.toFixed(2)}%`}
+            />
+            <Label
+              title="Total replays watched"
+              className="bg-blue-500"
+              hoverValue="The total amount of times your replays have been watched"
+              value={formatNumber(scoreStats.replaysWatched)}
             />
 
             {hasLocalScores && (
