@@ -9,6 +9,12 @@ import "./globals.css";
 
 const font = Inter({ subsets: ["latin-ext"], weight: "500" });
 
+// TODO: use type when NextJS fixes the type:
+// export const viewport: Viewport = {
+export const viewport: any = {
+  themeColor: "#3B82F6",
+};
+
 export const metadata: Metadata = {
   metadataBase: new URL(ssrSettings.siteUrl),
   title: {
@@ -26,7 +32,6 @@ export const metadata: Metadata = {
     locale: "en_US",
     type: "website",
   },
-  themeColor: "#3B82F6",
 };
 
 export default function RootLayout({
