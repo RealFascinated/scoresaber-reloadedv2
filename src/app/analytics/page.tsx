@@ -3,6 +3,7 @@ import Card from "@/components/Card";
 import Container from "@/components/Container";
 import { ScoresaberPlayerCountHistory } from "@/schemas/fascinated/scoresaberPlayerCountHistory";
 import { ssrSettings } from "@/ssrSettings";
+import { formatNumber } from "@/utils/number";
 import { Metadata } from "next";
 
 async function getData() {
@@ -33,7 +34,9 @@ export async function generateMetadata(): Promise<Metadata> {
       description:
         description +
         `
-      Players currently online: ${data.history[data.history.length - 1].value}`,
+      Players currently online: ${formatNumber(
+        data.history[data.history.length - 1].value,
+      )}`,
     },
   };
 }
