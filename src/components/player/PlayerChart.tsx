@@ -39,6 +39,7 @@ export const options: any = {
       ticks: {
         autoSkip: true,
         maxTicksLimit: 8,
+        stepSize: 1,
       },
       reverse: true,
     },
