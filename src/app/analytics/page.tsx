@@ -23,7 +23,8 @@ async function getData() {
 export async function generateMetadata(): Promise<Metadata> {
   const data = await getData();
 
-  const description = "View Scoresaber metrics and statistics over time.";
+  const description =
+    "View Scoresaber metrics and statistics over the last 30 days.";
 
   return {
     title: `Analytics`,
