@@ -1,12 +1,9 @@
 import AnalyticsChart from "@/components/AnalyticsChart";
 import Card from "@/components/Card";
 import Container from "@/components/Container";
-
+import { ScoresaberPlayerCountHistory } from "@/schemas/fascinated/scoresaberPlayerCountHistory";
+import { ssrSettings } from "@/ssrSettings";
 import { Metadata } from "next";
-
-export const metadata: Metadata = {
-  title: "Search",
-};
 
 async function getData() {
   const response = await fetch(
@@ -19,7 +16,26 @@ async function getData() {
   );
 
   const json = await response.json();
-  return json;
+  return json as ScoresaberPlayerCountHistory;
+}
+
+export async function generateMetadata(): Promise<Metadata> {
+  const data = await getData();
+
+  const description = "View Scoresaber metrics and statistics over time.";
+
+  return {
+    title: `Analytics`,
+    description: description,
+    openGraph: {
+      siteName: ssrSettings.siteName,
+      title: `Analytics`,
+      description:
+        description +
+        `
+      Players currently online: ${data.history[data.history.length - 1].value}`,
+    },
+  };
 }
 
 export default async function Analytics() {
