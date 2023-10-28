@@ -1,6 +1,7 @@
 import Leaderboard from "@/components/leaderboard/Leaderboard";
 import { formatNumber } from "@/utils/number";
 import { ScoreSaberAPI } from "@/utils/scoresaber/api";
+import { scoresaberDifficultyNumberToName } from "@/utils/songUtils";
 import { formatTime } from "@/utils/timeUtils";
 import { Metadata } from "next";
 
@@ -29,6 +30,10 @@ export async function generateMetadata({
       }).
 
       Mapper: ${leaderboard.levelAuthorName}
+      Stars: ${leaderboard.stars}
+      Difficulty: ${scoresaberDifficultyNumberToName(
+        leaderboard.difficulty.difficulty,
+      )}
       Total plays: ${formatNumber(leaderboard.plays)}
       Created: ${formatTime(new Date(leaderboard.createdDate))}
       `,
