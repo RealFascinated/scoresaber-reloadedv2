@@ -3,6 +3,7 @@ import Image from "next/image";
 const headsets = [
   {
     id: [-1], // Fallback headset (CV1)
+    name: "Unknown",
     filters:
       "invert(99%) sepia(3%) saturate(82%) hue-rotate(58deg) brightness(118%) contrast(100%)",
     icon: "oculus.svg",
