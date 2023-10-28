@@ -15,6 +15,7 @@ import {
 } from "@heroicons/react/20/solid";
 import clsx from "clsx";
 import Image from "next/image";
+import HeadsetIcon from "../HeadsetIcon";
 import ScoreStatLabel from "./ScoreStatLabel";
 
 type ScoreProps = {
@@ -34,10 +35,11 @@ export default function Score({ score, player, leaderboard }: ScoreProps) {
   return (
     // <div className="grid grid-cols-1 pb-2 pt-2 first:pt-0 last:pb-0 md:grid-cols-[1fr_6fr_0.4fr_1.3fr]">
     <div className="grid grid-cols-1 pb-2 pt-2 first:pt-0 last:pb-0 md:grid-cols-[0.8fr_6fr_1.3fr]">
-      <div className="ml-3 flex flex-col items-start justify-center">
-        <div className="hidden w-fit flex-row items-center justify-start gap-1 md:flex">
+      <div className="flex flex-col items-center justify-center">
+        <div className="hidden w-fit flex-row items-center justify-center gap-1 md:flex">
           <GlobeAsiaAustraliaIcon width={20} height={20} />
           <p>#{formatNumber(score.rank)}</p>
+          <HeadsetIcon id={score.hmd} size={20} />
         </div>
         <p
           className="hidden text-sm text-gray-200 md:block"
@@ -98,6 +100,7 @@ export default function Score({ score, player, leaderboard }: ScoreProps) {
           <div className="flex items-center gap-1">
             <GlobeAsiaAustraliaIcon width={20} height={20} />
             <p>#{formatNumber(score.rank)}</p>
+            <HeadsetIcon id={score.hmd} size={20} />
           </div>
 
           {/* Time Set (Mobile) */}
@@ -138,7 +141,11 @@ export default function Score({ score, player, leaderboard }: ScoreProps) {
                 "min-w-[2rem]",
                 isFullCombo ? "bg-green-500" : "bg-red-500",
               )}
-              title={isFullCombo ? "Full Combo" : `${score.missedNotes}x Missed Notes`}
+              title={
+                isFullCombo
+                  ? "Full Combo"
+                  : `${score.missedNotes}x Missed Notes`
+              }
               icon={
                 isFullCombo ? (
                   <CheckIcon width={20} height={20} />
