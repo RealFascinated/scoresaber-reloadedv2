@@ -88,9 +88,6 @@ export default function AnalyticsChart({
     if (i >= 1) {
       const date = playerCountHistory[i - 1].time;
       labels.push(formatTimeAgo(date));
-    } else {
-      const date = playerCountHistory[i].time;
-      labels.push(formatTimeAgo(date));
     }
   }
 
