@@ -31,9 +31,9 @@ export default function Score({ score, player, leaderboard }: ScoreProps) {
   );
   const diffColor = songDifficultyToColor(diffName);
   const accuracy = ((score.baseScore / leaderboard.maxScore) * 100).toFixed(2);
+  const totalMissedNotes = score.missedNotes + score.badCuts;
 
   return (
-    // <div className="grid grid-cols-1 pb-2 pt-2 first:pt-0 last:pb-0 md:grid-cols-[1fr_6fr_0.4fr_1.3fr]">
     <div className="grid grid-cols-1 pb-2 pt-2 first:pt-0 last:pb-0 md:grid-cols-[0.8fr_6fr_1.3fr]">
       <div className="flex flex-col items-center justify-center">
         <div className="hidden w-fit flex-row items-center justify-center gap-1 md:flex">
@@ -85,15 +85,6 @@ export default function Score({ score, player, leaderboard }: ScoreProps) {
         </div>
       </div>
 
-      {/* Score Buttons */}
-      {/* <div className="flex items-center justify-between p-1 md:items-start md:justify-end">
-        <button className="rounded-md bg-gray-500">
-          <Link href={`https://beatsaver.com/maps/${leaderboard.songHash}`}>
-            <BeatSaverLogo size={24} className="p-[2.5px]" />
-          </Link>
-        </button>
-      </div> */}
-
       <div className="flex items-center justify-between p-1 md:items-start md:justify-end">
         <div className="flex flex-col md:hidden">
           {/* Score rank */}
@@ -142,9 +133,7 @@ export default function Score({ score, player, leaderboard }: ScoreProps) {
                 isFullCombo ? "bg-green-500" : "bg-red-500",
               )}
               title={
-                isFullCombo
-                  ? "Full Combo"
-                  : `${score.missedNotes}x Missed Notes`
+                isFullCombo ? "Full Combo" : `${totalMissedNotes}x Missed Notes`
               }
               icon={
                 isFullCombo ? (
@@ -153,11 +142,7 @@ export default function Score({ score, player, leaderboard }: ScoreProps) {
                   <XMarkIcon width={20} height={20} />
                 )
               }
-              value={
-                isFullCombo
-                  ? "FC"
-                  : formatNumber(score.missedNotes + score.badCuts) + "x"
-              }
+              value={isFullCombo ? "FC" : formatNumber(totalMissedNotes) + "x"}
             />
           </div>
         </div>
