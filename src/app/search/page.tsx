@@ -2,7 +2,7 @@ import Card from "@/components/Card";
 import Container from "@/components/Container";
 import UnknownAvatar from "@/components/UnknownAvatar";
 
-import SearchPlayer from "@/components/player/SearchPlayer";
+import SearchPlayer from "@/components/SearchPlayer";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {

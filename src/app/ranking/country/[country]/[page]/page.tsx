@@ -1,4 +1,4 @@
-import GlobalRanking from "@/components/player/GlobalRanking";
+import GlobalRanking from "@/components/GlobalRanking";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {

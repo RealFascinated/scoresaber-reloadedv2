@@ -1,6 +1,6 @@
 export type ScoresaberScore = {
   id: number;
-  leaderboardPlayerInfo: string;
+  leaderboardPlayerInfo: LeaderboardPlayerInfo;
   rank: number;
   baseScore: number;
   modifiedScore: number;

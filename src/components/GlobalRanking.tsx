@@ -7,13 +7,13 @@ import dynamic from "next/dynamic";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
-import Card from "../Card";
-import Container from "../Container";
-import CountyFlag from "../CountryFlag";
-import Pagination from "../Pagination";
-import Spinner from "../Spinner";
-import PlayerRanking from "./PlayerRanking";
-import PlayerRankingMobile from "./PlayerRankingMobile";
+import Card from "./Card";
+import Container from "./Container";
+import CountyFlag from "./CountryFlag";
+import Pagination from "./Pagination";
+import Spinner from "./Spinner";
+import PlayerRanking from "./player/PlayerRanking";
+import PlayerRankingMobile from "./player/PlayerRankingMobile";
 
 const Error = dynamic(() => import("@/components/Error"));
 

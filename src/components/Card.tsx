@@ -15,7 +15,7 @@ export default function Card({
     <div className={className}>
       <div
         className={clsx(
-          "rounded-md bg-gray-800 p-3 opacity-90",
+          "w-full rounded-md bg-gray-800 p-3 opacity-90",
           innerClassName,
         )}
       >

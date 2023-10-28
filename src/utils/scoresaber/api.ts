@@ -1,5 +1,7 @@
+import { ScoresaberLeaderboardInfo } from "@/schemas/scoresaber/leaderboard";
 import { ScoresaberPlayer } from "@/schemas/scoresaber/player";
 import { ScoresaberPlayerScore } from "@/schemas/scoresaber/playerScore";
+import { ScoresaberScore } from "@/schemas/scoresaber/score";
 import { ssrSettings } from "@/ssrSettings";
 import { FetchQueue } from "../fetchWithQueue";
 import { formatString } from "../string";
@@ -17,6 +19,10 @@ export const SS_GET_PLAYER_DATA_FULL = SS_API_URL + "/player/{}/full";
 export const SS_GET_PLAYERS_URL = SS_API_URL + "/players?page={}";
 export const SS_GET_PLAYERS_BY_COUNTRY_URL =
   SS_API_URL + "/players?page={}&countries={}";
+export const SS_GET_LEADERBOARD_INFO_URL =
+  SS_API_URL + "/leaderboard/by-id/{}/info";
+export const SS_GET_LEADERBOARD_SCORES_URL =
+  SS_API_URL + "/leaderboard/by-id/{}/scores?page={}";
 
 const SearchType = {
   RECENT: "recent",
@@ -200,10 +206,77 @@ async function fetchTopPlayers(
   };
 }
 
+/**
+ * Get the leaderboard info for the given leaderboard id
+ *
+ * @param leaderboardId the id of the leaderboard
+ * @returns the leaderboard info
+ */
+async function fetchLeaderboardInfo(
+  leaderboardId: string,
+): Promise<ScoresaberLeaderboardInfo | undefined> {
+  const response = await ScoresaberFetchQueue.fetch(
+    formatString(SS_GET_LEADERBOARD_INFO_URL, true, leaderboardId),
+  );
+  const json = await response.json();
+
+  // Check if there was an error fetching the user data
+  if (json.errorMessage) {
+    return undefined;
+  }
+
+  return json as ScoresaberLeaderboardInfo;
+}
+
+/**
+ * Get the leaderboard scores from the given page
+ *
+ * @param leaderboardId the id of the leaderboard
+ * @param page the page to get the scores from
+ * @returns a list of scores
+ */
+async function fetchLeaderboardScores(
+  leaderboardId: string,
+  page: number = 1,
+): Promise<
+  | {
+      scores: ScoresaberScore[];
+      pageInfo: {
+        totalScores: number;
+        page: number;
+        totalPages: number;
+      };
+    }
+  | undefined
+> {
+  const response = await ScoresaberFetchQueue.fetch(
+    formatString(SS_GET_LEADERBOARD_SCORES_URL, true, leaderboardId, page),
+  );
+  const json = await response.json();
+
+  // Check if there was an error fetching the user data
+  if (json.errorMessage) {
+    return undefined;
+  }
+
+  const scores = json.scores as ScoresaberScore[];
+  const metadata = json.metadata;
+  return {
+    scores: scores,
+    pageInfo: {
+      totalScores: metadata.total,
+      page: metadata.page,
+      totalPages: Math.ceil(metadata.total / metadata.itemsPerPage),
+    },
+  };
+}
+
 export const ScoreSaberAPI = {
   searchByName,
   fetchPlayerData,
   fetchScores,
   fetchAllScores,
   fetchTopPlayers,
+  fetchLeaderboardInfo,
+  fetchLeaderboardScores,
 };

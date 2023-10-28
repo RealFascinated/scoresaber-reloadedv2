@@ -15,7 +15,8 @@ import {
 } from "@heroicons/react/20/solid";
 import clsx from "clsx";
 import Image from "next/image";
-import HeadsetIcon from "../HeadsetIcon";
+import Link from "next/link";
+import HeadsetIcon from "../icons/HeadsetIcon";
 import ScoreStatLabel from "./ScoreStatLabel";
 
 type ScoreProps = {
@@ -76,13 +77,20 @@ export default function Score({ score, player, leaderboard }: ScoreProps) {
           </div>
         </div>
         {/* Song Info */}
-        <div className="w-fit truncate text-blue-500">
-          <p className="font-bold">{leaderboard.songName}</p>
-          <p className="text-blue-300">
-            {leaderboard.songAuthorName}{" "}
-            <span className="text-gray-200">{leaderboard.levelAuthorName}</span>
-          </p>
-        </div>
+        <Link
+          href={`/leaderboard/${leaderboard.id}/1`}
+          className="transform-gpu transition-all hover:opacity-70"
+        >
+          <div className="w-fit truncate text-blue-500">
+            <p className="font-bold">{leaderboard.songName}</p>
+            <p className="text-blue-300">
+              {leaderboard.songAuthorName}{" "}
+              <span className="text-gray-200">
+                {leaderboard.levelAuthorName}
+              </span>
+            </p>
+          </div>
+        </Link>
       </div>
 
       <div className="flex items-center justify-between p-1 md:items-start md:justify-end">
