@@ -1,4 +1,6 @@
 import Leaderboard from "@/components/leaderboard/Leaderboard";
+import { ScoreSaberAPI } from "@/utils/scoresaber/api";
+import { formatTime } from "@/utils/timeUtils";
 import { Metadata } from "next";
 
 type Props = {
@@ -8,8 +10,29 @@ type Props = {
 export async function generateMetadata({
   params: { id },
 }: Props): Promise<Metadata> {
+  const leaderboard = await ScoreSaberAPI.fetchLeaderboardInfo(id);
+  if (!leaderboard) {
+    return {
+      title: "Leaderboard not found",
+    };
+  }
+
   return {
-    title: `Leaderboard - name`,
+    title: `${leaderboard.songName}`,
+    description: `View the leaderboard for ${leaderboard.songName}.`,
+    openGraph: {
+      siteName: "ScoreSaber",
+      title: `${leaderboard.songName}`,
+      description: `View the leaderboard for ${leaderboard.songName}.
+      Song: ${leaderboard.songName} (${leaderboard.songSubName})
+      Mapper: ${leaderboard.levelAuthorName}
+      Total plays: ${leaderboard.plays}
+      Created: ${formatTime(new Date(leaderboard.createdDate))}
+      `,
+    },
+    twitter: {
+      card: "summary",
+    },
   };
 }
 

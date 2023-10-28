@@ -59,3 +59,18 @@ export function formatMsToTime(ms: number) {
 
   return hoursStr + minutesStr + secondsStr;
 }
+
+/**
+ * Formats a date to a human readable format
+ * eg: January 1, 2021
+ *
+ * @param date the date to format
+ * @returns the formatted date
+ */
+export function formatTime(date: Date) {
+  return date.toLocaleTimeString("en-US", {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+  });
+}
