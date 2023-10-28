@@ -6,7 +6,7 @@ const headsets = [
     name: "Unknown",
     filters:
       "invert(99%) sepia(3%) saturate(82%) hue-rotate(58deg) brightness(118%) contrast(100%)",
-    icon: "oculus.svg",
+    icon: "unknown.svg",
   },
   {
     id: [64],

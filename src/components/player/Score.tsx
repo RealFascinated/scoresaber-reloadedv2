@@ -34,7 +34,7 @@ export default function Score({ score, player, leaderboard }: ScoreProps) {
   const totalMissedNotes = score.missedNotes + score.badCuts;
 
   return (
-    <div className="grid grid-cols-1 pb-2 pt-2 first:pt-0 last:pb-0 md:grid-cols-[0.8fr_6fr_1.3fr]">
+    <div className="grid grid-cols-1 pb-2 pt-2 first:pt-0 last:pb-0 md:grid-cols-[0.85fr_6fr_1.3fr]">
       <div className="flex flex-col items-center justify-center">
         <div className="hidden w-fit flex-row items-center justify-center gap-1 md:flex">
           <GlobeAsiaAustraliaIcon width={20} height={20} />
