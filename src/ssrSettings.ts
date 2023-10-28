@@ -1,6 +1,7 @@
 export const ssrSettings = {
   siteName: "ScoreSaber Reloaded",
-  description: "Aggregate your scores with other leaderboards together!",
+  description:
+    "Scoresaber Reloaded is a new way to view your scores and get more stats about your and your plays",
   siteUrl: "https://ssr.fascinated.cc",
   proxy: "https://proxy.fascinated.cc",
 };
