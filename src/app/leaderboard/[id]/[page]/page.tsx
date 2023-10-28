@@ -34,6 +34,11 @@ export async function generateMetadata({
     },
     twitter: {
       card: "summary",
+      images: [
+        {
+          url: leaderboard.coverImage,
+        },
+      ],
     },
   };
 }
