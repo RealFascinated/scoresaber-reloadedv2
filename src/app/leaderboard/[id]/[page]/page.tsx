@@ -24,6 +24,7 @@ export async function generateMetadata({
       siteName: "ScoreSaber",
       title: `${leaderboard.songName}`,
       description: `View the leaderboard for ${leaderboard.songName}.
+      
       Song: ${leaderboard.songName} (${leaderboard.songSubName})
       Mapper: ${leaderboard.levelAuthorName}
       Total plays: ${leaderboard.plays}
