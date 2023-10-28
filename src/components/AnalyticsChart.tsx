@@ -88,6 +88,8 @@ export default function AnalyticsChart({
     if (i >= 1) {
       const date = playerCountHistory[i - 1].time;
       labels.push(formatTimeAgo(date));
+    } else {
+      labels.push("30 days ago");
     }
   }
 
