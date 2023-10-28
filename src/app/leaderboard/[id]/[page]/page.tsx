@@ -1,4 +1,5 @@
 import Leaderboard from "@/components/leaderboard/Leaderboard";
+import { formatNumber } from "@/utils/number";
 import { ScoreSaberAPI } from "@/utils/scoresaber/api";
 import { formatTime } from "@/utils/timeUtils";
 import { Metadata } from "next";
@@ -24,10 +25,10 @@ export async function generateMetadata({
       siteName: "ScoreSaber",
       title: `${leaderboard.songName}`,
       description: `View the leaderboard for ${leaderboard.songName}.
-      
+
       Song: ${leaderboard.songName} (${leaderboard.songSubName})
       Mapper: ${leaderboard.levelAuthorName}
-      Total plays: ${leaderboard.plays}
+      Total plays: ${formatNumber(leaderboard.plays)}
       Created: ${formatTime(new Date(leaderboard.createdDate))}
       `,
     },
