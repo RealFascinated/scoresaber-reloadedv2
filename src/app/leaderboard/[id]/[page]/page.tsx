@@ -30,7 +30,7 @@ export async function generateMetadata({
       }).
 
       Mapper: ${leaderboard.levelAuthorName}
-      Stars: ${leaderboard.stars}
+      Stars: ${leaderboard.stars} ⭐
       Difficulty: ${scoresaberDifficultyNumberToName(
         leaderboard.difficulty.difficulty,
       )}
