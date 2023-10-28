@@ -24,9 +24,10 @@ export async function generateMetadata({
     openGraph: {
       siteName: "ScoreSaber",
       title: `${leaderboard.songName}`,
-      description: `View the leaderboard for ${leaderboard.songName}.
+      description: `View the leaderboard for ${leaderboard.songName} (${
+        leaderboard.songSubName
+      }).
 
-      Song: ${leaderboard.songName} (${leaderboard.songSubName})
       Mapper: ${leaderboard.levelAuthorName}
       Total plays: ${formatNumber(leaderboard.plays)}
       Created: ${formatTime(new Date(leaderboard.createdDate))}
