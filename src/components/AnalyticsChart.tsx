@@ -81,7 +81,17 @@ export default function AnalyticsChart({
       labels.push("today");
       continue;
     }
-    labels.push(formatTimeAgo(playerCountHistory[i].time));
+    if (i == playerCountHistory.length - 2) {
+      labels.push("yesterday");
+      continue;
+    }
+    if (i >= 1) {
+      const date = playerCountHistory[i - 1].time;
+      labels.push(formatTimeAgo(date));
+    } else {
+      const date = playerCountHistory[i].time;
+      labels.push(formatTimeAgo(date));
+    }
   }
 
   const data = {
