@@ -24,7 +24,7 @@ export default function LeaderboardScore({
   const accuracy = ((score.baseScore / leaderboard.maxScore) * 100).toFixed(2);
 
   return (
-    <div className="mb-1 mt-1 grid grid-cols-[0.5fr_3fr_1.3fr] first:pt-0 last:pb-0 md:grid-cols-[1.2fr_6fr_1.3fr]">
+    <div className="mb-1 mt-1 grid grid-cols-[0.6fr_3fr_1.3fr] first:pt-0 last:pb-0 md:grid-cols-[1.2fr_6fr_1.3fr]">
       <div className="flex flex-col items-center justify-center">
         <div className="flex w-fit flex-row items-center justify-center gap-1">
           <p>#{formatNumber(score.rank)}</p>
@@ -59,25 +59,23 @@ export default function LeaderboardScore({
         </Link>
       </div>
 
-      <div className="flex items-center justify-between p-1 md:items-start md:justify-end">
+      <div className="flex flex-col items-end gap-2 p-1 md:flex-row md:items-start md:justify-end">
         {/* PP */}
-        <div className="flex justify-end gap-2">
-          {score.pp > 0 && (
-            <ScoreStatLabel
-              className="bg-blue-500 text-center"
-              value={formatNumber(score.pp.toFixed(2)) + "pp"}
-            />
-          )}
-
-          {/* Percentage score */}
+        {score.pp > 0 && (
           <ScoreStatLabel
-            value={
-              !leaderboard.maxScore
-                ? formatNumber(score.baseScore)
-                : accuracy + "%"
-            }
+            className="bg-blue-500 text-center"
+            value={formatNumber(score.pp.toFixed(2)) + "pp"}
           />
-        </div>
+        )}
+
+        {/* Percentage score */}
+        <ScoreStatLabel
+          value={
+            !leaderboard.maxScore
+              ? formatNumber(score.baseScore)
+              : accuracy + "%"
+          }
+        />
       </div>
     </div>
   );
