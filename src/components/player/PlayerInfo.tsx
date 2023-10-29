@@ -247,7 +247,7 @@ export default function PlayerInfo({ playerData }: PlayerInfoProps) {
                 <Label
                   title="Top PP"
                   className="bg-pp-blue"
-                  tooltip={<p>Your highest pp play</p>}
+                  tooltip={<p>Their highest pp play</p>}
                   value={`${formatNumber(
                     getHighestPpPlay(playerId)?.toFixed(2),
                   )}pp`}
