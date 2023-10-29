@@ -1,5 +1,5 @@
 import Leaderboard from "@/components/leaderboard/Leaderboard";
-import { formatNumber } from "@/utils/number";
+import { formatNumber } from "@/utils/numberUtils";
 import { ScoreSaberAPI } from "@/utils/scoresaber/api";
 import { scoresaberDifficultyNumberToName } from "@/utils/songUtils";
 import { formatTime } from "@/utils/timeUtils";

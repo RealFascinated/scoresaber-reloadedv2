@@ -3,7 +3,7 @@ import Card from "@/components/Card";
 import Container from "@/components/Container";
 import { ScoresaberMetricsHistory } from "@/schemas/fascinated/scoresaberMetricsHistory";
 import { ssrSettings } from "@/ssrSettings";
-import { formatNumber } from "@/utils/number";
+import { formatNumber } from "@/utils/numberUtils";
 import { isProduction } from "@/utils/utils";
 import { Metadata } from "next";
 import Link from "next/link";

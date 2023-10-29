@@ -1,7 +1,6 @@
 import { ScoresaberLeaderboardInfo } from "@/schemas/scoresaber/leaderboard";
 import { ScoresaberScore } from "@/schemas/scoresaber/score";
-import { formatNumber } from "@/utils/number";
-import { scoresaberDifficultyNumberToName } from "@/utils/songUtils";
+import { formatNumber } from "@/utils/numberUtils";
 import { formatDate, formatTimeAgo } from "@/utils/timeUtils";
 import Image from "next/image";
 import Link from "next/link";
@@ -18,9 +17,6 @@ export default function LeaderboardScore({
   player,
   leaderboard,
 }: ScoreProps) {
-  const diffName = scoresaberDifficultyNumberToName(
-    leaderboard.difficulty.difficulty,
-  );
   const accuracy = ((score.baseScore / leaderboard.maxScore) * 100).toFixed(2);
 
   return (

@@ -1,7 +1,8 @@
 import { ScoresaberLeaderboardInfo } from "@/schemas/scoresaber/leaderboard";
 import { ScoresaberPlayer } from "@/schemas/scoresaber/player";
 import { ScoresaberScore } from "@/schemas/scoresaber/score";
-import { formatNumber } from "@/utils/number";
+import { formatNumber } from "@/utils/numberUtils";
+import { getPpGainedFromScore } from "@/utils/scoresaber/scores";
 import {
   scoresaberDifficultyNumberToName,
   songDifficultyToColor,
@@ -120,6 +121,10 @@ export default function Score({ score, player, leaderboard }: ScoreProps) {
               <ScoreStatLabel
                 className="bg-blue-500 text-center"
                 value={formatNumber(score.pp.toFixed(2)) + "pp"}
+                title={`Weighted pp ${formatNumber(
+                  getPpGainedFromScore(player.id, score),
+                  2,
+                )}pp`}
               />
             )}
 

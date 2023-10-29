@@ -1,6 +1,7 @@
 // Yoinked from https://github.com/Shurdoof/pp-calculator
 // Thank for for this I have no fucking idea what the maths is doing but it works!
 
+import { ScoresaberScore } from "@/schemas/scoresaber/score";
 import { useScoresaberScoresStore } from "@/store/scoresaberScoresStore";
 
 export const WEIGHT_COEFFICIENT = 0.965;
@@ -169,6 +170,38 @@ export function calcPpBoundary(playerId: string, expectedPp = 1) {
 }
 
 /**
+ * Gets the ranked scores of the player
+ *
+ * @param playerId the player id
+ * @returns all ranked scores of the player
+ */
+export function getRankedScores(playerId: string, sorted: boolean = false) {
+  const scores = useScoresaberScoresStore
+    .getState()
+    .players.find((p) => p.id === playerId)
+    ?.scores?.filter((s) => s.score.pp !== undefined);
+  if (sorted && scores) {
+    return scores.sort((a, b) => b.score.pp - a.score.pp);
+  }
+  return scores;
+}
+
+/**
+ * Gets the global pp gained from the score
+ *
+ * @param playerId the player id
+ * @param score the score to get the pp gained from
+ * @returns the pp gained from the score
+ */
+export function getPpGainedFromScore(playerId: string, score: ScoresaberScore) {
+  const scores = getRankedScores(playerId, true);
+  if (!scores) return null;
+  const scoreIndex = scores.map((s) => s.score.id).indexOf(score.id);
+
+  return score.pp * Math.pow(WEIGHT_COEFFICIENT, scoreIndex);
+}
+
+/**
  * Get the highest pp play of a player
  *
  * @param playerId the player id
@@ -195,16 +228,10 @@ export function getHighestPpPlay(playerId: string) {
  * @param limit the amount of top scores to average (default: 50)
  */
 export function getAveragePp(playerId: string, limit: number = 50) {
-  const rankedScores = useScoresaberScoresStore
-    .getState()
-    .players.find((p) => p.id === playerId)
-    ?.scores?.filter((s) => s.score.pp !== undefined);
+  const rankedScores = getRankedScores(playerId, true);
   if (!rankedScores) return null;
 
-  const rankedScorePps = rankedScores
-    .map((s) => s.score.pp)
-    .sort((a, b) => b - a)
-    .slice(0, limit);
+  const rankedScorePps = rankedScores.map((s) => s.score.pp).slice(0, limit);
 
   return (
     rankedScorePps.reduce((cum, pp) => cum + pp, 0) / rankedScorePps.length

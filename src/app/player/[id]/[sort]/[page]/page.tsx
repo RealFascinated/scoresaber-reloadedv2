@@ -1,6 +1,6 @@
 import PlayerPage from "@/components/player/PlayerPage";
 import { ssrSettings } from "@/ssrSettings";
-import { formatNumber } from "@/utils/number";
+import { formatNumber } from "@/utils/numberUtils";
 import { ScoreSaberAPI } from "@/utils/scoresaber/api";
 import { normalizedRegionName } from "@/utils/utils";
 import { Metadata } from "next";
