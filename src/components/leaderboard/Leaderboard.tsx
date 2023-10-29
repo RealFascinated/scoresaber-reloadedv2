@@ -5,7 +5,7 @@ import { ScoreSaberAPI } from "@/utils/scoresaber/api";
 import Image from "next/image";
 
 import { ScoresaberScore } from "@/schemas/scoresaber/score";
-import { formatNumber } from "@/utils/number";
+import { formatNumber } from "@/utils/numberUtils";
 import { scoresaberDifficultyNumberToName } from "@/utils/songUtils";
 import { StarIcon } from "@heroicons/react/20/solid";
 import Link from "next/link";

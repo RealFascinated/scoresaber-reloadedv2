@@ -1,6 +1,6 @@
 import { ScoresaberPlayer } from "@/schemas/scoresaber/player";
 import { useSettingsStore } from "@/store/settingsStore";
-import { formatNumber } from "@/utils/number";
+import { formatNumber } from "@/utils/numberUtils";
 import dynamic from "next/dynamic";
 import Link from "next/link";
 import { useStore } from "zustand";

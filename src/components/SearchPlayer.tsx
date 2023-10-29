@@ -1,7 +1,7 @@
 "use client";
 
 import { ScoresaberPlayer } from "@/schemas/scoresaber/player";
-import { formatNumber } from "@/utils/number";
+import { formatNumber } from "@/utils/numberUtils";
 import { ScoreSaberAPI } from "@/utils/scoresaber/api";
 import { MagnifyingGlassIcon } from "@heroicons/react/20/solid";
 import clsx from "clsx";
