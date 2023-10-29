@@ -83,10 +83,20 @@ export default function Score({
             }}
           >
             {leaderboard.ranked ? (
-              <div className="flex items-center justify-center gap-[2px]">
-                <StarIcon width={13} height={13} />
-                {leaderboard.stars.toFixed(2)}
-              </div>
+              <Tooltip>
+                <TooltipTrigger>
+                  <div className="flex items-center justify-center gap-[2px]">
+                    <StarIcon width={13} height={13} />
+                    {leaderboard.stars.toFixed(2)}
+                  </div>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <div>
+                    <p className="font-bold">Difficulty</p>
+                    <p>{diffName}</p>
+                  </div>
+                </TooltipContent>
+              </Tooltip>
             ) : (
               <p>{diffName}</p>
             )}
