@@ -10,6 +10,7 @@ import {
   UserIcon,
   XMarkIcon,
 } from "@heroicons/react/20/solid";
+import dynamic from "next/dynamic";
 import { useRef } from "react";
 import { toast } from "react-toastify";
 import { useStore } from "zustand";
@@ -18,7 +19,8 @@ import Button from "../Button";
 import Card from "../Card";
 import CountyFlag from "../CountryFlag";
 import Label from "../Label";
-import PPGainLabel from "./PPGainLabel";
+
+const PPGainLabel = dynamic(() => import("./PPGainLabel"));
 
 type PlayerInfoProps = {
   playerData: ScoresaberPlayer;
