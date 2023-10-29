@@ -11,6 +11,8 @@
   "dependencies": {
     "@boiseitguru/cookie-cutter": "^0.2.1",
     "@heroicons/react": "^2.0.18",
+    "@radix-ui/react-popover": "^1.0.7",
+    "@radix-ui/react-slider": "^1.1.2",
     "@radix-ui/react-tooltip": "^1.0.7",
     "@sentry/nextjs": "^7.74.1",
     "bluebird": "^3.7.2",
@@ -23,6 +25,7 @@
     "lucide-react": "^0.290.0",
     "next": "14.0.0",
     "next-build-id": "^3.0.0",
+    "next-themes": "^0.2.1",
     "node-fetch-cache": "^3.1.3",
     "react": "^18",
     "react-chartjs-2": "^5.2.0",

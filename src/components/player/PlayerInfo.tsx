@@ -2,11 +2,7 @@ import { ScoresaberPlayer } from "@/schemas/scoresaber/player";
 import { useScoresaberScoresStore } from "@/store/scoresaberScoresStore";
 import { useSettingsStore } from "@/store/settingsStore";
 import { formatNumber } from "@/utils/numberUtils";
-import {
-  calcPpBoundary,
-  getAveragePp,
-  getHighestPpPlay,
-} from "@/utils/scoresaber/scores";
+import { getAveragePp, getHighestPpPlay } from "@/utils/scoresaber/scores";
 import { normalizedRegionName } from "@/utils/utils";
 import {
   GlobeAsiaAustraliaIcon,
@@ -22,6 +18,7 @@ import Button from "../Button";
 import Card from "../Card";
 import CountyFlag from "../CountryFlag";
 import Label from "../Label";
+import PPGainLabel from "./PPGainLabel";
 
 type PlayerInfoProps = {
   playerData: ScoresaberPlayer;
@@ -262,19 +259,8 @@ export default function PlayerInfo({ playerData }: PlayerInfoProps) {
                     getAveragePp(playerId)?.toFixed(2),
                   )}pp`}
                 />
-                <Label
-                  title="+ 1pp"
-                  className="bg-pp-blue"
-                  tooltip={
-                    <p>
-                      Amount of raw pp required to increase your global pp by
-                      1pp
-                    </p>
-                  }
-                  value={`${formatNumber(
-                    calcPpBoundary(playerId, 1)?.toFixed(2),
-                  )}pp raw per global`}
-                />
+
+                <PPGainLabel playerId={playerId} />
               </>
             )}
           </div>
