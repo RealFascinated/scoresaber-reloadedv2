@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/Tooltip";
 
 const headsets = [
   {
@@ -58,17 +59,26 @@ export default function HeadsetIcon({ id, size = 32, className }: IconProps) {
   }
 
   return (
-    <div className={className}>
-      <Image
-        src={`/assets/headsets/${headset.icon}`}
-        alt={headset.name}
-        title={headset.name}
-        width={size}
-        height={size}
-        style={{
-          filter: headset.filters,
-        }}
-      />
-    </div>
+    <Tooltip>
+      <TooltipTrigger>
+        <div className={className}>
+          <Image
+            src={`/assets/headsets/${headset.icon}`}
+            alt={headset.name}
+            width={size}
+            height={size}
+            style={{
+              filter: headset.filters,
+            }}
+          />
+        </div>
+      </TooltipTrigger>
+      <TooltipContent>
+        <div>
+          <p className="font-bold">Headset</p>
+          <p>{headset.name}</p>
+        </div>
+      </TooltipContent>
+    </Tooltip>
   );
 }

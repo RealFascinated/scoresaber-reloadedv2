@@ -18,6 +18,7 @@ import { useRef } from "react";
 import { toast } from "react-toastify";
 import { useStore } from "zustand";
 import Avatar from "../Avatar";
+import Button from "../Button";
 import Card from "../Card";
 import CountyFlag from "../CountryFlag";
 import Label from "../Label";
@@ -123,35 +124,29 @@ export default function PlayerInfo({ playerData }: PlayerInfoProps) {
           {/* Settings Buttons */}
           <div className="absolute right-3 top-20 flex flex-col justify-end gap-2 md:relative md:right-0 md:top-0 md:mt-2 md:flex-row md:justify-center">
             {!isOwnProfile && (
-              <button
-                className="h-fit w-fit rounded-md bg-blue-500 p-1 hover:bg-blue-600"
+              <Button
                 onClick={claimProfile}
-                aria-label="Set as your Profile"
-              >
-                <HomeIcon title="Set as your Profile" width={24} height={24} />
-              </button>
+                tooltip={<p>Set as your Profile</p>}
+                icon={<HomeIcon width={24} height={24} />}
+              />
             )}
 
             {!isOwnProfile && (
               <>
                 {!settingsStore?.isFriend(playerId) && (
-                  <button
-                    className="rounded-md bg-blue-500 p-1 hover:opacity-80"
+                  <Button
                     onClick={addFriend}
-                    aria-label="Add as Friend"
-                  >
-                    <UserIcon title="Add as Friend" width={24} height={24} />
-                  </button>
+                    tooltip={<p>Add as Friend</p>}
+                    icon={<UserIcon width={24} height={24} />}
+                  />
                 )}
 
                 {settingsStore.isFriend(playerId) && (
-                  <button
-                    className="rounded-md bg-red-500 p-1 hover:opacity-80"
+                  <Button
                     onClick={removeFriend}
-                    aria-label="Remove Friend"
-                  >
-                    <XMarkIcon title="Remove Friend" width={24} height={24} />
-                  </button>
+                    tooltip={<p>Remove Friend</p>}
+                    icon={<XMarkIcon width={24} height={24} />}
+                  />
                 )}
               </>
             )}
@@ -182,13 +177,16 @@ export default function PlayerInfo({ playerData }: PlayerInfoProps) {
                 href={`/ranking/country/${playerData.country}/${Math.round(
                   playerData.countryRank / 50,
                 )}`}
-                title={`${playerData.name} is from ${normalizedRegionName(
-                  playerData.country,
-                )}`}
               >
                 <CountyFlag
                   countryCode={playerData.country}
                   className="!h-7 !w-7"
+                  tooltip={
+                    <p>
+                      {playerData.name} is from{" "}
+                      {normalizedRegionName(playerData.country)}
+                    </p>
+                  }
                 />
                 <p>#{formatNumber(playerData.countryRank)}</p>
               </a>
@@ -204,29 +202,43 @@ export default function PlayerInfo({ playerData }: PlayerInfoProps) {
             <Label
               title="Total play count"
               className="bg-blue-500"
-              hoverValue={`Total ranked song play count | Total plays: ${formatNumber(
-                scoreStats.totalPlayCount,
-              )} | Ranked plays: ${formatNumber(scoreStats.rankedPlayCount)}`}
+              tooltip={
+                <div>
+                  <p className="font-bold">Score counts</p>
+                  <p>Total plays: {formatNumber(scoreStats.totalPlayCount)}</p>
+                  <p>
+                    Ranked plays: {formatNumber(scoreStats.rankedPlayCount)}
+                  </p>
+                </div>
+              }
               value={formatNumber(scoreStats.totalPlayCount)}
             />
             <Label
               title="Total score"
               className="bg-blue-500"
-              hoverValue={`Total score of all your plays | Unranked score: ${formatNumber(
-                scoreStats.totalScore,
-              )} | Ranked score: ${formatNumber(scoreStats.totalRankedScore)} `}
+              tooltip={
+                <div>
+                  <p className="font-bold">Raw score</p>
+                  <p>Unranked score: {formatNumber(scoreStats.totalScore)}</p>
+                  <p>
+                    Ranked score: {formatNumber(scoreStats.totalRankedScore)}
+                  </p>
+                </div>
+              }
               value={formatNumber(scoreStats.totalScore)}
             />
             <Label
               title="Avg ranked acc"
               className="bg-blue-500"
-              hoverValue="Average accuracy of all your ranked plays"
+              tooltip={<p>Average accuracy of all their ranked plays</p>}
               value={`${scoreStats.averageRankedAccuracy.toFixed(2)}%`}
             />
             <Label
               title="Total replays watched"
               className="bg-blue-500"
-              hoverValue="The total amount of times your replays have been watched"
+              tooltip={
+                <p>The total amount of times their replays have been watched</p>
+              }
               value={formatNumber(scoreStats.replaysWatched)}
             />
 
@@ -235,7 +247,7 @@ export default function PlayerInfo({ playerData }: PlayerInfoProps) {
                 <Label
                   title="Top PP"
                   className="bg-pp-blue"
-                  hoverValue="Highest pp play"
+                  tooltip={<p>Your highest pp play</p>}
                   value={`${formatNumber(
                     getHighestPpPlay(playerId)?.toFixed(2),
                   )}pp`}
@@ -243,7 +255,9 @@ export default function PlayerInfo({ playerData }: PlayerInfoProps) {
                 <Label
                   title="Avg PP"
                   className="bg-pp-blue"
-                  hoverValue="Average amount of pp per play (best 50 scores)"
+                  tooltip={
+                    <p>Average amount of pp per play (best 50 scores)</p>
+                  }
                   value={`${formatNumber(
                     getAveragePp(playerId)?.toFixed(2),
                   )}pp`}
@@ -251,7 +265,12 @@ export default function PlayerInfo({ playerData }: PlayerInfoProps) {
                 <Label
                   title="+ 1pp"
                   className="bg-pp-blue"
-                  hoverValue="Amount of raw pp required to increase your global pp by 1pp"
+                  tooltip={
+                    <p>
+                      Amount of raw pp required to increase your global pp by
+                      1pp
+                    </p>
+                  }
                   value={`${formatNumber(
                     calcPpBoundary(playerId, 1)?.toFixed(2),
                   )}pp raw per global`}

@@ -11,6 +11,7 @@ import clsx from "clsx";
 import dynamic from "next/dynamic";
 import Image from "next/image";
 import { useEffect, useState } from "react";
+import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/Tooltip";
 import PlayerChart from "./PlayerChart";
 import PlayerInfo from "./PlayerInfo";
 
@@ -99,14 +100,19 @@ export default function PlayerPage({ id, sort, page }: PlayerPageProps) {
           >
             {badges.map((badge) => {
               return (
-                <Image
-                  key={badge.image}
-                  src={badge.image}
-                  alt={badge.description}
-                  title={badge.description}
-                  width={80}
-                  height={30}
-                />
+                <Tooltip key={badge.image}>
+                  <TooltipTrigger>
+                    <Image
+                      src={badge.image}
+                      alt={badge.description}
+                      width={80}
+                      height={30}
+                    />
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>{badge.description}</p>
+                  </TooltipContent>
+                </Tooltip>
               );
             })}
           </div>

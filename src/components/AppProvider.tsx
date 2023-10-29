@@ -3,6 +3,7 @@
 import { useScoresaberScoresStore } from "@/store/scoresaberScoresStore";
 import { useSettingsStore } from "@/store/settingsStore";
 import React from "react";
+import { TooltipProvider } from "./ui/Tooltip";
 const UPDATE_INTERVAL = 1000 * 60 * 5; // 5 minutes
 
 export default class AppProvider extends React.Component {
@@ -47,6 +48,6 @@ export default class AppProvider extends React.Component {
   render(): React.ReactNode {
     const props: any = this.props;
 
-    return <>{props.children}</>;
+    return <TooltipProvider>{props.children}</TooltipProvider>;
   }
 }

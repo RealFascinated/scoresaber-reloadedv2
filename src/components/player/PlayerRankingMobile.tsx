@@ -39,12 +39,12 @@ export default function PlayerRankingMobile({
         <div className="flex flex-wrap justify-center gap-2">
           <Label
             title="PP"
-            hoverValue="Total amount of pp"
+            tooltip={<p>The total amount of pp this player has</p>}
             value={`${formatNumber(player.pp)}`}
           />
           <Label
             title="Total play count"
-            hoverValue="Total ranked song play count"
+            tooltip={<p>The total amount of plays this player has</p>}
             value={formatNumber(player.scoreStats.totalPlayCount)}
           />
         </div>

@@ -5,6 +5,7 @@ import { formatDate, formatTimeAgo } from "@/utils/timeUtils";
 import Image from "next/image";
 import Link from "next/link";
 import ScoreStatLabel from "../player/ScoreStatLabel";
+import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/Tooltip";
 
 type ScoreProps = {
   score: ScoresaberScore;
@@ -25,12 +26,19 @@ export default function LeaderboardScore({
         <div className="flex w-fit flex-row items-center justify-center gap-1">
           <p>#{formatNumber(score.rank)}</p>
         </div>
-        <p
-          className="hidden text-sm text-gray-200 md:block"
-          title={formatDate(score.timeSet)}
-        >
-          {formatTimeAgo(score.timeSet)}
-        </p>
+        <Tooltip>
+          <TooltipTrigger>
+            <p className="hidden text-sm text-gray-200 md:block">
+              {formatTimeAgo(score.timeSet)}
+            </p>
+          </TooltipTrigger>
+          <TooltipContent>
+            <div>
+              <p className="font-bold">Time Submitted</p>
+              <p>{formatDate(score.timeSet)}</p>
+            </div>
+          </TooltipContent>
+        </Tooltip>
       </div>
       {/* Song Image */}
       <div className="flex w-full items-center gap-2 ">

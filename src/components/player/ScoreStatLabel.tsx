@@ -1,19 +1,20 @@
 import clsx from "clsx";
+import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/Tooltip";
 
 type LabelProps = {
   value: string;
-  title?: string;
+  tooltip?: React.ReactNode;
   icon?: JSX.Element;
   className?: string;
 };
 
 export default function ScoreStatLabel({
   value,
-  title,
+  tooltip,
   icon,
   className = "bg-neutral-700",
 }: LabelProps) {
-  return (
+  const base = (
     <div
       className={clsx(
         "flex flex-col rounded-md hover:cursor-default",
@@ -21,14 +22,21 @@ export default function ScoreStatLabel({
       )}
     >
       <div className="p4-[0.3rem] flex items-center gap-2 pb-[0.2rem] pl-[0.3rem] pr-[0.3rem] pt-[0.2rem]">
-        <p
-          className="flex w-full items-center justify-center gap-1"
-          title={title}
-        >
+        <p className="flex w-full items-center justify-center gap-1">
           {value}
           {icon}
         </p>
       </div>
     </div>
   );
+
+  if (tooltip) {
+    return (
+      <Tooltip>
+        <TooltipTrigger>{base}</TooltipTrigger>
+        <TooltipContent>{tooltip}</TooltipContent>
+      </Tooltip>
+    );
+  }
+  return base;
 }

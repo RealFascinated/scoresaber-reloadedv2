@@ -18,6 +18,7 @@ import clsx from "clsx";
 import Image from "next/image";
 import Link from "next/link";
 import HeadsetIcon from "../icons/HeadsetIcon";
+import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/Tooltip";
 import ScoreStatLabel from "./ScoreStatLabel";
 
 type ScoreProps = {
@@ -34,6 +35,8 @@ export default function Score({ score, player, leaderboard }: ScoreProps) {
   const diffColor = songDifficultyToColor(diffName);
   const accuracy = ((score.baseScore / leaderboard.maxScore) * 100).toFixed(2);
   const totalMissedNotes = score.missedNotes + score.badCuts;
+  const weightedPp =
+    formatNumber(getPpGainedFromScore(player.id, score), 2) + "pp";
 
   return (
     <div className="grid grid-cols-1 pb-2 pt-2 first:pt-0 last:pb-0 md:grid-cols-[0.85fr_6fr_1.3fr]">
@@ -43,12 +46,19 @@ export default function Score({ score, player, leaderboard }: ScoreProps) {
           <p>#{formatNumber(score.rank)}</p>
           <HeadsetIcon id={score.hmd} size={20} />
         </div>
-        <p
-          className="hidden text-sm text-gray-200 md:block"
-          title={formatDate(score.timeSet)}
-        >
-          {formatTimeAgo(score.timeSet)}
-        </p>
+        <Tooltip>
+          <TooltipTrigger>
+            <p className="text-sm text-gray-200">
+              {formatTimeAgo(score.timeSet)}
+            </p>
+          </TooltipTrigger>
+          <TooltipContent>
+            <div>
+              <p className="font-bold">Time Submitted</p>
+              <p>{formatDate(score.timeSet)}</p>
+            </div>
+          </TooltipContent>
+        </Tooltip>
       </div>
       {/* Song Image */}
       <div className="flex w-full items-center gap-2">
@@ -105,12 +115,19 @@ export default function Score({ score, player, leaderboard }: ScoreProps) {
 
           {/* Time Set (Mobile) */}
           <div>
-            <p
-              className="block text-sm text-gray-200 md:hidden"
-              title={formatDate(score.timeSet)}
-            >
-              {formatTimeAgo(score.timeSet)}
-            </p>
+            <Tooltip>
+              <TooltipTrigger>
+                <p className="text-sm text-gray-200">
+                  {formatTimeAgo(score.timeSet)}
+                </p>
+              </TooltipTrigger>
+              <TooltipContent>
+                <div>
+                  <p className="font-bold">Time Submitted</p>
+                  <p>{formatDate(score.timeSet)}</p>
+                </div>
+              </TooltipContent>
+            </Tooltip>
           </div>
         </div>
 
@@ -121,15 +138,24 @@ export default function Score({ score, player, leaderboard }: ScoreProps) {
               <ScoreStatLabel
                 className="bg-blue-500 text-center"
                 value={formatNumber(score.pp.toFixed(2)) + "pp"}
-                title={`Weighted pp ${formatNumber(
-                  getPpGainedFromScore(player.id, score),
-                  2,
-                )}pp`}
+                tooltip={
+                  <div>
+                    <p className="font-bold">Performance Points</p>
+                    <p>Weighted PP: {weightedPp}</p>
+                  </div>
+                }
               />
             )}
 
             {/* Percentage score */}
             <ScoreStatLabel
+              tooltip={
+                <div>
+                  <p className="font-bold">Score</p>
+                  <p>Accuracy: {accuracy}%</p>
+                  <p>Raw Score: {formatNumber(score.baseScore)}</p>
+                </div>
+              }
               value={
                 !leaderboard.maxScore
                   ? formatNumber(score.baseScore)
@@ -145,8 +171,12 @@ export default function Score({ score, player, leaderboard }: ScoreProps) {
                 "min-w-[2rem]",
                 isFullCombo ? "bg-green-500" : "bg-red-500",
               )}
-              title={
-                isFullCombo ? "Full Combo" : `${totalMissedNotes}x Missed Notes`
+              tooltip={
+                <div>
+                  <p className="font-bold">Mistakes</p>
+                  <p>Misses: {score.missedNotes}</p>
+                  <p>Bad Cuts: {score.badCuts}</p>
+                </div>
               }
               icon={
                 isFullCombo ? (
