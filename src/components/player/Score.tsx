@@ -25,9 +25,15 @@ type ScoreProps = {
   score: ScoresaberScore;
   player: ScoresaberPlayer;
   leaderboard: ScoresaberLeaderboardInfo;
+  ownProfile?: ScoresaberPlayer;
 };
 
-export default function Score({ score, player, leaderboard }: ScoreProps) {
+export default function Score({
+  score,
+  player,
+  leaderboard,
+  ownProfile,
+}: ScoreProps) {
   const isFullCombo = score.missedNotes + score.badCuts === 0;
   const diffName = scoresaberDifficultyNumberToName(
     leaderboard.difficulty.difficulty,
@@ -37,6 +43,7 @@ export default function Score({ score, player, leaderboard }: ScoreProps) {
   const totalMissedNotes = score.missedNotes + score.badCuts;
   const weightedPp =
     formatNumber(getPpGainedFromScore(player.id, score), 2) + "pp";
+  const isOwnProfile = player.id === ownProfile?.id;
 
   return (
     <div className="grid grid-cols-1 pb-2 pt-2 first:pt-0 last:pb-0 md:grid-cols-[0.85fr_6fr_1.3fr]">
@@ -141,7 +148,8 @@ export default function Score({ score, player, leaderboard }: ScoreProps) {
                 tooltip={
                   <div>
                     <p className="font-bold">Performance Points</p>
-                    <p>Weighted PP: {weightedPp}</p>
+                    {weightedPp && <p>Weighted PP: {weightedPp}</p>}
+                    <p>Raw PP: {formatNumber(score.pp, 2)}pp</p>
                   </div>
                 }
               />
@@ -174,8 +182,14 @@ export default function Score({ score, player, leaderboard }: ScoreProps) {
               tooltip={
                 <div>
                   <p className="font-bold">Mistakes</p>
-                  <p>Misses: {score.missedNotes}</p>
-                  <p>Bad Cuts: {score.badCuts}</p>
+                  {isFullCombo ? (
+                    <p>Full Combo</p>
+                  ) : (
+                    <>
+                      <p>Misses: {score.missedNotes}</p>
+                      <p>Bad Cuts: {score.badCuts}</p>
+                    </>
+                  )}
                 </div>
               }
               icon={

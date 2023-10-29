@@ -141,6 +141,7 @@ export default function Scores({ playerData, page, sortType }: ScoresProps) {
                     player={playerData}
                     score={score}
                     leaderboard={leaderboard}
+                    ownProfile={settingsStore?.player}
                   />
                 );
               })
