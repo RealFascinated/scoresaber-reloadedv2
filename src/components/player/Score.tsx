@@ -41,9 +41,7 @@ export default function Score({
   const diffColor = songDifficultyToColor(diffName);
   const accuracy = ((score.baseScore / leaderboard.maxScore) * 100).toFixed(2);
   const totalMissedNotes = score.missedNotes + score.badCuts;
-  const weightedPp =
-    formatNumber(getPpGainedFromScore(player.id, score), 2) + "pp";
-  const isOwnProfile = player.id === ownProfile?.id;
+  const weightedPp = formatNumber(getPpGainedFromScore(player.id, score), 2);
 
   return (
     <div className="grid grid-cols-1 pb-2 pt-2 first:pt-0 last:pb-0 md:grid-cols-[0.85fr_6fr_1.3fr]">
@@ -148,7 +146,7 @@ export default function Score({
                 tooltip={
                   <div>
                     <p className="font-bold">Performance Points</p>
-                    {weightedPp && <p>Weighted PP: {weightedPp}</p>}
+                    {weightedPp !== null && <p>Weighted PP: {weightedPp}pp</p>}
                     <p>Raw PP: {formatNumber(score.pp, 2)}pp</p>
                   </div>
                 }
