@@ -19,22 +19,22 @@ async function getData() {
   );
 
   const json = await response.json();
-  return json as ScoresaberMetricsHistory;
+  return {
+    data: json as ScoresaberMetricsHistory,
+    timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+  };
 }
 
 export async function generateMetadata(): Promise<Metadata> {
-  const historyData = await getData();
+  const { data } = await getData();
 
   const description =
     "View Scoresaber metrics and statistics over the last 30 days.";
 
   const lastActivePlayers =
-    historyData.activePlayersHistory[
-      historyData.activePlayersHistory.length - 1
-    ].value;
+    data.activePlayersHistory[data.activePlayersHistory.length - 1].value;
   const lastScoreCount =
-    historyData.scoreCountHistory[historyData.scoreCountHistory.length - 1]
-      .value;
+    data.scoreCountHistory[data.scoreCountHistory.length - 1].value;
 
   return {
     title: `Analytics`,
@@ -53,7 +53,7 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function Analytics() {
-  const historyData = await getData();
+  const { data, timezone } = await getData();
 
   return (
     <main>
@@ -63,7 +63,7 @@ export default async function Analytics() {
           innerClassName="flex flex-col items-center justify-center"
         >
           <h1 className="text-center text-3xl font-bold">Analytics</h1>
-          <p className="text-center text-gray-300">
+          <p className="text-center">
             Scoresaber metrics and statistics over the last 30 days.
           </p>
           <p className="text-gray-300">
@@ -78,8 +78,9 @@ export default async function Analytics() {
               </Link>
             </span>
           </p>
+          <p className="text-gray-300">Timezone: {timezone}</p>
           <div className="mt-3 h-[400px] w-full">
-            <AnalyticsChart historyData={historyData} />
+            <AnalyticsChart historyData={data} />
           </div>
         </Card>
       </Container>
