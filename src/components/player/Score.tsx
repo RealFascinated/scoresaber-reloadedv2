@@ -52,7 +52,7 @@ export default function Score({
           <HeadsetIcon id={score.hmd} size={20} />
         </div>
         <Tooltip>
-          <TooltipTrigger>
+          <TooltipTrigger className="hidden md:block">
             <p className="text-sm text-gray-200">
               {formatTimeAgo(score.timeSet)}
             </p>
@@ -71,7 +71,7 @@ export default function Score({
           <Image
             src={leaderboard.coverImage}
             alt={leaderboard.songName}
-            className="h-fit rounded-md"
+            className="h-fit min-w-[60px] rounded-md"
             width={60}
             height={60}
             loading="lazy"
@@ -107,13 +107,11 @@ export default function Score({
           href={`/leaderboard/${leaderboard.id}/1`}
           className="transform-gpu transition-all hover:opacity-70"
         >
-          <div className="w-fit truncate text-blue-500">
+          <div className="w-fit text-clip text-blue-500">
             <p className="font-bold">{leaderboard.songName}</p>
-            <p className="text-blue-300">
-              {leaderboard.songAuthorName}{" "}
-              <span className="text-gray-200">
-                {leaderboard.levelAuthorName}
-              </span>
+            <p className="text-blue-300">{leaderboard.songAuthorName}</p>
+            <p className="text-sm text-gray-400">
+              {leaderboard.levelAuthorName}
             </p>
           </div>
         </Link>
