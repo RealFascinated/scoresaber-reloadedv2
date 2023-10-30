@@ -66,7 +66,7 @@ export default async function Analytics() {
             Want more in-depth data? Click{" "}
             <span className="text-pp-blue">
               <Link
-                href="https://grafana.fascinated.cc/d/c40febe5-6779-4f91-b85e-0a46b3865041/beatsaber-metrics"
+                href="https://grafana.fascinated.cc/d/b3c6c28d-39e9-4fa9-8e2b-b0ddb10f875e/beatsaber-metrics"
                 target="_blank"
                 rel="noopener noreferrer"
               >
