@@ -21,7 +21,6 @@ async function getData() {
   const json = await response.json();
   return {
     data: json as ScoresaberMetricsHistory,
-    timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
   };
 }
 
@@ -53,15 +52,12 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function Analytics() {
-  const { data, timezone } = await getData();
+  const { data } = await getData();
 
   return (
     <main>
       <Container>
-        <Card
-          className="mt-2 w-full rounded-md bg-gray-800"
-          innerClassName="flex flex-col items-center justify-center"
-        >
+        <Card className="flex flex-col items-center justify-center">
           <h1 className="text-center text-3xl font-bold">Analytics</h1>
           <p className="text-center">
             Scoresaber metrics and statistics over the last 30 days.
@@ -78,7 +74,6 @@ export default async function Analytics() {
               </Link>
             </span>
           </p>
-          <p className="text-gray-300">Timezone: {timezone}</p>
           <div className="mt-3 h-[400px] w-full">
             <AnalyticsChart historyData={data} />
           </div>
