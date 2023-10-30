@@ -14,6 +14,7 @@ import Pagination from "./Pagination";
 import Spinner from "./Spinner";
 import PlayerRanking from "./player/PlayerRanking";
 import PlayerRankingMobile from "./player/PlayerRankingMobile";
+import { Separator } from "./ui/separator";
 
 const Error = dynamic(() => import("@/components/Error"));
 
@@ -117,7 +118,7 @@ export default function GlobalRanking({ page, country }: GlobalRankingProps) {
             </div>
           ) : (
             <div className="flex flex-col gap-2">
-              <div className="flex items-center gap-2 rounded-md bg-gray-700 p-2">
+              <div className="flex items-center gap-2 p-2">
                 {country && (
                   <CountyFlag countryCode={country} className="!h-8 !w-8" />
                 )}
@@ -128,6 +129,8 @@ export default function GlobalRanking({ page, country }: GlobalRankingProps) {
                     : "Global scores"}
                 </p>
               </div>
+
+              <Separator />
 
               {!isMobile && (
                 <table className="table w-full table-auto border-spacing-2 border-none text-left">
@@ -145,7 +148,7 @@ export default function GlobalRanking({ page, country }: GlobalRankingProps) {
                     {players.map((player) => (
                       <tr
                         key={player.rank}
-                        className="border-b border-gray-700"
+                        className="border-b border-gray-800"
                       >
                         <PlayerRanking
                           showCountryFlag={country ? false : true}
@@ -173,8 +176,8 @@ export default function GlobalRanking({ page, country }: GlobalRankingProps) {
               )}
 
               {/* Pagination */}
-              <div className="flex w-full flex-row justify-center rounded-md bg-gray-800 md:flex-col">
-                <div className="p-3">
+              <div className="flex w-full flex-row justify-center">
+                <div className="pt-3">
                   <Pagination
                     currentPage={pageInfo.page}
                     totalPages={pageInfo.totalPages}

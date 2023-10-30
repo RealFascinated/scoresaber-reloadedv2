@@ -21,10 +21,7 @@ export default async function Analytics() {
   return (
     <main>
       <Container>
-        <Card
-          className="mt-2 w-full rounded-md bg-gray-800"
-          innerClassName="flex flex-col items-center justify-center text-center"
-        >
+        <Card>
           <h1 className="mb-1 text-3xl font-bold">Credits</h1>
           <p className="mb-8 text-gray-300">
             This website is made possible because of the following:

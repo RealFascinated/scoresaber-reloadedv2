@@ -48,7 +48,7 @@ export default function Navbar() {
 
   return (
     <>
-      <div className="flex h-fit w-full rounded-md bg-gray-800">
+      <div className="bg-background flex h-fit w-full rounded-md">
         {settingsStore !== undefined && settingsStore.player && (
           <NavbarButton
             ariaLabel="Your profile"

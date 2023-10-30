@@ -1,26 +1,15 @@
+import { Card as CardBase, CardContent } from "@/components/ui/card";
 import clsx from "clsx";
 
 type CardProps = {
   className?: string;
-  innerClassName?: string;
   children: React.ReactNode;
 };
 
-export default function Card({
-  className,
-  innerClassName,
-  children,
-}: CardProps) {
+export default function Card({ className, children }: CardProps) {
   return (
-    <div className={className}>
-      <div
-        className={clsx(
-          "w-full rounded-md bg-gray-800 p-3 opacity-90",
-          innerClassName,
-        )}
-      >
-        {children}
-      </div>
-    </div>
+    <CardBase className="mt-2">
+      <CardContent className={clsx(className, "mt-2")}>{children}</CardContent>
+    </CardBase>
   );
 }

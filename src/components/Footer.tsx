@@ -20,7 +20,7 @@ const buildId = process.env.NEXT_PUBLIC_BUILD_ID
 export default function Footer() {
   return (
     <footer>
-      <div className="m-3 flex flex-col items-center justify-center gap-1 rounded-md bg-gray-800 p-3">
+      <div className="bg-background m-3 flex flex-col items-center justify-center gap-1 rounded-md p-3">
         <div className="flex flex-row gap-3">
           <a
             className="transform-gpu transition-all hover:text-blue-500"

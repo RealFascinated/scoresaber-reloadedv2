@@ -99,7 +99,7 @@ export default function Scores({ playerData, page, sortType }: ScoresProps) {
   return (
     <Card className="mt-2 w-full items-center md:flex-col">
       {/* Sort */}
-      <div className="m-2 w-full text-sm">
+      <div className="m-4 w-full text-sm">
         <div className="flex justify-center gap-2">
           {Object.values(SortTypes).map((sortType) => {
             return (
@@ -128,7 +128,7 @@ export default function Scores({ playerData, page, sortType }: ScoresProps) {
             <Spinner />
           </div>
         ) : (
-          <div className="grid grid-cols-1 divide-y divide-gray-500">
+          <div className="grid grid-cols-1 divide-y divide-gray-800">
             {!scores.loading && scores.scores.length == 0 ? (
               <p className="text-red-400">{errorMessage}</p>
             ) : (
@@ -152,7 +152,7 @@ export default function Scores({ playerData, page, sortType }: ScoresProps) {
 
       {/* Pagination */}
       <div>
-        <div className="p-3">
+        <div className="pt-3">
           <Pagination
             currentPage={scores.page}
             totalPages={scores.totalPages}
