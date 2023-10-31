@@ -11,6 +11,7 @@ import {
 import { GlobeAltIcon } from "@heroicons/react/24/outline";
 import Avatar from "./Avatar";
 import Button from "./Button";
+import { Card } from "./ui/card";
 
 interface ButtonProps {
   text: string;
@@ -48,7 +49,7 @@ export default function Navbar() {
 
   return (
     <>
-      <div className="bg-background flex h-fit w-full rounded-md">
+      <Card className="flex h-fit w-full rounded-md">
         {settingsStore !== undefined && settingsStore.player && (
           <NavbarButton
             ariaLabel="Your profile"
@@ -127,7 +128,7 @@ export default function Navbar() {
           icon={<CogIcon height={20} width={20} />}
           href="/settings"
         />
-      </div>
+      </Card>
     </>
   );
 }
