@@ -145,7 +145,7 @@ export default function Leaderboard({ id, page }: LeaderboardProps) {
               );
             })}
           </div>
-          <div className="grid grid-cols-1 divide-y divide-gray-500">
+          <div className="grid grid-cols-1 divide-y divide-border">
             {leaderboardScores?.map((score, index) => {
               return (
                 <div key={index}>
