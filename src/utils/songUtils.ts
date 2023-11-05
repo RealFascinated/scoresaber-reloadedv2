@@ -15,6 +15,20 @@ export function songDifficultyToColor(diff: string) {
   }
 }
 
+export function accuracyToColor(acc: number) {
+  if (acc >= 90) {
+    return "rgb(0, 255, 255)";
+  } else if (acc >= 80) {
+    return "rgb(255, 255, 255)";
+  } else if (acc >= 70) {
+    return "rgb(0, 255, 0)";
+  } else if (acc >= 60) {
+    return "rgb(255, 235, 4)";
+  } else {
+    return "rgb(255, 0, 0)";
+  }
+}
+
 export function scoresaberDifficultyNumberToName(
   diff: number,
   shortened: boolean = false,
