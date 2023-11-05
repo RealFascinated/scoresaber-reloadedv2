@@ -70,7 +70,10 @@ export default class Overlay extends Component<OverlayProps, OverlayState> {
   render() {
     const { player } = this.state;
 
-    if (!this.state.mounted || !player) {
+    if (
+      !this.state.mounted ||
+      (!player && this.state.settings.settings.showPlayerStats)
+    ) {
       return (
         <main className="flex items-center !bg-transparent p-3">
           <Spinner />
@@ -109,7 +112,7 @@ export default class Overlay extends Component<OverlayProps, OverlayState> {
     return (
       <main>
         <div>
-          {this.state.settings.settings.showPlayerStats && (
+          {this.state.settings.settings.showPlayerStats && player && (
             <PlayerStats player={player} />
           )}
           {this.state.settings.settings.showScoreStats && <ScoreStats />}
