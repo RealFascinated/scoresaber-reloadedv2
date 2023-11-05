@@ -60,9 +60,9 @@ export default class Overlay extends Component<OverlayProps, OverlayState> {
     this.setState({ settings: settings });
 
     if (settings.settings.showPlayerStats) {
-      this.updatePlayer(settings.playerId);
+      this.updatePlayer(settings.accountId);
       setInterval(() => {
-        this.updatePlayer(settings.playerId);
+        this.updatePlayer(settings.accountId);
       }, UPDATE_INTERVAL);
     }
   }
