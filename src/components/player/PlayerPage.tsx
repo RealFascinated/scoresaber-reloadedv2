@@ -67,7 +67,7 @@ export default function PlayerPage({ id, sort, page }: PlayerPageProps) {
     return (
       <main>
         <Container>
-          <Card className="mt-2">
+          <Card outerClassName="mt-2" className="mt-2">
             <div className="p-3 text-center">
               <div role="status">
                 <div className="flex flex-col items-center justify-center gap-2">
@@ -90,7 +90,7 @@ export default function PlayerPage({ id, sort, page }: PlayerPageProps) {
       <Container>
         <PlayerInfo playerData={playerData} />
         {/* Chart */}
-        <Card className="mt-2">
+        <Card outerClassName="mt-2">
           {/* Badges */}
           <div
             className={clsx(

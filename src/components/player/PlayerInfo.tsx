@@ -111,7 +111,7 @@ export default function PlayerInfo({ playerData }: PlayerInfoProps) {
   const scoreStats = playerData.scoreStats;
 
   return (
-    <Card className="mt-2">
+    <Card outerClassName="mt-2" className="mt-2">
       {/* Player Info */}
       <div className="flex flex-col items-center gap-3 md:flex-row md:items-start">
         <div className="min-w-fit">

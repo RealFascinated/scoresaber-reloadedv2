@@ -111,7 +111,7 @@ export default function GlobalRanking({ page, country }: GlobalRankingProps) {
   return (
     <main>
       <Container>
-        <Card className="mt-2">
+        <Card outerClassName="mt-2" className="mt-2">
           {pageInfo.loading ? (
             <div className="flex justify-center">
               <Spinner />

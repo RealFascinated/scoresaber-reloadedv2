@@ -97,9 +97,9 @@ export default function Scores({ playerData, page, sortType }: ScoresProps) {
   }
 
   return (
-    <Card className="mt-2 w-full items-center md:flex-col">
+    <Card outerClassName="mt-2" className="w-full items-center md:flex-col">
       {/* Sort */}
-      <div className="m-4 w-full text-sm">
+      <div className="mb-2 mt-1 w-full text-sm">
         <div className="flex justify-center gap-2">
           {Object.values(SortTypes).map((sortType) => {
             return (

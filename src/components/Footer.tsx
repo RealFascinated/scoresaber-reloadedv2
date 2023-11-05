@@ -1,5 +1,6 @@
 import { ssrSettings } from "@/ssrSettings";
 import { isProduction } from "@/utils/utils";
+import Card from "./Card";
 
 const buttons = [
   {
@@ -19,8 +20,8 @@ const buildId = process.env.NEXT_PUBLIC_BUILD_ID
 
 export default function Footer() {
   return (
-    <footer>
-      <div className="bg-background m-3 flex flex-col items-center justify-center gap-1 rounded-md p-3">
+    <footer className="p-3">
+      <Card className="mb-2 mt-2 flex flex-col items-center justify-center gap-1 !pb-1 !pt-0">
         <div className="flex flex-row gap-3">
           <a
             className="transform-gpu transition-all hover:text-blue-500"
@@ -48,7 +49,7 @@ export default function Footer() {
         </div>
 
         <div className="text-sm text-gray-400">Build ID: {buildId}</div>
-      </div>
+      </Card>
     </footer>
   );
 }

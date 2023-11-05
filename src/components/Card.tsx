@@ -3,13 +3,20 @@ import clsx from "clsx";
 
 type CardProps = {
   className?: string;
+  outerClassName?: string;
   children: React.ReactNode;
 };
 
-export default function Card({ className, children }: CardProps) {
+export default function Card({
+  className,
+  outerClassName,
+  children,
+}: CardProps) {
   return (
-    <CardBase className="mt-2">
-      <CardContent className={clsx(className, "mt-2")}>{children}</CardContent>
+    <CardBase className={outerClassName}>
+      <CardContent className={clsx(className, "pb-4 pt-2")}>
+        {children}
+      </CardContent>
     </CardBase>
   );
 }

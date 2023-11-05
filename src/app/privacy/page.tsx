@@ -25,7 +25,7 @@ export default async function Analytics() {
   return (
     <main>
       <Container>
-        <Card>
+        <Card outerClassName="mt-2">
           <h1 className="mb-1 text-3xl font-bold">Privacy</h1>
           <p className="mb-8 text-gray-300">
             This site does not collect personal data. All of the data stored is

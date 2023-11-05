@@ -57,7 +57,10 @@ export default async function Analytics() {
   return (
     <main>
       <Container>
-        <Card className="flex flex-col items-center justify-center">
+        <Card
+          outerClassName="mt-2"
+          className="flex flex-col items-center justify-center"
+        >
           <h1 className="text-center text-3xl font-bold">Analytics</h1>
           <p className="text-center">
             Scoresaber metrics and statistics over the last 30 days.

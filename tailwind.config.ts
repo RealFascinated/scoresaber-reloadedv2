@@ -22,7 +22,7 @@ module.exports = {
           "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
       },
       backgroundColor: {
-        "pp-blue": "#5763c9",
+        "pp-blue": "hsl(var(--primary))",
       },
       textColor: {
         "pp-blue": "#9fa8f3",

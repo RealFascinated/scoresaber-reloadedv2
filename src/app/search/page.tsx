@@ -13,7 +13,10 @@ export default function Home() {
   return (
     <main>
       <Container>
-        <Card className="flex flex-col items-center justify-center">
+        <Card
+          outerClassName="mt-2"
+          className="flex flex-col items-center justify-center"
+        >
           <UnknownAvatar />
 
           <p className="text-xl">Stranger</p>
