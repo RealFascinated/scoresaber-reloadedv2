@@ -11,7 +11,7 @@ import {
 import { GlobeAltIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
 import Avatar from "./Avatar";
-import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/Tooltip";
+import { Button } from "./ui/button";
 import { Card } from "./ui/card";
 import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
 
@@ -51,7 +51,20 @@ function FriendsButton() {
       </PopoverTrigger>
       <PopoverContent className="p-2">
         {settingsStore?.friends.length == 0 ? (
-          <p className="text-sm font-bold">No friends, add someone!</p>
+          <div className="flex flex-col gap-2">
+            <div>
+              <p className="text-md font-bold">No friends</p>
+              <p className="text-sm text-gray-400">
+                Add new friends by clicking below
+              </p>
+            </div>
+
+            <Link href={"/search"}>
+              <Button className="w-full" size={"sm"}>
+                Search
+              </Button>
+            </Link>
+          </div>
         ) : (
           settingsStore?.friends.map((friend) => {
             return (
@@ -94,19 +107,21 @@ export default function Navbar() {
               <Avatar
                 url={settingsStore.player.profilePicture}
                 label="Your avatar"
-                size={32}
+                size={20}
               />
             }
             href={`/player/${settingsStore.player.id}/top/1`}
           />
         )}
 
-        <Tooltip>
+        <FriendsButton />
+        {/* TODO: fix hydration error? */}
+        {/* <Tooltip>
           <TooltipTrigger>
             <FriendsButton />
           </TooltipTrigger>
           <TooltipContent>Click to view your friends</TooltipContent>
-        </Tooltip>
+        </Tooltip> */}
 
         <NavbarButton
           ariaLabel="View the global ranking"
