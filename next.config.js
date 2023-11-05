@@ -37,6 +37,12 @@ const nextConfig = {
         port: "",
         pathname: "/**",
       },
+      {
+        protocol: "https",
+        hostname: "na.cdn.beatsaver.com",
+        port: "",
+        pathname: "/**",
+      },
     ],
   },
 };
