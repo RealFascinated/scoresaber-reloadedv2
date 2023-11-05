@@ -96,8 +96,8 @@ export default function Leaderboard({ id, page }: LeaderboardProps) {
 
   return (
     <Container>
-      <div className="flex flex-col gap-2 md:flex-row">
-        <Card className="mt-2 flex">
+      <div className="mt-2 flex flex-col gap-2 md:flex-row">
+        <Card outerClassName="h-fit" className="mt-2 flex">
           <div className="flex min-w-[300px] flex-wrap justify-between gap-2 md:justify-start">
             <div className="flex gap-2">
               <Image
