@@ -11,6 +11,7 @@ interface OverlaySettingsStore {
   settings: {
     showPlayerStats: boolean;
     showSongInfo: boolean;
+    showScoreStats: boolean;
   };
 
   setIpAddress: (ipAddress: string) => void;
@@ -18,6 +19,7 @@ interface OverlaySettingsStore {
   setPlatform: (platform: string) => void;
   setShowPlayerStats: (showPlayerStats: boolean) => void;
   setShowSongInfo: (showSongInfo: boolean) => void;
+  setShowScoreStats: (showScoreStats: boolean) => void;
 }
 
 export const useOverlaySettingsStore = create<OverlaySettingsStore>()(
@@ -29,6 +31,7 @@ export const useOverlaySettingsStore = create<OverlaySettingsStore>()(
       settings: {
         showPlayerStats: true,
         showSongInfo: true,
+        showScoreStats: true,
       },
 
       setIpAddress(ipAddress: string) {
@@ -59,6 +62,14 @@ export const useOverlaySettingsStore = create<OverlaySettingsStore>()(
           settings: {
             ...get().settings,
             showSongInfo,
+          },
+        });
+      },
+      setShowScoreStats(showScoreStats: boolean) {
+        set({
+          settings: {
+            ...get().settings,
+            showScoreStats,
           },
         });
       },
