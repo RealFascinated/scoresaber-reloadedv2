@@ -109,7 +109,7 @@ export default function Analytics() {
               />
               <SwitchInput
                 id="show-score-stats"
-                label="Show Song Info"
+                label="Show Song Stats"
                 defaultChecked={settingsStore.settings.showScoreStats}
                 onChange={(value) => {
                   settingsStore.setShowScoreStats(value);
