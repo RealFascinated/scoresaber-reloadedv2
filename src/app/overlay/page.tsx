@@ -107,12 +107,16 @@ export default class Overlay extends Component<OverlayProps, OverlayState> {
     return (
       <main>
         <div>
-          <PlayerStats player={player} />
-          <ScoreStats />
+          {this.state.settings.settings.showPlayerStats && (
+            <PlayerStats player={player} />
+          )}
+          {this.state.settings.settings.showScoreStats && <ScoreStats />}
         </div>
-        <div className="absolute bottom-0 left-0">
-          <SongInfo />
-        </div>
+        {this.state.settings.settings.showSongInfo && (
+          <div className="absolute bottom-0 left-0">
+            <SongInfo />
+          </div>
+        )}
       </main>
     );
   }
