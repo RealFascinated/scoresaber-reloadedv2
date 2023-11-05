@@ -21,26 +21,26 @@ export default function SongInfo() {
         className="rounded-md"
         alt="Song Image"
         src={songInfo.art}
-        width={120}
-        height={120}
+        width={140}
+        height={140}
       />
       <div className="flex flex-col justify-between pb-2 pt-1">
         <div>
-          <p className="text-xl font-bold">
+          <p className="text-2xl font-bold">
             {songInfo.songName} {songInfo.songSubName}
           </p>
-          <p className="text-md">{songInfo.songMapper}</p>
+          <p className="text-xl">{songInfo.songMapper}</p>
         </div>
         <div className="mt-1 flex items-center gap-2">
           <p
-            className="text-md rounded-md p-[3px]"
+            className="rounded-md p-[3px] text-xl"
             style={{
               backgroundColor: songDifficultyToColor(songInfo.difficulty),
             }}
           >
             {songInfo.difficulty}
           </p>
-          <p className="text-md">!bsr {songInfo.bsr}</p>
+          <p className="text-xl">!bsr {songInfo.bsr}</p>
         </div>
       </div>
     </div>
