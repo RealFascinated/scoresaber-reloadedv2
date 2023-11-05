@@ -57,7 +57,7 @@ export default function LeaderboardScore({
           href={`/leaderboard/${leaderboard.id}/1`}
           className="transform-gpu transition-all hover:opacity-70"
         >
-          <div className="w-fit truncate text-blue-500">
+          <div className="w-fit truncate">
             <p className="font-bold">{player.name}</p>
           </div>
         </Link>
@@ -67,7 +67,7 @@ export default function LeaderboardScore({
         {/* PP */}
         {score.pp > 0 && (
           <ScoreStatLabel
-            className="bg-blue-500 text-center"
+            className="bg-pp-blue text-center"
             value={formatNumber(score.pp.toFixed(2)) + "pp"}
           />
         )}

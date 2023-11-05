@@ -118,7 +118,7 @@ export default function Leaderboard({ id, page }: LeaderboardProps) {
               <div className="flex">
                 <p>Stars:</p>
                 <StarIcon width={20} height={20} className="ml-1" />
-                <p>{stars}</p>
+                <p className="text-pp-blue">{stars}</p>
               </div>
               <p>
                 Plays: {formatNumber(plays)} ({dailyPlays} in the last day)
