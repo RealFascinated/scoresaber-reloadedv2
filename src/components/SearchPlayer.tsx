@@ -67,14 +67,14 @@ export default function SearchPlayer() {
 
       <div
         className={clsx(
-          "absolute z-20 mt-7 flex max-h-[200px] min-w-[14rem] flex-col divide-y overflow-y-auto rounded-md bg-gray-700 shadow-sm md:max-h-[300px]",
+          "absolute z-20 mt-7 flex max-h-[200px] min-w-[14rem] flex-col divide-y overflow-y-auto rounded-md bg-popover shadow-sm md:max-h-[300px]",
           players.length > 0 ? "flex" : "hidden",
         )}
       >
         {players.map((player: ScoresaberPlayer) => (
           <a
             key={player.id}
-            className="flex min-w-[14rem] items-center gap-2 rounded-md p-2 transition-all hover:bg-gray-600"
+            className="flex min-w-[14rem] items-center gap-2 p-2 transition-all hover:bg-background"
             href={`/player/${player.id}/top/1`}
           >
             <Avatar label="Account" size={40} url={player.profilePicture} />
