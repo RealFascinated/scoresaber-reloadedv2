@@ -25,7 +25,7 @@ module.exports = {
         "pp-blue": "hsl(var(--primary))",
       },
       textColor: {
-        primary: "hsl(var(--primary))",
+        primary: "hsl(var(--foreground))",
         "pp-blue": "#9fa8f3",
       },
       colors: {
