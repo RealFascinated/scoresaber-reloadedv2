@@ -59,10 +59,12 @@ export default class Overlay extends Component<OverlayProps, OverlayState> {
     const settings = JSON.parse(data);
     this.setState({ settings: settings });
 
-    this.updatePlayer(settings.accountId);
-    setInterval(() => {
-      this.updatePlayer(settings.accountId);
-    }, UPDATE_INTERVAL);
+    if (settings.settings.showPlayerStats) {
+      this.updatePlayer(settings.playerId);
+      setInterval(() => {
+        this.updatePlayer(settings.playerId);
+      }, UPDATE_INTERVAL);
+    }
   }
 
   render() {
@@ -70,7 +72,7 @@ export default class Overlay extends Component<OverlayProps, OverlayState> {
 
     if (!this.state.mounted || !player) {
       return (
-        <main className="flex items-center p-3">
+        <main className="flex items-center !bg-transparent p-3">
           <Spinner />
           <p className="text-xl">Loading player data</p>
         </main>
