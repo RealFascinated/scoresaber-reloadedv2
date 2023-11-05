@@ -148,7 +148,7 @@ export default function GlobalRanking({ page, country }: GlobalRankingProps) {
                     {players.map((player) => (
                       <tr
                         key={player.rank}
-                        className="border-b border-gray-800"
+                        className="border-b border-gray-700"
                       >
                         <PlayerRanking
                           showCountryFlag={country ? false : true}

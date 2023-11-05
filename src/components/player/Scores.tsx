@@ -128,7 +128,7 @@ export default function Scores({ playerData, page, sortType }: ScoresProps) {
             <Spinner />
           </div>
         ) : (
-          <div className="grid grid-cols-1 divide-y divide-gray-800">
+          <div className="grid grid-cols-1 divide-y divide-gray-700">
             {!scores.loading && scores.scores.length == 0 ? (
               <p className="text-red-400">{errorMessage}</p>
             ) : (
