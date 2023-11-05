@@ -137,6 +137,7 @@ export default function PlayerInfo({ playerData }: PlayerInfoProps) {
                     onClick={addFriend}
                     tooltip={<p>Add as Friend</p>}
                     icon={<UserIcon width={24} height={24} />}
+                    color="bg-green-500"
                   />
                 )}
 
@@ -145,6 +146,7 @@ export default function PlayerInfo({ playerData }: PlayerInfoProps) {
                     onClick={removeFriend}
                     tooltip={<p>Remove Friend</p>}
                     icon={<XMarkIcon width={24} height={24} />}
+                    color="bg-red-500"
                   />
                 )}
               </>
