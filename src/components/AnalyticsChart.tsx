@@ -43,10 +43,18 @@ export const options: any = {
         maxTicksLimit: 8,
         stepSize: 1,
       },
+      grid: {
+        // gray grid lines
+        color: "#252525",
+      },
     },
     x: {
       ticks: {
         autoSkip: true,
+      },
+      grid: {
+        // gray grid lines
+        color: "#252525",
       },
     },
   },
