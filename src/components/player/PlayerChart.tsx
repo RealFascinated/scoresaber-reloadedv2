@@ -77,7 +77,7 @@ export const options: any = {
         label(context: any) {
           switch (context.dataset.label) {
             case "Rank": {
-              return `Rank #${formatNumber(context.parsed.y.toFixed(0))}`;
+              return `Rank #${formatNumber(Number(context.parsed.y))}`;
             }
           }
         },

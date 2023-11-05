@@ -91,10 +91,10 @@ export default function Score({
                   </div>
                 </TooltipTrigger>
                 <TooltipContent>
-                  <div>
+                  <>
                     <p className="font-bold">Difficulty</p>
                     <p>{diffName}</p>
-                  </div>
+                  </>
                 </TooltipContent>
               </Tooltip>
             ) : (
