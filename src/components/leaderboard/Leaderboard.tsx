@@ -127,7 +127,7 @@ export default function Leaderboard({ id, page }: LeaderboardProps) {
           </div>
         </Card>
         <Card className="mt-2 h-fit">
-          <div className="mb-2 mt-2 flex justify-center gap-2">
+          <div className="mb-2 flex justify-center gap-2">
             {difficulties.map((diff) => {
               return (
                 <div
