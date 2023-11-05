@@ -5,6 +5,7 @@ import { useSettingsStore } from "@/store/settingsStore";
 import React from "react";
 import { TooltipProvider } from "./ui/Tooltip";
 import { ThemeProvider } from "./ui/theme-provider";
+
 const UPDATE_INTERVAL = 1000 * 60 * 5; // 5 minutes
 
 export default class AppProvider extends React.Component {

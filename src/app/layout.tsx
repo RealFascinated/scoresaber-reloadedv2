@@ -49,7 +49,7 @@ export default function RootLayout({
         src="https://analytics.fascinated.cc/js/script.js"
       />
 
-      <body className={clsx(font.className, "bg-black text-white")}>
+      <body className={clsx(font.className, "bg-black text-primary")}>
         <div className="fixed left-0 top-0 z-0 h-full w-full blur-sm">
           <Image
             className="object-fill object-center"

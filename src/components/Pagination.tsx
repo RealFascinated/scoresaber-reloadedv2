@@ -23,7 +23,7 @@ export default function Pagination(props: PaginationProps) {
   }
 
   return (
-    <div className="flex justify-center text-white">
+    <div className="flex justify-center text-primary">
       <nav>
         <ul className="flex items-center gap-2">
           {currentPage > 1 && (
@@ -60,7 +60,7 @@ export default function Pagination(props: PaginationProps) {
               <button
                 className={`rounded-md px-3 py-1 ${
                   pageNumber === currentPage
-                    ? "bg-blue-500 text-white"
+                    ? "bg-blue-500 text-primary"
                     : "bg-neutral-700 hover:opacity-80"
                 }`}
                 onClick={() => onPageChange(pageNumber)}
