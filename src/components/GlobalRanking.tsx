@@ -146,10 +146,7 @@ export default function GlobalRanking({ page, country }: GlobalRankingProps) {
                   </thead>
                   <tbody className="border-none">
                     {players.map((player) => (
-                      <tr
-                        key={player.rank}
-                        className="border-b border-gray-700"
-                      >
+                      <tr key={player.rank} className="border-b border-border">
                         <PlayerRanking
                           showCountryFlag={country ? false : true}
                           player={player}
@@ -165,7 +162,7 @@ export default function GlobalRanking({ page, country }: GlobalRankingProps) {
                   {players.map((player) => (
                     <div
                       key={player.rank}
-                      className="flex flex-col gap-2 rounded-md bg-gray-700 hover:bg-gray-600"
+                      className="flex flex-col gap-2 rounded-md bg-background"
                     >
                       <Link href={`/player/${player.id}/top/1`}>
                         <PlayerRankingMobile player={player} />
