@@ -33,15 +33,25 @@ export default function Analytics() {
           </CardTitle>
 
           <CardContent>
-            <p className="mb-2">
-              Confused on how to use this? Check out the{" "}
-              <span className="transform-gpu text-pp-blue transition-all hover:opacity-80">
-                <Link href={"https://www.youtube.com/watch?v=IjctLf1nX8w"}>
-                  tutorial
-                </Link>
-              </span>
-              .
-            </p>
+            <div className="mb-2">
+              <p>
+                Confused on how to use this? Check out the{" "}
+                <span className="transform-gpu text-pp-blue transition-all hover:opacity-80">
+                  <Link href={"https://www.youtube.com/watch?v=IjctLf1nX8w"}>
+                    tutorial
+                  </Link>
+                </span>
+                .
+              </p>
+              <p>
+                The overlay requires{" "}
+                <span className="transform-gpu text-pp-blue transition-all hover:opacity-80">
+                  <Link href={"https://github.com/denpadokei/HttpSiraStatus"}>
+                    HttpSiraStatus
+                  </Link>
+                </span>
+              </p>
+            </div>
 
             <Input
               id="ip-address"
