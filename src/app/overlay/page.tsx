@@ -7,7 +7,8 @@ import ScoreStats from "@/components/overlay/ScoreStats";
 import SongInfo from "@/components/overlay/SongInfo";
 import { Card, CardDescription, CardTitle } from "@/components/ui/card";
 import { HttpSiraStatus } from "@/overlay/httpSiraStatus";
-import { ScoresaberPlayer } from "@/schemas/scoresaber/player";
+import { OverlayPlayer } from "@/overlay/type/overlayPlayer";
+import { BeatLeaderAPI } from "@/utils/beatleader/api";
 import { ScoreSaberAPI } from "@/utils/scoresaber/api";
 import { Component } from "react";
 
@@ -17,7 +18,7 @@ interface OverlayProps {}
 
 interface OverlayState {
   mounted: boolean;
-  player: ScoresaberPlayer | undefined;
+  player: OverlayPlayer | undefined;
   settings: any | undefined;
 }
 
@@ -31,13 +32,44 @@ export default class Overlay extends Component<OverlayProps, OverlayState> {
     };
   }
 
-  updatePlayer = async (playerId: string) => {
+  updatePlayer = async (
+    playerId: string,
+    leaderboard: "scoresaber" | "beatleader" = "scoresaber",
+  ) => {
     console.log(`Updating player stats for ${playerId}`);
-    const player = await ScoreSaberAPI.fetchPlayerData(playerId);
-    if (!player) {
-      return;
+    if (leaderboard == "scoresaber") {
+      const player = await ScoreSaberAPI.fetchPlayerData(playerId);
+      if (!player) {
+        return;
+      }
+      this.setState({
+        player: {
+          id: player.id,
+          profilePicture: player.profilePicture,
+          country: player.country,
+          pp: player.pp,
+          rank: player.rank,
+          countryRank: player.countryRank,
+        },
+      });
     }
-    this.setState({ player });
+
+    if (leaderboard == "beatleader") {
+      const player = await BeatLeaderAPI.fetchPlayerData(playerId);
+      if (!player) {
+        return;
+      }
+      this.setState({
+        player: {
+          id: player.id,
+          profilePicture: player.avatar,
+          country: player.country,
+          pp: player.pp,
+          rank: player.rank,
+          countryRank: player.countryRank,
+        },
+      });
+    }
   };
 
   componentDidMount() {
@@ -60,9 +92,9 @@ export default class Overlay extends Component<OverlayProps, OverlayState> {
     this.setState({ settings: settings });
 
     if (settings.settings.showPlayerStats) {
-      this.updatePlayer(settings.accountId);
+      this.updatePlayer(settings.accountId, settings.platform);
       setInterval(() => {
-        this.updatePlayer(settings.accountId);
+        this.updatePlayer(settings.accountId, settings.platform);
       }, UPDATE_INTERVAL);
     }
   }
@@ -113,7 +145,7 @@ export default class Overlay extends Component<OverlayProps, OverlayState> {
       <main>
         <div>
           {this.state.settings.settings.showPlayerStats && player && (
-            <PlayerStats player={player} />
+            <PlayerStats player={player} settings={this.state.settings} />
           )}
           {this.state.settings.settings.showScoreStats && <ScoreStats />}
         </div>

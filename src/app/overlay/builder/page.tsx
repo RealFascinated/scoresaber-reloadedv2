@@ -79,10 +79,10 @@ export default function Analytics() {
                   id: "scoresaber",
                   value: "ScoreSaber",
                 },
-                // {
-                //   id: "beatleader",
-                //   value: "BeatLeader",
-                // },
+                {
+                  id: "beatleader",
+                  value: "BeatLeader",
+                },
               ]}
               onChange={(value) => {
                 settingsStore.setPlatform(value);
