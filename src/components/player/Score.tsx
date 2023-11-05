@@ -149,7 +149,7 @@ export default function Score({
           <div className="flex justify-end gap-2">
             {score.pp > 0 && (
               <ScoreStatLabel
-                className="bg-blue-500 text-center"
+                className="bg-pp-blue text-center"
                 value={formatNumber(score.pp.toFixed(2)) + "pp"}
                 tooltip={
                   <div>
