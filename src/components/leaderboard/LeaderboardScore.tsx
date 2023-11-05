@@ -21,14 +21,14 @@ export default function LeaderboardScore({
   const accuracy = ((score.baseScore / leaderboard.maxScore) * 100).toFixed(2);
 
   return (
-    <div className="mb-1 mt-1 grid grid-cols-[0.6fr_3fr_1.3fr] first:pt-0 last:pb-0 md:grid-cols-[1.28fr_6fr_1.3fr]">
+    <div className="mb-1 mt-1 grid grid-cols-[1.28fr_3fr_1.3fr] first:pt-0 last:pb-0 md:grid-cols-[1.28fr_6fr_1.3fr]">
       <div className="flex flex-col items-center justify-center">
         <div className="flex w-fit flex-row items-center justify-center gap-1">
           <p>#{formatNumber(score.rank)}</p>
         </div>
         <Tooltip>
           <TooltipTrigger>
-            <p className="hidden text-sm text-gray-200 md:block">
+            <p className="block text-sm text-gray-200">
               {formatTimeAgo(score.timeSet)}
             </p>
           </TooltipTrigger>
