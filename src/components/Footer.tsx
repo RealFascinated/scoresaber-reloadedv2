@@ -1,5 +1,6 @@
 import { ssrSettings } from "@/ssrSettings";
 import { isProduction } from "@/utils/utils";
+import Link from "next/link";
 import Card from "./Card";
 
 const buttons = [
@@ -49,7 +50,13 @@ export default function Footer() {
           </div>
         </div>
 
-        <div className="text-sm text-gray-400">Build ID: {buildId}</div>
+        <Link
+          className="transform-gpu text-sm text-gray-400 transition-all hover:opacity-80"
+          href={`https://git.fascinated.cc/Fascinated/scoresaber-reloaded-v2/commit/${buildId}`}
+          target="_blank"
+        >
+          Build ID: {buildId}
+        </Link>
       </Card>
     </footer>
   );
