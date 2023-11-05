@@ -46,7 +46,7 @@ function FriendsButton() {
         <NavbarButton
           ariaLabel="View your friends"
           text="Friends"
-          icon={<UserIcon height={20} width={20} />}
+          icon={<UserIcon height={23} width={23} />}
         />
       </PopoverTrigger>
       <PopoverContent className="p-2">
@@ -107,7 +107,7 @@ export default function Navbar() {
               <Avatar
                 url={settingsStore.player.profilePicture}
                 label="Your avatar"
-                size={20}
+                size={23}
               />
             }
             href={`/player/${settingsStore.player.id}/top/1`}
@@ -126,13 +126,13 @@ export default function Navbar() {
         <NavbarButton
           ariaLabel="View the global ranking"
           text="Ranking"
-          icon={<GlobeAltIcon height={20} width={20} />}
+          icon={<GlobeAltIcon height={23} width={23} />}
           href="/ranking/global/1"
         />
         <NavbarButton
           ariaLabel="View analytics for Scoresaber"
           text="Analytics"
-          icon={<ServerIcon height={20} width={20} />}
+          icon={<ServerIcon height={23} width={23} />}
           href="/analytics"
         />
 
@@ -141,13 +141,13 @@ export default function Navbar() {
         <NavbarButton
           ariaLabel="Search for a player"
           text="Search"
-          icon={<MagnifyingGlassIcon height={20} width={20} />}
+          icon={<MagnifyingGlassIcon height={23} width={23} />}
           href="/search"
         />
         <NavbarButton
           ariaLabel="View your settings"
           text="Settings"
-          icon={<CogIcon height={20} width={20} />}
+          icon={<CogIcon height={23} width={23} />}
           href="/settings"
         />
       </Card>
