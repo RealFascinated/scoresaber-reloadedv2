@@ -8,7 +8,7 @@ import {
   ServerIcon,
   UserIcon,
 } from "@heroicons/react/20/solid";
-import { GlobeAltIcon } from "@heroicons/react/24/outline";
+import { GlobeAltIcon, TvIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
 import Avatar from "./Avatar";
 import { Button } from "./ui/button";
@@ -128,6 +128,12 @@ export default function Navbar() {
           text="Ranking"
           icon={<GlobeAltIcon height={23} width={23} />}
           href="/ranking/global/1"
+        />
+        <NavbarButton
+          ariaLabel="View the overlay builder"
+          text="Overlay"
+          icon={<TvIcon height={23} width={23} />}
+          href="/overlay/builder"
         />
         <NavbarButton
           ariaLabel="View analytics for Scoresaber"

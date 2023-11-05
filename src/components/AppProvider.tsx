@@ -3,6 +3,7 @@
 import { useScoresaberScoresStore } from "@/store/scoresaberScoresStore";
 import { useSettingsStore } from "@/store/settingsStore";
 import React from "react";
+import { ToastContainer } from "react-toastify";
 import { TooltipProvider } from "./ui/Tooltip";
 import { ThemeProvider } from "./ui/theme-provider";
 
@@ -52,7 +53,15 @@ export default class AppProvider extends React.Component {
 
     return (
       <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
-        <TooltipProvider>{props.children}</TooltipProvider>
+        <TooltipProvider>
+          <ToastContainer
+            className="z-50"
+            position="top-right"
+            theme="dark"
+            pauseOnFocusLoss={false}
+          />
+          {props.children}
+        </TooltipProvider>
       </ThemeProvider>
     );
   }

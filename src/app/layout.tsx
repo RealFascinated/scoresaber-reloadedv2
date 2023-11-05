@@ -3,7 +3,6 @@ import { ssrSettings } from "@/ssrSettings";
 import clsx from "clsx";
 import { Metadata } from "next";
 import { Inter } from "next/font/google";
-import Image from "next/image";
 import Script from "next/script";
 import "react-toastify/dist/ReactToastify.css";
 import "./globals.css";
@@ -49,16 +48,7 @@ export default function RootLayout({
         src="https://analytics.fascinated.cc/js/script.js"
       />
 
-      <body className={clsx(font.className, "bg-black text-primary")}>
-        <div className="fixed left-0 top-0 z-0 h-full w-full blur-sm">
-          <Image
-            className="object-fill object-center"
-            alt="Background image"
-            src={"/assets/background.webp"}
-            fill
-          />
-        </div>
-
+      <body className={clsx(font.className, "text-primary")}>
         <AppProvider>{children}</AppProvider>
       </body>
     </html>
