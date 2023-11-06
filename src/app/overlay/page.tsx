@@ -19,7 +19,7 @@ interface OverlayProps {}
 interface OverlayState {
   mounted: boolean;
   player: OverlayPlayer | undefined;
-  settings: any | undefined;
+  config: any | undefined;
 }
 
 export default class Overlay extends Component<OverlayProps, OverlayState> {
@@ -28,7 +28,7 @@ export default class Overlay extends Component<OverlayProps, OverlayState> {
     this.state = {
       mounted: false,
       player: undefined,
-      settings: undefined,
+      config: undefined,
     };
   }
 
@@ -77,9 +77,6 @@ export default class Overlay extends Component<OverlayProps, OverlayState> {
       return;
     }
     this.setState({ mounted: true });
-    if (!this.state.mounted) {
-      HttpSiraStatus.connectWebSocket();
-    }
 
     const url = new URL(window.location.href);
     const searchParams = url.searchParams;
@@ -88,24 +85,26 @@ export default class Overlay extends Component<OverlayProps, OverlayState> {
     if (!data) {
       return;
     }
-    const settings = JSON.parse(data);
-    this.setState({ settings: settings });
+    const config = JSON.parse(data);
+    this.setState({ config: config });
+    const settings = config.settings;
 
-    if (settings.settings.showPlayerStats) {
-      this.updatePlayer(settings.accountId, settings.platform);
+    if (settings.showPlayerStats) {
+      this.updatePlayer(config.accountId, config.platform);
       setInterval(() => {
-        this.updatePlayer(settings.accountId, settings.platform);
+        this.updatePlayer(config.accountId, config.platform);
       }, UPDATE_INTERVAL);
+    }
+
+    if (settings.showScoreStats || settings.showSongInfo) {
+      HttpSiraStatus.connectWebSocket();
     }
   }
 
   render() {
-    const { player } = this.state;
+    const { player, config, mounted } = this.state;
 
-    if (
-      !this.state.mounted ||
-      (!player && this.state.settings.settings.showPlayerStats)
-    ) {
+    if (!mounted || (!player && config.settings.showPlayerStats)) {
       return (
         <main className="flex items-center !bg-transparent p-3">
           <Spinner />
@@ -114,7 +113,7 @@ export default class Overlay extends Component<OverlayProps, OverlayState> {
       );
     }
 
-    if (!this.state.settings) {
+    if (!config) {
       return (
         <main>
           <Container>
@@ -144,12 +143,12 @@ export default class Overlay extends Component<OverlayProps, OverlayState> {
     return (
       <main>
         <div>
-          {this.state.settings.settings.showPlayerStats && player && (
-            <PlayerStats player={player} settings={this.state.settings} />
+          {config.settings.showPlayerStats && player && (
+            <PlayerStats player={player} config={config} />
           )}
-          {this.state.settings.settings.showScoreStats && <ScoreStats />}
+          {config.settings.showScoreStats && <ScoreStats />}
         </div>
-        {this.state.settings.settings.showSongInfo && (
+        {config.settings.showSongInfo && (
           <div className="absolute bottom-0 left-0">
             <SongInfo />
           </div>

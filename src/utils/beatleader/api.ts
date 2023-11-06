@@ -28,9 +28,6 @@ async function fetchPlayerData(
   );
   const json = await response.json();
 
-  // Check if there was an error fetching the user data
-  console.log(json);
-
   return json as BeatLeaderPlayer;
 }
 
@@ -66,9 +63,6 @@ async function fetchScores(
     formatString(PLAYER_SCORES_URL, true, playerId, page),
   );
   const json = await response.json();
-
-  // Check if there was an error fetching the user data
-  console.log(json);
 
   const metadata = json.metadata;
   return {

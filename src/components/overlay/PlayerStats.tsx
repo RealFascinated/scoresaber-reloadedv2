@@ -6,7 +6,7 @@ import CountyFlag from "../CountryFlag";
 
 type PlayerStatsProps = {
   player: OverlayPlayer;
-  settings: any;
+  config: any;
 };
 
 const leaderboardImages: Record<string, string> = {
@@ -14,7 +14,7 @@ const leaderboardImages: Record<string, string> = {
   beatleader: "/assets/logos/beatleader.png",
 };
 
-export default function PlayerStats({ player, settings }: PlayerStatsProps) {
+export default function PlayerStats({ player, config }: PlayerStatsProps) {
   return (
     <div className="flex gap-2 p-2">
       <Image
@@ -28,7 +28,7 @@ export default function PlayerStats({ player, settings }: PlayerStatsProps) {
         <div className="flex gap-1">
           <Image
             alt="Leaderboard logo"
-            src={leaderboardImages[settings.platform]}
+            src={leaderboardImages[config.platform]}
             width={36}
             height={36}
           />
