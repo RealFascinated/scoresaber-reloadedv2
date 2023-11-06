@@ -12,7 +12,7 @@ export default function ScoreStats() {
   return (
     <div className="flex flex-col pl-2">
       <p className="text-2xl font-bold">{formatNumber(scoreStats.score)}</p>
-      <p className="text-2xl">Combo: {formatNumber(scoreStats.combo)}x</p>
+      <p className="text-2xl">{formatNumber(scoreStats.combo)}x</p>
       <p className="text-2xl">
         <span
           style={{
