@@ -18,7 +18,7 @@ export default function SongInfo() {
       )}
     >
       <Image
-        className="rounded-md"
+        className="rounded-lg"
         alt="Song Image"
         src={songInfo.art}
         width={140}

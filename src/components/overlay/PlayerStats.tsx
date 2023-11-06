@@ -19,7 +19,7 @@ export default function PlayerStats({ player, config }: PlayerStatsProps) {
     <div className="flex gap-2 p-2">
       <Image
         alt="Player profile picture"
-        className="rounded-md"
+        className="rounded-lg"
         src={player.profilePicture}
         width={180}
         height={180}
