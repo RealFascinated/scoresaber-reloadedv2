@@ -25,14 +25,14 @@ export default function PlayerStats({ player, settings }: PlayerStatsProps) {
         height={180}
       />
       <div>
-        <div className="flex gap-2">
+        <div className="flex gap-1">
           <Image
             alt="Leaderboard logo"
             src={leaderboardImages[settings.platform]}
             width={36}
             height={36}
           />
-          <p className="text-3xl font-bold">{formatNumber(player.pp, 2)}pp</p>
+          <p className="text-3xl">{formatNumber(player.pp, 2)}pp</p>
         </div>
         <div className="flex items-center gap-2">
           <GlobeAltIcon width={25} height={25} />
