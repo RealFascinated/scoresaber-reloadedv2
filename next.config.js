@@ -10,6 +10,13 @@ const nextConfig = {
   env: {
     NEXT_PUBLIC_BUILD_ID:
       process.env.GIT_REV || nextBuildId.sync({ dir: __dirname }),
+    NEXT_PUBLIC_BUILD_TIME: new Date().toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+      hour: "numeric",
+      minute: "numeric",
+    }),
   },
   images: {
     remotePatterns: [
@@ -58,6 +65,7 @@ module.exports = withBundleAnalyzer(nextConfig);
 // // Injected content via Sentry wizard below
 
 const { withSentryConfig } = require("@sentry/nextjs");
+const { format } = require("path");
 
 module.exports = withSentryConfig(
   module.exports,

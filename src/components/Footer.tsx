@@ -15,9 +15,14 @@ const buttons = [
 ];
 
 const buildId = process.env.NEXT_PUBLIC_BUILD_ID
-  ? process.env.NEXT_PUBLIC_BUILD_ID.slice(0, 7) +
-    (isProduction() ? "" : "-dev")
+  ? isProduction()
+    ? process.env.NEXT_PUBLIC_BUILD_ID.slice(0, 7)
+    : "dev"
   : "";
+const buildTime = process.env.NEXT_PUBLIC_BUILD_TIME;
+const gitUrl = isProduction()
+  ? `https://git.fascinated.cc/Fascinated/scoresaber-reloaded-v2/commit/${buildId}`
+  : "https://git.fascinated.cc/Fascinated/scoresaber-reloaded-v2";
 
 export default function Footer() {
   return (
@@ -52,10 +57,10 @@ export default function Footer() {
 
         <Link
           className="transform-gpu text-sm text-gray-400 transition-all hover:opacity-80"
-          href={`https://git.fascinated.cc/Fascinated/scoresaber-reloaded-v2/commit/${buildId}`}
+          href={gitUrl}
           target="_blank"
         >
-          Build ID: {buildId}
+          Build ID: {buildId} ({buildTime})
         </Link>
       </Card>
     </footer>

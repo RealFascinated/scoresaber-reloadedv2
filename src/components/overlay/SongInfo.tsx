@@ -14,7 +14,7 @@ export default function SongInfo() {
     <div
       className={clsx(
         "flex transform-gpu gap-2 p-2 transition-all",
-        paused ? "grayscale" : "grayscale-0",
+        paused ? "grayscale" : "grayscale-0", // make the song info grayscale when paused
       )}
     >
       <Image
