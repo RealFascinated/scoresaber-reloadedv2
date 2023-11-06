@@ -15,15 +15,6 @@ export function middleware(request: NextRequest) {
       return NextResponse.redirect(new URL("/search", request.url));
     }
   }
-
-  const requestHeaders = new Headers(request.headers);
-  requestHeaders.set("x-url", request.url);
-  return NextResponse.next({
-    request: {
-      // New request headers
-      headers: requestHeaders,
-    },
-  });
 }
 
 export const config = {

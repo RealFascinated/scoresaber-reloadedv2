@@ -49,30 +49,3 @@ export function getPageFromSearchQuery(
 
   return page;
 }
-
-/**
- * Gets the users locales from the browser
- *
- * @param options the options to use
- * @returns the browser locales
- */
-export function getBrowserLocales(options = {}) {
-  const defaultOptions = {
-    languageCodeOnly: false,
-  };
-  const opt = {
-    ...defaultOptions,
-    ...options,
-  };
-  const browserLocales =
-    navigator.languages === undefined
-      ? [navigator.language]
-      : navigator.languages;
-  if (!browserLocales) {
-    return undefined;
-  }
-  return browserLocales.map((locale) => {
-    const trimmedLocale = locale.trim();
-    return opt.languageCodeOnly ? trimmedLocale.split(/-|_/)[0] : trimmedLocale;
-  });
-}
