@@ -29,7 +29,7 @@ export default function SongInfo() {
           <p className="text-2xl font-bold">
             {songInfo.songName} {songInfo.songSubName}
           </p>
-          <p className="text-xl">{songInfo.songMapper}</p>
+          <p className="text-2xl text-gray-300">{songInfo.songMapper}</p>
         </div>
         <div className="mt-1 flex items-center gap-2">
           <p
