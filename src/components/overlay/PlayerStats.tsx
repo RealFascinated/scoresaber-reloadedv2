@@ -32,6 +32,7 @@ export default function PlayerStats({ player, config }: PlayerStatsProps) {
             src={leaderboardImages[config.platform]}
             width={36}
             height={36}
+            priority
           />
           <p className="text-3xl">{formatNumber(player.pp, 2)}pp</p>
         </div>
