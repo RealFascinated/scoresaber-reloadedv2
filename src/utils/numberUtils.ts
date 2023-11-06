@@ -1,3 +1,5 @@
+import { getBrowserLocales } from "./utils";
+
 /**
  * Checks if the given value is an number.
  *
@@ -24,7 +26,7 @@ export function formatNumber(number: any, decimals?: number) {
   if (typeof number !== "number") {
     return number;
   }
-  return number.toLocaleString(undefined, {
+  return number.toLocaleString(getBrowserLocales(), {
     minimumFractionDigits: decimals,
     maximumFractionDigits: decimals,
   });
