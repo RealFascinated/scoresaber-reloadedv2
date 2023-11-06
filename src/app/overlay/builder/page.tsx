@@ -10,13 +10,14 @@ import { Label } from "@/components/ui/label";
 import { useOverlaySettingsStore } from "@/store/overlaySettingsStore";
 import useStore from "@/utils/useStore";
 import Link from "next/link";
+import { toast } from "react-toastify";
 
 /**
  * Opens the overlay with the current settings
  *
  * @param settings the settings to pass to the overlay
  */
-function goToOverlay(settings: any) {
+function openOverlay(settings: any) {
   window.open(`/overlay?data=${JSON.stringify(settings)}`, "_blank");
 }
 
@@ -120,7 +121,15 @@ export default function Analytics() {
             <Button
               className="mt-3"
               onClick={() => {
-                goToOverlay(settingsStore);
+                if (!settingsStore.ipAddress) {
+                  toast.error("No IP Address provided");
+                  return;
+                }
+                if (!settingsStore.accountId) {
+                  toast.error("No Account ID provided");
+                  return;
+                }
+                openOverlay(settingsStore);
               }}
             >
               Open Overlay
