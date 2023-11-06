@@ -26,9 +26,7 @@ export default function SongInfo() {
       />
       <div className="flex flex-col justify-between pb-2 pt-1">
         <div>
-          <p className="text-2xl font-bold">
-            {songInfo.songName} {songInfo.songSubName}
-          </p>
+          <p className="text-2xl font-bold">{songInfo.songName}</p>
           <p className="text-2xl text-gray-300">{songInfo.songMapper}</p>
         </div>
         <div className="mt-1 flex items-center gap-2">
