@@ -65,7 +65,6 @@ module.exports = withBundleAnalyzer(nextConfig);
 // // Injected content via Sentry wizard below
 
 const { withSentryConfig } = require("@sentry/nextjs");
-const { format } = require("path");
 
 module.exports = withSentryConfig(
   module.exports,

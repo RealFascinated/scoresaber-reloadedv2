@@ -17,7 +17,11 @@ ENV NEXT_TELEMETRY_DISABLED 1
 ARG GIT_REV
 ENV GIT_REV ${GIT_REV}
 
+# Build the app
 RUN npm run build
+
+# Generate sitemap
+RUN npm run generate-sitemap
 
 # Run the app
 FROM base AS runner
@@ -37,11 +41,6 @@ COPY --from=builder --chown=nextjs:nodejs /app/.next ./.next
 COPY --from=builder --chown=nextjs:nodejs /app/public ./public
 COPY --from=builder --chown=nextjs:nodejs /app/package.json ./package.json
 COPY --from=builder --chown=nextjs:nodejs /app/next.config.js ./next.config.js
-COPY --from=builder --chown=nextjs:nodejs /app/next-sitemap.config.js ./next-sitemap.config.js
-COPY --from=builder --chown=nextjs:nodejs /app/src/ssrSettings.json ./src/ssrSettings.json
-
-# Generate sitemap
-RUN npm run generate-sitemap
 
 USER nextjs
 EXPOSE 80
