@@ -19,8 +19,8 @@ export default function Home() {
         >
           <UnknownAvatar />
 
-          <p className="text-xl">Stranger</p>
-          <p className="text mt-2">Find a player profile</p>
+          <h1 className="text-xl">Search Player</h1>
+          <p className="text mt-2 text-gray-300">Find yourself or a friend</p>
 
           <SearchPlayer />
         </Card>
