@@ -18,6 +18,12 @@ async function getTopPlayers() {
   return players;
 }
 
+const additionalData = {
+  priority: 0.5,
+  changefreq: "monthly",
+  lastmod: new Date().toISOString(),
+};
+
 /** @type {import('next-sitemap').IConfig} */
 module.exports = {
   siteUrl: ssrSettings.siteUrl,
@@ -28,6 +34,7 @@ module.exports = {
     for (let i = 0; i < 50; i++) {
       paths.push({
         loc: `/ranking/global/${i + 1}`,
+        ...additionalData,
       });
     }
 
@@ -37,6 +44,7 @@ module.exports = {
       for (let i = 0; i < 50; i++) {
         paths.push({
           loc: `/ranking/country/${country}/${i + 1}`,
+          ...additionalData,
         });
       }
     }
@@ -46,6 +54,7 @@ module.exports = {
     for (const player of players) {
       paths.push({
         loc: `/player/${player.id}/top/1`,
+        ...additionalData,
       });
     }
 
