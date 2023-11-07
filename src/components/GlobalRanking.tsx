@@ -125,7 +125,8 @@ export default function GlobalRanking({ page, country }: GlobalRankingProps) {
                 <p>
                   You are viewing{" "}
                   {country
-                    ? "scores from " + normalizedRegionName(country)
+                    ? "scores from " +
+                      normalizedRegionName(country.toUpperCase())
                     : "Global scores"}
                 </p>
               </div>

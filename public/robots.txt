@@ -1,2 +1,9 @@
+# *
 User-agent: *
 Allow: /
+
+# Host
+Host: https://ssr.fascinated.cc
+
+# Sitemaps
+Sitemap: https://ssr.fascinated.cc/sitemap.xml

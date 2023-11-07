@@ -1,5 +1,5 @@
 import PlayerPage from "@/components/player/PlayerPage";
-import { ssrSettings } from "@/ssrSettings";
+import ssrSettings from "@/ssrSettings.json";
 import { formatNumber } from "@/utils/numberUtils";
 import { ScoreSaberAPI } from "@/utils/scoresaber/api";
 import { normalizedRegionName } from "@/utils/utils";

@@ -1,5 +1,5 @@
 import { BeatsaverMap } from "@/schemas/beatsaver/BeatsaverMap";
-import { ssrSettings } from "@/ssrSettings";
+import ssrSettings from "@/ssrSettings.json";
 import { FetchQueue } from "../fetchWithQueue";
 import { formatString } from "../string";
 

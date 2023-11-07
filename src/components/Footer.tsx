@@ -1,4 +1,4 @@
-import { ssrSettings } from "@/ssrSettings";
+import ssrSettings from "@/ssrSettings.json";
 import { isProduction } from "@/utils/utils";
 import Link from "next/link";
 import Card from "./Card";

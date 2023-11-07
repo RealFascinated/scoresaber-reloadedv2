@@ -2,7 +2,7 @@ import { ScoresaberLeaderboardInfo } from "@/schemas/scoresaber/leaderboard";
 import { ScoresaberPlayer } from "@/schemas/scoresaber/player";
 import { ScoresaberPlayerScore } from "@/schemas/scoresaber/playerScore";
 import { ScoresaberScore } from "@/schemas/scoresaber/score";
-import { ssrSettings } from "@/ssrSettings";
+import ssrSettings from "@/ssrSettings.json";
 import { FetchQueue } from "../fetchWithQueue";
 import { formatString } from "../string";
 

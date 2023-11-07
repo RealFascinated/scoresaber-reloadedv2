@@ -1,6 +1,6 @@
 import { BeatLeaderPlayer } from "@/schemas/beatleader/player";
 import { BeatleaderScore } from "@/schemas/beatleader/score";
-import { ssrSettings } from "@/ssrSettings";
+import ssrSettings from "@/ssrSettings.json";
 import { FetchQueue } from "../fetchWithQueue";
 import { formatString } from "../string";
 

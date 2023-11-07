@@ -1,5 +1,5 @@
 import AppProvider from "@/components/AppProvider";
-import { ssrSettings } from "@/ssrSettings";
+import ssrSettings from "@/ssrSettings.json";
 import clsx from "clsx";
 import { Metadata } from "next";
 import { Inter } from "next/font/google";
