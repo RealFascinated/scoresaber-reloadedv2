@@ -38,6 +38,7 @@ COPY --from=builder --chown=nextjs:nodejs /app/public ./public
 COPY --from=builder --chown=nextjs:nodejs /app/package.json ./package.json
 COPY --from=builder --chown=nextjs:nodejs /app/next.config.js ./next.config.js
 COPY --from=builder --chown=nextjs:nodejs /app/next-sitemap.config.js ./next-sitemap.config.js
+COPY --from=builder --chown=nextjs:nodejs /app/src/ssrSettings.json ./src/ssrSettings.json
 
 # Generate sitemap
 RUN npm run generate-sitemap
