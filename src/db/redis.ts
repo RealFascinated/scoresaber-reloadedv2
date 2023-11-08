@@ -8,10 +8,7 @@ async function connectRedis(): Promise<any> {
     url: process.env.REDIS_URL,
   });
   await client.connect();
-
-  client.on("connect", () => {
-    console.log("Connected to redis");
-  });
+  console.log("Connected to redis");
 
   client.on("error", (error) => {
     console.error("There was an error connecting to redis: " + error);
