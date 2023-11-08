@@ -3,38 +3,38 @@ import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/Tooltip";
 
 interface ButtonProps {
   text?: JSX.Element | string;
-  url?: string;
   icon?: JSX.Element;
   color?: string;
   tooltip?: React.ReactNode;
   className?: string;
+  ariaLabel?: string;
   onClick?: () => void;
 }
 
 export default function Button({
   text,
-  url,
   icon,
   color,
   tooltip,
   className,
+  ariaLabel = "Default button label",
   onClick,
 }: ButtonProps) {
   if (!color) color = "bg-blue-500";
 
   const base = (
-    <a href={url} onClick={onClick}>
-      <p
-        className={clsx(
-          "font-md flex w-fit transform-gpu flex-row items-center gap-1 rounded-md p-1 transition-all hover:opacity-80",
-          className,
-          color,
-        )}
-      >
-        {icon}
-        {text}
-      </p>
-    </a>
+    <button
+      className={clsx(
+        "flex items-center justify-center gap-2 rounded-md px-4 py-2",
+        color,
+        className,
+      )}
+      onClick={onClick}
+      aria-label={ariaLabel}
+    >
+      {icon}
+      {text}
+    </button>
   );
 
   if (tooltip) {
