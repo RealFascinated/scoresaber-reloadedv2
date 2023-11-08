@@ -64,21 +64,6 @@ export default function GlobalRanking({
                 ))}
               </tbody>
             </table>
-            {/* 
-              {isMobile && (
-                <div className="flex flex-col gap-2">
-                  {players.map((player) => (
-                    <div
-                      key={player.rank}
-                      className="flex flex-col gap-2 rounded-md bg-background"
-                    >
-                      <Link href={`/player/${player.id}/top/1`}>
-                        <PlayerRankingMobile player={player} />
-                      </Link>
-                    </div>
-                  ))}
-                </div>
-              )} */}
 
             {/* Pagination */}
             <div className="flex w-full flex-row justify-center">

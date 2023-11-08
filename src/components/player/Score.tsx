@@ -74,7 +74,7 @@ export default function Score({
             className="h-fit min-w-[60px] rounded-md"
             width={60}
             height={60}
-            loading="lazy"
+            priority
           />
           <div
             className="absolute mt-12 flex w-[55px] cursor-default items-center justify-center divide-x divide-y rounded-sm pl-[3px] pr-[3px] text-[0.8rem] opacity-90"

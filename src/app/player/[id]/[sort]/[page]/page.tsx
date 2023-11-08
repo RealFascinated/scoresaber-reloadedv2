@@ -69,15 +69,21 @@ export async function generateMetadata({
  * @param id the player's id
  * @returns the player's data
  */
-async function getData(id: string) {
-  const response = await ScoreSaberAPI.fetchPlayerData(id);
+async function getData(id: string, page: number, sort: string) {
+  const playerData = await ScoreSaberAPI.fetchPlayerData(id);
+  const playerScores = await ScoreSaberAPI.fetchScores(id, page, sort, 10);
   return {
-    data: response,
+    playerData: playerData,
+    playerScores: playerScores,
   };
 }
 
 export default async function Player({ params: { id, sort, page } }: Props) {
-  const { data: player } = await getData(id);
+  const { playerData: player, playerScores } = await getData(
+    id,
+    Number(page),
+    sort,
+  );
   if (!player) {
     return (
       <main>
@@ -130,7 +136,12 @@ export default async function Player({ params: { id, sort, page } }: Props) {
             </Suspense>
           </div>
         </Card>
-        <Scores playerData={player} page={Number(page)} sortType={sortType} />
+        <Scores
+          initalScores={playerScores?.scores}
+          initalPage={Number(page)}
+          playerData={player}
+          initalSortType={sortType}
+        />
       </Container>
     </main>
   );
