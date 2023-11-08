@@ -136,6 +136,7 @@ export default function PlayerInfo({ playerData }: PlayerInfoProps) {
                     onClick={claimProfile}
                     tooltip={<p>Set as your Profile</p>}
                     icon={<HomeIcon width={24} height={24} />}
+                    ariaLabel="Set as your Profile"
                   />
                 )}
 
@@ -147,6 +148,7 @@ export default function PlayerInfo({ playerData }: PlayerInfoProps) {
                         tooltip={<p>Add as Friend</p>}
                         icon={<UserIcon width={24} height={24} />}
                         color="bg-green-500"
+                        ariaLabel="Add Friend"
                       />
                     )}
 
@@ -156,6 +158,7 @@ export default function PlayerInfo({ playerData }: PlayerInfoProps) {
                         tooltip={<p>Remove Friend</p>}
                         icon={<XMarkIcon width={24} height={24} />}
                         color="bg-red-500"
+                        ariaLabel="Remove Friend"
                       />
                     )}
                   </>
