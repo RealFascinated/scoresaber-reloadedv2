@@ -176,7 +176,7 @@ async function fetchScoresWithBeatsaverData(
   });
   const mapJson = await mapResponse.json();
   for (const score of scores) {
-    const mapData = mapJson[score.leaderboard.songHash];
+    const mapData = mapJson.maps[score.leaderboard.songHash];
     if (mapData) {
       scoresWithBeatsaverData[score.leaderboard.songHash] = {
         score: score.score,

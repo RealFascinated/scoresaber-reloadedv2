@@ -1,7 +1,8 @@
+import { Redis } from "@/db/redis";
 import { BeatsaverMap } from "@/schemas/beatsaver/BeatsaverMap";
 import { BeatsaverAPI } from "@/utils/beatsaver/api";
 
-const mapCache = new Map<string, BeatsaverMap>();
+await Redis.connectRedis();
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
@@ -10,24 +11,41 @@ export async function GET(request: Request) {
     return new Response("mapHashes parameter is required", { status: 400 });
   }
   const idOnly = searchParams.get("idonly") === "true";
+  let totalInCache = 0;
 
   const maps: Record<string, BeatsaverMap | { id: string }> = {};
   for (const mapHash of mapHashes) {
-    if (mapCache.has(mapHash)) {
-      maps[mapHash] = mapCache.get(mapHash)!;
+    const cachedMap = await (
+      await Redis.client
+    ).get(`beatsaver:map:${mapHash}`);
+    if (cachedMap) {
+      maps[mapHash] = JSON.parse(cachedMap);
+      totalInCache++;
     } else {
       const map = await BeatsaverAPI.fetchMapByHash(mapHash);
-      if (map) {
-        maps[mapHash] = map;
-        mapCache.set(mapHash, map);
+      if (!map) {
+        continue;
       }
-      if (map && idOnly) {
-        maps[mapHash] = { id: map.id };
-      }
+      maps[mapHash] = map;
+      await (
+        await Redis.client
+      ).set("beatsaver:map:" + mapHash, JSON.stringify(map), {
+        EX: 60 * 60 * 24 * 7, // 7 days
+      });
+    }
+
+    if (idOnly) {
+      maps[mapHash] = { id: (maps[mapHash] as BeatsaverMap).id };
     }
   }
 
-  return new Response(JSON.stringify(maps), {
-    headers: { "content-type": "application/json;charset=UTF-8" },
-  });
+  return new Response(
+    JSON.stringify({
+      maps,
+      totalInCache,
+    }),
+    {
+      headers: { "content-type": "application/json;charset=UTF-8" },
+    },
+  );
 }
