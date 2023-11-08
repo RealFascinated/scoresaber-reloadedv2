@@ -2,12 +2,19 @@ import { ScoresaberPlayer } from "@/schemas/scoresaber/player";
 import { formatNumber } from "@/utils/numberUtils";
 import { normalizedRegionName } from "@/utils/utils";
 import { GlobeAsiaAustraliaIcon } from "@heroicons/react/20/solid";
+import dynamic from "next/dynamic";
+import { Fragment, Suspense } from "react";
 import Avatar from "../Avatar";
 import Card from "../Card";
 import CountyFlag from "../CountryFlag";
 import Label from "../Label";
-import PlayerInfoExtraLabels from "./PlayerInfoExtraLabels";
+
+/**
+ * import PlayerInfoExtraLabels from "./PlayerInfoExtraLabels";
 import PlayerSettingsButtons from "./PlayerSettingsButtons";
+ */
+const PlayerInfoExtraLabels = dynamic(() => import("./PlayerInfoExtraLabels"));
+const PlayerSettingsButtons = dynamic(() => import("./PlayerSettingsButtons"));
 
 type PlayerInfoProps = {
   playerData: ScoresaberPlayer;
@@ -28,7 +35,11 @@ export default function PlayerInfo({ playerData }: PlayerInfoProps) {
 
           {/* Settings Buttons */}
           <div className="absolute right-3 top-20 flex flex-col justify-end gap-2 md:relative md:right-0 md:top-0 md:mt-2 md:flex-row md:justify-center">
-            <PlayerSettingsButtons playerData={playerData} />
+            <Fragment>
+              <Suspense>
+                <PlayerSettingsButtons playerData={playerData} />
+              </Suspense>
+            </Fragment>
           </div>
         </div>
 
@@ -125,7 +136,11 @@ export default function PlayerInfo({ playerData }: PlayerInfoProps) {
               value={formatNumber(scoreStats.replaysWatched)}
             />
 
-            <PlayerInfoExtraLabels playerId={playerData.id} />
+            <Fragment>
+              <Suspense>
+                <PlayerInfoExtraLabels playerId={playerData.id} />
+              </Suspense>
+            </Fragment>
           </div>
         </div>
       </div>

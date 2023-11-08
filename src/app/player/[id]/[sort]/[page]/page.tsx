@@ -1,6 +1,5 @@
 import Card from "@/components/Card";
 import Container from "@/components/Container";
-import PlayerChart from "@/components/player/PlayerChart";
 import PlayerInfo from "@/components/player/PlayerInfo";
 import Scores from "@/components/player/Scores";
 import {
@@ -15,7 +14,11 @@ import { ScoreSaberAPI } from "@/utils/scoresaber/api";
 import { normalizedRegionName } from "@/utils/utils";
 import clsx from "clsx";
 import { Metadata } from "next";
+import dynamic from "next/dynamic";
 import Image from "next/image";
+import { Fragment, Suspense } from "react";
+
+const PlayerChart = dynamic(() => import("@/components/player/PlayerChart"));
 
 const DEFAULT_SORT_TYPE = SortTypes.top;
 
@@ -129,7 +132,11 @@ export default async function Player({ params: { id, sort, page } }: Props) {
             })}
           </div>
           <div className="h-[320px] w-full">
-            <PlayerChart scoresaber={player} />
+            <Fragment>
+              <Suspense>
+                <PlayerChart scoresaber={player} />
+              </Suspense>
+            </Fragment>
           </div>
         </Card>
         <Scores
