@@ -120,13 +120,6 @@ function calcRawPpAtIdx(
  * @param expectedPp the expected pp
  * @returns the pp boundary (+ per raw pp)
  */
-/**
- * Gets the amount of raw pp needed to gain the expected pp
- *
- * @param playerId the player id
- * @param expectedPp the expected pp
- * @returns the pp boundary (+ per raw pp)
- */
 export function calcPpBoundary(playerId: string, expectedPp = 1) {
   const state = useScoresaberScoresStore.getState();
   const player = state.players.find((p) => p.id === playerId);

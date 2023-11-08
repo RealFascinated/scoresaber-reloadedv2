@@ -1,6 +1,5 @@
 import Card from "@/components/Card";
 import Container from "@/components/Container";
-import PlayerChart from "@/components/player/PlayerChart";
 import PlayerInfo from "@/components/player/PlayerInfo";
 import Scores from "@/components/player/Scores";
 import {
@@ -128,9 +127,9 @@ export default async function Player({ params: { id, sort, page } }: Props) {
               );
             })}
           </div>
-          <div className="h-[320px] w-full">
+          {/* <div className="h-[320px] w-full">
             <PlayerChart scoresaber={player} />
-          </div>
+          </div> */}
         </Card>
         <Scores
           initalScores={playerScores?.scores}
