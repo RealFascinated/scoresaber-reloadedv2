@@ -2,7 +2,7 @@ import AppProvider from "@/components/AppProvider";
 import { ThemeProvider } from "@/components/ui/theme-provider";
 import ssrSettings from "@/ssrSettings.json";
 import clsx from "clsx";
-import { Metadata } from "next";
+import { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
 import Script from "next/script";
 import "react-toastify/dist/ReactToastify.css";
@@ -10,9 +10,7 @@ import "./globals.css";
 
 const font = Inter({ subsets: ["latin-ext"], weight: "500" });
 
-// TODO: use type when NextJS fixes the type:
-// export const viewport: Viewport = {
-export const viewport: any = {
+export const viewport: Viewport = {
   themeColor: "#3B82F6",
 };
 
@@ -47,9 +45,9 @@ export default function RootLayout({
     <html lang="en">
       <Script
         id="plausible"
-        defer
         data-domain="ssr.fascinated.cc"
         src="https://analytics.fascinated.cc/js/script.js"
+        defer
       />
 
       <body className={clsx(font.className, "text-primary")}>
