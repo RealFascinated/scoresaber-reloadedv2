@@ -4,10 +4,11 @@ const { getCodeList } = require("country-list");
 const SS_API_URL = ssrSettings.proxy + "/https://scoresaber.com/api";
 const SS_GET_PLAYERS_URL = SS_API_URL + "/players?page={}";
 
+// todo: cache this somehow?
 async function getTopPlayers() {
   console.log("Fetching top players...");
   const players = [];
-  const pagesToFetch = 25;
+  const pagesToFetch = 30;
   for (let i = 0; i < pagesToFetch; i++) {
     console.log(`Fetching page ${i + 1} of ${pagesToFetch}...`);
     const response = await fetch(SS_GET_PLAYERS_URL.replace("{}", i));
@@ -49,13 +50,19 @@ module.exports = {
       }
     }
 
+    const sortTypes = ["top", "recent"];
+
     // Add top players
     const players = await getTopPlayers();
-    for (const player of players) {
-      paths.push({
-        loc: `/player/${player.id}/top/1`,
-        ...additionalData,
-      });
+    for (const sortType of sortTypes) {
+      for (const player of players) {
+        for (let i = 0; i < 5; i++) {
+          paths.push({
+            loc: `/player/${player.id}/${sortType}/${i + 1}`,
+            ...additionalData,
+          });
+        }
+      }
     }
 
     return paths;
