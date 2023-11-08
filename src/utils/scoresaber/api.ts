@@ -162,24 +162,28 @@ async function fetchScoresWithBeatsaverData(
     string,
     ScoresaberScoreWithBeatsaverData
   > = {};
+
+  let url = `${
+    isProduction() ? ssrSettings.siteUrl : "http://localhost:3000"
+  }/api/beatsaver/mapdata?hashes=`;
   for (const score of scores) {
-    const mapResponse = await fetch(
-      `${
-        isProduction() ? ssrSettings.siteUrl : "http://localhost:3000"
-      }/api/beatsaver/mapdata?hashes=${score.leaderboard.songHash}&idonly=true`,
-      {
-        next: {
-          revalidate: 60 * 60 * 24 * 7, // 1 week
-        },
-      },
-    );
-    const mapData = await mapResponse.json();
-    const mapId = mapData[score.leaderboard.songHash].id;
-    scoresWithBeatsaverData[score.score.id] = {
-      score: score.score,
-      leaderboard: score.leaderboard,
-      mapId: mapId,
-    };
+    url += `${score.leaderboard.songHash},`;
+  }
+  const mapResponse = await fetch(url, {
+    next: {
+      revalidate: 60 * 60 * 24 * 7, // 1 week
+    },
+  });
+  const mapJson = await mapResponse.json();
+  for (const score of scores) {
+    const mapData = mapJson[score.leaderboard.songHash];
+    if (mapData) {
+      scoresWithBeatsaverData[score.leaderboard.songHash] = {
+        score: score.score,
+        leaderboard: score.leaderboard,
+        mapId: mapData.id,
+      };
+    }
   }
 
   return {

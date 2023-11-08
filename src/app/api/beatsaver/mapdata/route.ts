@@ -19,14 +19,15 @@ export async function GET(request: Request) {
       const map = await BeatsaverAPI.fetchMapByHash(mapHash);
       if (map) {
         maps[mapHash] = map;
+        mapCache.set(mapHash, map);
       }
       if (map && idOnly) {
         maps[mapHash] = { id: map.id };
       }
     }
-
-    return new Response(JSON.stringify(maps), {
-      headers: { "content-type": "application/json;charset=UTF-8" },
-    });
   }
+
+  return new Response(JSON.stringify(maps), {
+    headers: { "content-type": "application/json;charset=UTF-8" },
+  });
 }
