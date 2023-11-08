@@ -13,7 +13,7 @@ export default function CopyBsrButton({ mapId }: CopyBsrButtonProps) {
     <Tooltip>
       <TooltipTrigger>
         <Button
-          className="h-[30px] w-[30px] p-1"
+          className="h-[30px] w-[30px] bg-neutral-700 p-1"
           variant={"secondary"}
           onClick={() => {
             navigator.clipboard.writeText(`!bsr ${mapId}`);
