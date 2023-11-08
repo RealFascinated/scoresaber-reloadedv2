@@ -11,8 +11,19 @@ const nextConfig = {
   experimental: {
     webpackBuildWorker: true,
     optimizeCss: true,
+    optimizePackageImports: [
+      "react",
+      "react-dom",
+      "next-themes",
+      "react-tostify",
+      "websocket",
+      "cslx",
+      "chart.js",
+      "react-chartjs-2",
+      "country-list",
+      "@sentry/nextjs",
+    ],
   },
-  output: "standalone",
   compress: false,
   poweredByHeader: false,
   env: {
