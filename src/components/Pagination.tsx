@@ -31,13 +31,13 @@ export default function Pagination(props: PaginationProps) {
           {currentPage > 1 && (
             <li className="rounded-md bg-neutral-700 hover:opacity-80">
               {useHref ? (
-                <Link href={`?page=${currentPage - 1}`}>
-                  <a
+                <Link href={`${currentPage - 1}`}>
+                  <p
                     className="px-3 py-1"
                     aria-label={`Page ${currentPage - 1} (previous page)`}
                   >
                     <ArrowUturnLeftIcon width={20} height={20} />
-                  </a>
+                  </p>
                 </Link>
               ) : (
                 <button
@@ -55,13 +55,13 @@ export default function Pagination(props: PaginationProps) {
             <>
               <li>
                 {useHref ? (
-                  <Link href={`?page=1`}>
-                    <a
+                  <Link href={`${1}`}>
+                    <p
                       className="rounded-md bg-neutral-700 px-3 py-1 hover:opacity-80"
                       aria-label="Page 1 (first page)"
                     >
                       1
-                    </a>
+                    </p>
                   </Link>
                 ) : (
                   <button
@@ -82,8 +82,8 @@ export default function Pagination(props: PaginationProps) {
           {pageNumbers.map((pageNumber) => (
             <li key={pageNumber}>
               {useHref ? (
-                <Link href={`?page=${pageNumber}`}>
-                  <a
+                <Link href={`${pageNumber}`}>
+                  <p
                     className={`rounded-md px-3 py-1 ${
                       pageNumber === currentPage
                         ? "bg-blue-500 text-primary"
@@ -92,7 +92,7 @@ export default function Pagination(props: PaginationProps) {
                     aria-label={`Page ${pageNumber}`}
                   >
                     {pageNumber}
-                  </a>
+                  </p>
                 </Link>
               ) : (
                 <button
@@ -118,13 +118,13 @@ export default function Pagination(props: PaginationProps) {
 
               <li>
                 {useHref ? (
-                  <Link href={`?page=${totalPages}`}>
-                    <a
+                  <Link href={`${totalPages}`}>
+                    <p
                       className="rounded-md bg-neutral-700 px-3 py-1 hover:opacity-80"
                       aria-label={`Page ${totalPages} (last page)`}
                     >
                       {totalPages}
-                    </a>
+                    </p>
                   </Link>
                 ) : (
                   <button
@@ -142,13 +142,13 @@ export default function Pagination(props: PaginationProps) {
           {currentPage < totalPages && (
             <li className="rounded-md bg-neutral-700 hover:opacity-80">
               {useHref ? (
-                <Link href={`?page=${currentPage + 1}`}>
-                  <a
+                <Link href={`${currentPage + 1}`}>
+                  <p
                     className="px-3 py-1"
                     aria-label={`Page ${currentPage + 1} (next page)`}
                   >
                     <ArrowUturnRightIcon width={20} height={20} />
-                  </a>
+                  </p>
                 </Link>
               ) : (
                 <button

@@ -10,7 +10,6 @@ const nextConfig = {
   swcMinify: true,
   experimental: {
     webpackBuildWorker: true,
-    optimizeCss: true,
     optimizePackageImports: [
       "react",
       "react-dom",
