@@ -2,8 +2,6 @@ import { Redis } from "@/db/redis";
 import { BeatsaverMap } from "@/schemas/beatsaver/BeatsaverMap";
 import { BeatsaverAPI } from "@/utils/beatsaver/api";
 
-await Redis.connectRedis();
-
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const mapHashes = searchParams.get("hashes")?.split(",") ?? undefined;
