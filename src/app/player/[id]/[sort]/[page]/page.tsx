@@ -47,6 +47,24 @@ export async function generateMetadata({
   };
 }
 
-export default function Player({ params: { id, sort, page } }: Props) {
-  return <PlayerPage id={id} sort={sort} page={page} />;
+/**
+ * Gets the player's data on the server side.
+ *
+ * @param id the player's id
+ * @returns the player's data
+ */
+async function getData(id: string) {
+  const response = await ScoreSaberAPI.fetchPlayerData(id);
+  return {
+    data: response,
+  };
+}
+
+export default async function Player({ params: { id, sort, page } }: Props) {
+  const { data } = await getData(id);
+  if (!data) {
+    return <div>Player not found</div>;
+  }
+
+  return <PlayerPage player={data} sort={sort} page={page} />;
 }

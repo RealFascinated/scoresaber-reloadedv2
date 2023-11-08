@@ -2,15 +2,17 @@ import {
   ArrowUturnLeftIcon,
   ArrowUturnRightIcon,
 } from "@heroicons/react/20/solid";
+import Link from "next/link";
 
 type PaginationProps = {
   currentPage: number;
   totalPages: number;
-  onPageChange: (pageNumber: number) => void;
+  useHref?: boolean;
+  onPageChange?: (pageNumber: number) => void;
 };
 
 export default function Pagination(props: PaginationProps) {
-  const { currentPage, totalPages, onPageChange } = props;
+  const { currentPage, totalPages, useHref, onPageChange } = props;
 
   // Calculate the range of page numbers to display
   const rangeStart = Math.max(1, currentPage - 2);
@@ -28,26 +30,48 @@ export default function Pagination(props: PaginationProps) {
         <ul className="flex items-center gap-2">
           {currentPage > 1 && (
             <li className="rounded-md bg-neutral-700 hover:opacity-80">
-              <button
-                className="px-3 py-1"
-                onClick={() => onPageChange(currentPage - 1)}
-                aria-label={`Page ${currentPage - 1} (previous page)`}
-              >
-                <ArrowUturnLeftIcon width={20} height={20} />
-              </button>
+              {useHref ? (
+                <Link href={`?page=${currentPage - 1}`}>
+                  <a
+                    className="px-3 py-1"
+                    aria-label={`Page ${currentPage - 1} (previous page)`}
+                  >
+                    <ArrowUturnLeftIcon width={20} height={20} />
+                  </a>
+                </Link>
+              ) : (
+                <button
+                  className="px-3 py-1"
+                  onClick={() => onPageChange && onPageChange(currentPage - 1)}
+                  aria-label={`Page ${currentPage - 1} (previous page)`}
+                >
+                  <ArrowUturnLeftIcon width={20} height={20} />
+                </button>
+              )}
             </li>
           )}
 
           {currentPage !== 1 && currentPage - 2 > 1 && (
             <>
               <li>
-                <button
-                  className="rounded-md bg-neutral-700 px-3 py-1 hover:opacity-80"
-                  onClick={() => onPageChange(1)}
-                  aria-label="Page 1 (first page)"
-                >
-                  1
-                </button>
+                {useHref ? (
+                  <Link href={`?page=1`}>
+                    <a
+                      className="rounded-md bg-neutral-700 px-3 py-1 hover:opacity-80"
+                      aria-label="Page 1 (first page)"
+                    >
+                      1
+                    </a>
+                  </Link>
+                ) : (
+                  <button
+                    className="rounded-md bg-neutral-700 px-3 py-1 hover:opacity-80"
+                    onClick={() => onPageChange && onPageChange(1)}
+                    aria-label="Page 1 (first page)"
+                  >
+                    1
+                  </button>
+                )}
               </li>
               <li>
                 <p>...</p>
@@ -57,17 +81,32 @@ export default function Pagination(props: PaginationProps) {
 
           {pageNumbers.map((pageNumber) => (
             <li key={pageNumber}>
-              <button
-                className={`rounded-md px-3 py-1 ${
-                  pageNumber === currentPage
-                    ? "bg-blue-500 text-primary"
-                    : "bg-neutral-700 hover:opacity-80"
-                }`}
-                onClick={() => onPageChange(pageNumber)}
-                aria-label={`Page ${pageNumber}`}
-              >
-                {pageNumber}
-              </button>
+              {useHref ? (
+                <Link href={`?page=${pageNumber}`}>
+                  <a
+                    className={`rounded-md px-3 py-1 ${
+                      pageNumber === currentPage
+                        ? "bg-blue-500 text-primary"
+                        : "bg-neutral-700 hover:opacity-80"
+                    }`}
+                    aria-label={`Page ${pageNumber}`}
+                  >
+                    {pageNumber}
+                  </a>
+                </Link>
+              ) : (
+                <button
+                  className={`rounded-md px-3 py-1 ${
+                    pageNumber === currentPage
+                      ? "bg-blue-500 text-primary"
+                      : "bg-neutral-700 hover:opacity-80"
+                  }`}
+                  onClick={() => onPageChange && onPageChange(pageNumber)}
+                  aria-label={`Page ${pageNumber}`}
+                >
+                  {pageNumber}
+                </button>
+              )}
             </li>
           ))}
 
@@ -78,26 +117,48 @@ export default function Pagination(props: PaginationProps) {
               </li>
 
               <li>
-                <button
-                  className="rounded-md bg-neutral-700 px-3 py-1 hover:opacity-80"
-                  onClick={() => onPageChange(totalPages)}
-                  aria-label={`Page ${totalPages} (last page)`}
-                >
-                  {totalPages}
-                </button>
+                {useHref ? (
+                  <Link href={`?page=${totalPages}`}>
+                    <a
+                      className="rounded-md bg-neutral-700 px-3 py-1 hover:opacity-80"
+                      aria-label={`Page ${totalPages} (last page)`}
+                    >
+                      {totalPages}
+                    </a>
+                  </Link>
+                ) : (
+                  <button
+                    className="rounded-md bg-neutral-700 px-3 py-1 hover:opacity-80"
+                    onClick={() => onPageChange && onPageChange(totalPages)}
+                    aria-label={`Page ${totalPages} (last page)`}
+                  >
+                    {totalPages}
+                  </button>
+                )}
               </li>
             </>
           )}
 
           {currentPage < totalPages && (
             <li className="rounded-md bg-neutral-700 hover:opacity-80">
-              <button
-                className="px-3 py-1"
-                onClick={() => onPageChange(currentPage + 1)}
-                aria-label={`Page ${currentPage + 1} (next page)`}
-              >
-                <ArrowUturnRightIcon width={20} height={20} />
-              </button>
+              {useHref ? (
+                <Link href={`?page=${currentPage + 1}`}>
+                  <a
+                    className="px-3 py-1"
+                    aria-label={`Page ${currentPage + 1} (next page)`}
+                  >
+                    <ArrowUturnRightIcon width={20} height={20} />
+                  </a>
+                </Link>
+              ) : (
+                <button
+                  className="px-3 py-1"
+                  onClick={() => onPageChange && onPageChange(currentPage + 1)}
+                  aria-label={`Page ${currentPage + 1} (next page)`}
+                >
+                  <ArrowUturnRightIcon width={20} height={20} />
+                </button>
+              )}
             </li>
           )}
         </ul>

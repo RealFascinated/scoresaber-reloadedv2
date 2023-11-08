@@ -1,3 +1,5 @@
+"use client";
+
 import { ScoresaberPlayer } from "@/schemas/scoresaber/player";
 import { ScoresaberPlayerScore } from "@/schemas/scoresaber/playerScore";
 import { useSettingsStore } from "@/store/settingsStore";

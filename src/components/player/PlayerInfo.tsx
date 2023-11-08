@@ -1,3 +1,5 @@
+"use client";
+
 import { ScoresaberPlayer } from "@/schemas/scoresaber/player";
 import { useScoresaberScoresStore } from "@/store/scoresaberScoresStore";
 import { useSettingsStore } from "@/store/settingsStore";
@@ -11,7 +13,7 @@ import {
   XMarkIcon,
 } from "@heroicons/react/20/solid";
 import dynamic from "next/dynamic";
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { toast } from "react-toastify";
 import { useStore } from "zustand";
 import Avatar from "../Avatar";
@@ -27,6 +29,7 @@ type PlayerInfoProps = {
 };
 
 export default function PlayerInfo({ playerData }: PlayerInfoProps) {
+  const [mounted, setMounted] = useState(false);
   const playerId = playerData.id;
   const settingsStore = useStore(useSettingsStore, (store) => store);
   const playerScoreStore = useStore(useScoresaberScoresStore, (store) => store);
@@ -35,6 +38,10 @@ export default function PlayerInfo({ playerData }: PlayerInfoProps) {
   const hasLocalScores = playerScoreStore?.exists(playerId);
 
   const toastId: any = useRef(null);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   async function claimProfile() {
     settingsStore?.setProfile(playerData);
@@ -122,32 +129,36 @@ export default function PlayerInfo({ playerData }: PlayerInfoProps) {
 
           {/* Settings Buttons */}
           <div className="absolute right-3 top-20 flex flex-col justify-end gap-2 md:relative md:right-0 md:top-0 md:mt-2 md:flex-row md:justify-center">
-            {!isOwnProfile && (
-              <Button
-                onClick={claimProfile}
-                tooltip={<p>Set as your Profile</p>}
-                icon={<HomeIcon width={24} height={24} />}
-              />
-            )}
-
-            {!isOwnProfile && (
+            {mounted && (
               <>
-                {!settingsStore?.isFriend(playerId) && (
+                {!isOwnProfile && (
                   <Button
-                    onClick={addFriend}
-                    tooltip={<p>Add as Friend</p>}
-                    icon={<UserIcon width={24} height={24} />}
-                    color="bg-green-500"
+                    onClick={claimProfile}
+                    tooltip={<p>Set as your Profile</p>}
+                    icon={<HomeIcon width={24} height={24} />}
                   />
                 )}
 
-                {settingsStore.isFriend(playerId) && (
-                  <Button
-                    onClick={removeFriend}
-                    tooltip={<p>Remove Friend</p>}
-                    icon={<XMarkIcon width={24} height={24} />}
-                    color="bg-red-500"
-                  />
+                {!isOwnProfile && (
+                  <>
+                    {!settingsStore?.isFriend(playerId) && (
+                      <Button
+                        onClick={addFriend}
+                        tooltip={<p>Add as Friend</p>}
+                        icon={<UserIcon width={24} height={24} />}
+                        color="bg-green-500"
+                      />
+                    )}
+
+                    {settingsStore.isFriend(playerId) && (
+                      <Button
+                        onClick={removeFriend}
+                        tooltip={<p>Remove Friend</p>}
+                        icon={<XMarkIcon width={24} height={24} />}
+                        color="bg-red-500"
+                      />
+                    )}
+                  </>
                 )}
               </>
             )}
@@ -165,7 +176,10 @@ export default function PlayerInfo({ playerData }: PlayerInfoProps) {
 
               <a
                 className="flex transform-gpu items-center gap-1 transition-all hover:text-blue-500"
-                href={`/ranking/global/${Math.round(playerData.rank / 50)}`}
+                href={`/ranking/global/${Math.max(
+                  Math.round(playerData.rank / 50),
+                  1,
+                )}`}
               >
                 <p>#{formatNumber(playerData.rank)}</p>
               </a>
@@ -175,8 +189,9 @@ export default function PlayerInfo({ playerData }: PlayerInfoProps) {
             <div className="text-gray-300">
               <a
                 className="flex transform-gpu items-center gap-1 transition-all hover:text-blue-500"
-                href={`/ranking/country/${playerData.country}/${Math.round(
-                  playerData.countryRank / 50,
+                href={`/ranking/country/${playerData.country}/${Math.max(
+                  Math.round(playerData.countryRank / 50),
+                  1,
                 )}`}
               >
                 <CountyFlag
