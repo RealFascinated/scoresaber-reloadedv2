@@ -1,9 +1,25 @@
-import PlayerPage from "@/components/player/PlayerPage";
+import Card from "@/components/Card";
+import Container from "@/components/Container";
+import Spinner from "@/components/Spinner";
+import PlayerChart from "@/components/player/PlayerChart";
+import PlayerInfo from "@/components/player/PlayerInfo";
+import Scores from "@/components/player/Scores";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/Tooltip";
 import ssrSettings from "@/ssrSettings.json";
+import { SortTypes } from "@/types/SortTypes";
 import { formatNumber } from "@/utils/numberUtils";
 import { ScoreSaberAPI } from "@/utils/scoresaber/api";
 import { normalizedRegionName } from "@/utils/utils";
+import clsx from "clsx";
 import { Metadata } from "next";
+import Image from "next/image";
+import { Suspense } from "react";
+
+const DEFAULT_SORT_TYPE = SortTypes.top;
 
 type Props = {
   params: { id: string; sort: string; page: string };
@@ -61,10 +77,61 @@ async function getData(id: string) {
 }
 
 export default async function Player({ params: { id, sort, page } }: Props) {
-  const { data } = await getData(id);
-  if (!data) {
-    return <div>Player not found</div>;
+  const { data: player } = await getData(id);
+  if (!player) {
+    return (
+      <main>
+        <Container>
+          <Card outerClassName="mt-2">
+            <h1 className="text-2xl font-bold">Player not found</h1>
+          </Card>
+        </Container>
+      </main>
+    );
   }
 
-  return <PlayerPage player={data} sort={sort} page={page} />;
+  const sortType = SortTypes[sort] || DEFAULT_SORT_TYPE;
+  const badges = player.badges;
+
+  return (
+    <main>
+      <Container>
+        <PlayerInfo playerData={player} />
+        {/* Chart */}
+        <Card outerClassName="mt-2 min-h-[320px]">
+          {/* Badges */}
+          <div
+            className={clsx(
+              "mb-2 mt-2 flex flex-wrap items-center justify-center gap-2",
+              badges.length > 0 ? "block" : "hidden",
+            )}
+          >
+            {badges.map((badge) => {
+              return (
+                <Tooltip key={badge.image}>
+                  <TooltipTrigger>
+                    <Image
+                      src={badge.image}
+                      alt={badge.description}
+                      width={80}
+                      height={30}
+                    />
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>{badge.description}</p>
+                  </TooltipContent>
+                </Tooltip>
+              );
+            })}
+          </div>
+          <div className="h-[320px] w-full">
+            <Suspense fallback={<Spinner />}>
+              <PlayerChart scoresaber={player} />
+            </Suspense>
+          </div>
+        </Card>
+        <Scores playerData={player} page={Number(page)} sortType={sortType} />
+      </Container>
+    </main>
+  );
 }

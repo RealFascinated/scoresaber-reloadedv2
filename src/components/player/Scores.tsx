@@ -6,6 +6,7 @@ import { useSettingsStore } from "@/store/settingsStore";
 import { SortType, SortTypes } from "@/types/SortTypes";
 import { ScoreSaberAPI } from "@/utils/scoresaber/api";
 import useStore from "@/utils/useStore";
+import clsx from "clsx";
 import dynamic from "next/dynamic";
 import { useCallback, useEffect, useState } from "react";
 import Card from "../Card";
@@ -99,7 +100,13 @@ export default function Scores({ playerData, page, sortType }: ScoresProps) {
   }
 
   return (
-    <Card outerClassName="mt-2" className="w-full items-center md:flex-col">
+    <Card
+      outerClassName="mt-2"
+      className={clsx(
+        "w-full items-center md:flex-col",
+        scores.loading && "min-h-[1050px]",
+      )}
+    >
       {/* Sort */}
       <div className="mb-2 mt-1 w-full text-sm">
         <div className="flex justify-center gap-2">
@@ -124,45 +131,44 @@ export default function Scores({ playerData, page, sortType }: ScoresProps) {
         </div>
       </div>
 
-      <div className="w-full p-1">
+      <div className="flex h-full w-full flex-col items-center justify-center">
         {scores.loading ? (
-          <div className="flex justify-center">
+          <div className="mt-2">
             <Spinner />
           </div>
         ) : (
-          <div className="grid grid-cols-1 divide-y divide-border">
-            {!scores.loading && scores.scores.length == 0 ? (
-              <p className="text-red-400">{errorMessage}</p>
-            ) : (
-              scores.scores.map((scoreData, id) => {
-                const { score, leaderboard } = scoreData;
+          <>
+            <div className="grid min-w-full grid-cols-1 divide-y divide-border">
+              {!scores.loading && scores.scores.length == 0 ? (
+                <p className="text-red-400">{errorMessage}</p>
+              ) : (
+                scores.scores.map((scoreData, id) => {
+                  const { score, leaderboard } = scoreData;
 
-                return (
-                  <Score
-                    key={id}
-                    player={playerData}
-                    score={score}
-                    leaderboard={leaderboard}
-                    ownProfile={settingsStore?.player}
-                  />
-                );
-              })
-            )}
-          </div>
+                  return (
+                    <Score
+                      key={id}
+                      player={playerData}
+                      score={score}
+                      leaderboard={leaderboard}
+                      ownProfile={settingsStore?.player}
+                    />
+                  );
+                })
+              )}
+            </div>
+            {/* Pagination */}
+            <div className="pt-3">
+              <Pagination
+                currentPage={scores.page}
+                totalPages={scores.totalPages}
+                onPageChange={(page) => {
+                  updateScoresPage(scores.sortType, page);
+                }}
+              />
+            </div>
+          </>
         )}
-      </div>
-
-      {/* Pagination */}
-      <div>
-        <div className="pt-3">
-          <Pagination
-            currentPage={scores.page}
-            totalPages={scores.totalPages}
-            onPageChange={(page) => {
-              updateScoresPage(scores.sortType, page);
-            }}
-          />
-        </div>
       </div>
     </Card>
   );
