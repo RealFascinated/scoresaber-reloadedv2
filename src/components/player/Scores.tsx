@@ -22,15 +22,17 @@ type PageInfo = {
 type ScoresProps = {
   initalScores: ScoresaberPlayerScore[] | undefined;
   initalPage: number;
-  playerData: ScoresaberPlayer;
   initalSortType: SortType;
+  initalTotalPages?: number;
+  playerData: ScoresaberPlayer;
 };
 
 export default function Scores({
   initalScores,
-  playerData,
   initalPage,
   initalSortType,
+  initalTotalPages,
+  playerData,
 }: ScoresProps) {
   const settingsStore = useStore(useSettingsStore, (store) => store);
   const playerId = playerData.id;
@@ -41,7 +43,7 @@ export default function Scores({
 
   const [scores, setScores] = useState<PageInfo>({
     page: initalPage,
-    totalPages: 1,
+    totalPages: initalTotalPages || 1,
     sortType: initalSortType,
     scores: initalScores ? initalScores : [],
   });

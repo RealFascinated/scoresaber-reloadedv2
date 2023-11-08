@@ -1,6 +1,5 @@
 import Card from "@/components/Card";
 import Container from "@/components/Container";
-import Spinner from "@/components/Spinner";
 import PlayerChart from "@/components/player/PlayerChart";
 import PlayerInfo from "@/components/player/PlayerInfo";
 import Scores from "@/components/player/Scores";
@@ -17,7 +16,6 @@ import { normalizedRegionName } from "@/utils/utils";
 import clsx from "clsx";
 import { Metadata } from "next";
 import Image from "next/image";
-import { Suspense } from "react";
 
 const DEFAULT_SORT_TYPE = SortTypes.top;
 
@@ -131,16 +129,15 @@ export default async function Player({ params: { id, sort, page } }: Props) {
             })}
           </div>
           <div className="h-[320px] w-full">
-            <Suspense fallback={<Spinner />}>
-              <PlayerChart scoresaber={player} />
-            </Suspense>
+            <PlayerChart scoresaber={player} />
           </div>
         </Card>
         <Scores
           initalScores={playerScores?.scores}
           initalPage={Number(page)}
-          playerData={player}
           initalSortType={sortType}
+          initalTotalPages={playerScores?.pageInfo.totalPages}
+          playerData={player}
         />
       </Container>
     </main>
