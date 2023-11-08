@@ -23,8 +23,11 @@ export const metadata: Metadata = {
   },
   description: ssrSettings.description,
   keywords:
-    "scoresaber, score saber, scoresaber stats, score saber stats, beatleader, beat leader, " +
-    "scoresaber reloaded, ssr, github, score aggregation, scoresaber api, score saber api, scoresaber api",
+    "scoresaber, score saber, scoresaber stats, score saber stats, beatleader, beat leader," +
+    "scoresaber reloaded, ssr, github, score aggregation, scoresaber api, score saber api, scoresaber api," +
+    "BeatSaber, Overlay, OBS, Twitch, YouTube, BeatSaber Overlay, Github, Beat Saber overlay, ScoreSaber, BeatLeader," +
+    "VR gaming, Twitch stream enhancement, Customizable overlay, Real-time scores, Rankings, Leaderboard information," +
+    "Stream enhancement, Professional overlay, Easy to use overlay builder.",
   openGraph: {
     title: ssrSettings.siteName,
     description: ssrSettings.description,
