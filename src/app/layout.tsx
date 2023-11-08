@@ -1,4 +1,5 @@
 import AppProvider from "@/components/AppProvider";
+import { ThemeProvider } from "@/components/ui/theme-provider";
 import ssrSettings from "@/ssrSettings.json";
 import clsx from "clsx";
 import { Metadata } from "next";
@@ -52,7 +53,14 @@ export default function RootLayout({
       />
 
       <body className={clsx(font.className, "text-primary")}>
-        <AppProvider>{children}</AppProvider>
+        <ThemeProvider
+          storageKey="ssr-theme"
+          attribute="class"
+          defaultTheme="dark"
+          enableSystem
+        >
+          <AppProvider>{children}</AppProvider>
+        </ThemeProvider>
       </body>
     </html>
   );
