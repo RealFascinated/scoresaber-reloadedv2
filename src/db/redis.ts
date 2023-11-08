@@ -12,9 +12,9 @@ async function connectRedis(): Promise<any> {
 
   client.on("error", (error) => {
     console.error("There was an error connecting to redis: " + error);
-    setTimeout(() => {
-      redisClient = connectRedis();
-    }, 5_000); // 5 seconds
+    setTimeout(async () => {
+      redisClient = await connectRedis();
+    }, 30_000); // 30 seconds
   });
 
   return client;
