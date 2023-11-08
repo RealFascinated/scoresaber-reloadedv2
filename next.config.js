@@ -1,7 +1,4 @@
 const nextBuildId = require("next-build-id");
-const withBundleAnalyzer = require("@next/bundle-analyzer")({
-  enabled: false,
-});
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
@@ -60,9 +57,7 @@ const nextConfig = {
   },
 };
 
-module.exports = withBundleAnalyzer(nextConfig);
-
-// Injected content via Sentry wizard below
+module.exports = nextConfig;
 
 const { withSentryConfig } = require("@sentry/nextjs");
 

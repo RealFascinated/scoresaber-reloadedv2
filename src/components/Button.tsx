@@ -25,7 +25,7 @@ export default function Button({
   const base = (
     <button
       className={clsx(
-        "flex items-center justify-center gap-2 rounded-md px-4 py-2",
+        "flex items-center justify-center gap-2 rounded-md p-1",
         color,
         className,
       )}
