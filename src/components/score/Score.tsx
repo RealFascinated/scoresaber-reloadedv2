@@ -17,15 +17,19 @@ import {
 import clsx from "clsx";
 import Image from "next/image";
 import Link from "next/link";
+import BeatSaverLogo from "../icons/BeatSaverLogo";
 import HeadsetIcon from "../icons/HeadsetIcon";
+import ScoreStatLabel from "../player/ScoreStatLabel";
 import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/Tooltip";
-import ScoreStatLabel from "./ScoreStatLabel";
+import { Button } from "../ui/button";
+import CopyBsrButton from "./CopyBsrButton";
 
 type ScoreProps = {
   score: ScoresaberScore;
   player: ScoresaberPlayer;
   leaderboard: ScoresaberLeaderboardInfo;
   ownProfile?: ScoresaberPlayer;
+  mapId?: string;
 };
 
 export default function Score({
@@ -33,6 +37,7 @@ export default function Score({
   player,
   leaderboard,
   ownProfile,
+  mapId,
 }: ScoreProps) {
   const isFullCombo = score.missedNotes + score.badCuts === 0;
   const diffName = scoresaberDifficultyNumberToName(
@@ -44,7 +49,7 @@ export default function Score({
   const weightedPp = formatNumber(getPpGainedFromScore(player.id, score), 2);
 
   return (
-    <div className="grid grid-cols-1 pb-2 pt-2 first:pt-0 last:pb-0 md:grid-cols-[0.85fr_6fr_1.3fr]">
+    <div className="grid grid-cols-1 pb-2 pt-2 first:pt-0 last:pb-0 md:grid-cols-[0.85fr_6fr_0.5fr_1.3fr]">
       <div className="flex flex-col items-center justify-center">
         <div className="hidden w-fit flex-row items-center justify-center gap-1 md:flex">
           <GlobeAsiaAustraliaIcon width={20} height={20} />
@@ -115,6 +120,30 @@ export default function Score({
             </p>
           </div>
         </Link>
+      </div>
+
+      <div className="hidden items-center justify-between gap-1 p-1 md:flex md:items-start md:justify-end">
+        {mapId && (
+          <>
+            <Tooltip>
+              <TooltipTrigger>
+                <Link href={`https://beatsaver.com/maps/${mapId}`}>
+                  <Button
+                    className="h-[30px] w-[30px] p-1"
+                    variant={"secondary"}
+                  >
+                    <BeatSaverLogo size={20} />
+                  </Button>
+                </Link>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>Click to open the map page</p>
+              </TooltipContent>
+            </Tooltip>
+
+            <CopyBsrButton mapId={mapId} />
+          </>
+        )}
       </div>
 
       <div className="flex items-center justify-between p-1 md:items-start md:justify-end">

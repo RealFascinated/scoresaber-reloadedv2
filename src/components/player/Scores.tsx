@@ -1,7 +1,7 @@
 "use client";
 
 import { ScoresaberPlayer } from "@/schemas/scoresaber/player";
-import { ScoresaberPlayerScore } from "@/schemas/scoresaber/playerScore";
+import { ScoresaberScoreWithBeatsaverData } from "@/schemas/scoresaber/scoreWithBeatsaverData";
 import { useSettingsStore } from "@/store/settingsStore";
 import { SortType, SortTypes } from "@/types/SortTypes";
 import { ScoreSaberAPI } from "@/utils/scoresaber/api";
@@ -10,17 +10,17 @@ import { useCallback, useEffect, useState } from "react";
 import Card from "../Card";
 import Error from "../Error";
 import Pagination from "../Pagination";
-import Score from "./Score";
+import Score from "../score/Score";
 
 type PageInfo = {
   page: number;
   totalPages: number;
   sortType: SortType;
-  scores: ScoresaberPlayerScore[];
+  scores: Record<string, ScoresaberScoreWithBeatsaverData>;
 };
 
 type ScoresProps = {
-  initalScores: ScoresaberPlayerScore[] | undefined;
+  initalScores: Record<string, ScoresaberScoreWithBeatsaverData> | undefined;
   initalPage: number;
   initalSortType: SortType;
   initalTotalPages?: number;
@@ -45,7 +45,7 @@ export default function Scores({
     page: initalPage,
     totalPages: initalTotalPages || 1,
     sortType: initalSortType,
-    scores: initalScores ? initalScores : [],
+    scores: initalScores ? initalScores : {},
   });
   const [changedPage, setChangedPage] = useState(false);
 
@@ -61,32 +61,35 @@ export default function Scores({
         return;
       }
 
-      ScoreSaberAPI.fetchScores(playerId, page, sortType.value, 10).then(
-        (scoresResponse) => {
-          if (!scoresResponse) {
-            setError(true);
-            setErrorMessage("No Scores");
-            setScores({ ...scores });
-            return;
-          }
-          setScores({
-            ...scores,
-            scores: scoresResponse.scores,
-            totalPages: scoresResponse.pageInfo.totalPages,
-            page: page,
-            sortType: sortType,
-          });
-          settingsStore?.setLastUsedSortType(sortType);
-          window.history.pushState(
-            {},
-            "",
-            `/player/${playerId}/${sortType.value}/${page}`,
-          );
-          setChangedPage(true);
+      ScoreSaberAPI.fetchScoresWithBeatsaverData(
+        playerId,
+        page,
+        sortType.value,
+        10,
+      ).then((scoresResponse) => {
+        if (!scoresResponse) {
+          setError(true);
+          setErrorMessage("No Scores");
+          setScores({ ...scores });
+          return;
+        }
+        setScores({
+          ...scores,
+          scores: scoresResponse.scores,
+          totalPages: scoresResponse.pageInfo.totalPages,
+          page: page,
+          sortType: sortType,
+        });
+        settingsStore?.setLastUsedSortType(sortType);
+        window.history.pushState(
+          {},
+          "",
+          `/player/${playerId}/${sortType.value}/${page}`,
+        );
+        setChangedPage(true);
 
-          console.log(`Switched page to ${page} with sort ${sortType.value}`);
-        },
-      );
+        console.log(`Switched page to ${page} with sort ${sortType.value}`);
+      });
     },
     [
       changedPage,
@@ -149,8 +152,8 @@ export default function Scores({
       <div className="flex h-full w-full flex-col items-center justify-center">
         <>
           <div className="grid min-w-full grid-cols-1 divide-y divide-border">
-            {scores.scores.map((scoreData, id) => {
-              const { score, leaderboard } = scoreData;
+            {Object.values(scores.scores).map((scoreData, id) => {
+              const { score, leaderboard, mapId } = scoreData;
 
               return (
                 <Score
@@ -158,6 +161,7 @@ export default function Scores({
                   player={playerData}
                   score={score}
                   leaderboard={leaderboard}
+                  mapId={mapId}
                   ownProfile={settingsStore?.player}
                 />
               );

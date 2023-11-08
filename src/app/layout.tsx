@@ -5,6 +5,7 @@ import clsx from "clsx";
 import { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
 import Script from "next/script";
+
 import "react-toastify/dist/ReactToastify.css";
 import "./globals.css";
 

@@ -2,9 +2,11 @@ import { ScoresaberLeaderboardInfo } from "@/schemas/scoresaber/leaderboard";
 import { ScoresaberPlayer } from "@/schemas/scoresaber/player";
 import { ScoresaberPlayerScore } from "@/schemas/scoresaber/playerScore";
 import { ScoresaberScore } from "@/schemas/scoresaber/score";
+import { ScoresaberScoreWithBeatsaverData } from "@/schemas/scoresaber/scoreWithBeatsaverData";
 import ssrSettings from "@/ssrSettings.json";
 import { FetchQueue } from "../fetchWithQueue";
 import { formatString } from "../string";
+import { isProduction } from "../utils";
 
 // Create a fetch instance with a cache
 export const ScoresaberFetchQueue = new FetchQueue();
@@ -115,6 +117,73 @@ async function fetchScores(
   const metadata = json.metadata;
   return {
     scores: scores,
+    pageInfo: {
+      totalScores: metadata.total,
+      page: metadata.page,
+      totalPages: Math.ceil(metadata.total / metadata.itemsPerPage),
+    },
+  };
+}
+
+async function fetchScoresWithBeatsaverData(
+  playerId: string,
+  page: number = 1,
+  searchType: string = SearchType.RECENT,
+  limit: number = 100,
+): Promise<
+  | {
+      scores: Record<string, ScoresaberScoreWithBeatsaverData>;
+      pageInfo: {
+        totalScores: number;
+        page: number;
+        totalPages: number;
+      };
+    }
+  | undefined
+> {
+  if (limit > 100) {
+    throw new Error("Limit cannot be greater than 100");
+  }
+  const response = await ScoresaberFetchQueue.fetch(
+    formatString(SS_PLAYER_SCORES, true, playerId, limit, searchType, page),
+  );
+  const json = await response.json();
+
+  // Check if there was an error fetching the user data
+  if (json.errorMessage) {
+    return undefined;
+  }
+
+  const scores = json.playerScores as ScoresaberPlayerScore[];
+  const metadata = json.metadata;
+
+  // Fetch the beatsaver data for each score
+  const scoresWithBeatsaverData: Record<
+    string,
+    ScoresaberScoreWithBeatsaverData
+  > = {};
+  for (const score of scores) {
+    const mapResponse = await fetch(
+      `${
+        isProduction() ? ssrSettings.siteUrl : "http://localhost:3000"
+      }/api/beatsaver/mapdata?hashes=${score.leaderboard.songHash}&idonly=true`,
+      {
+        next: {
+          revalidate: 60 * 60 * 24 * 7, // 1 week
+        },
+      },
+    );
+    const mapData = await mapResponse.json();
+    const mapId = mapData[score.leaderboard.songHash].id;
+    scoresWithBeatsaverData[score.score.id] = {
+      score: score.score,
+      leaderboard: score.leaderboard,
+      mapId: mapId,
+    };
+  }
+
+  return {
+    scores: scoresWithBeatsaverData,
     pageInfo: {
       totalScores: metadata.total,
       page: metadata.page,
@@ -275,6 +344,7 @@ export const ScoreSaberAPI = {
   searchByName,
   fetchPlayerData,
   fetchScores,
+  fetchScoresWithBeatsaverData,
   fetchAllScores,
   fetchTopPlayers,
   fetchLeaderboardInfo,
