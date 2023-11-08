@@ -1,11 +1,11 @@
-FROM fascinated/docker-images:node-latest AS base
+FROM fascinated/docker-images:node-pnpm-latest AS base
 
 # Install depends
 FROM base AS deps
 RUN apk add --no-cache libc6-compat
 WORKDIR /app
-COPY package.json* package-lock.yaml* ./
-RUN npm install --frozen-lockfile --quiet
+COPY package.json* pnpm-lock.yaml* ./
+RUN pnpx install --frozen-lockfile
 
 # Build from source
 FROM base AS builder
@@ -18,10 +18,10 @@ ARG GIT_REV
 ENV GIT_REV ${GIT_REV}
 
 # Build the app
-RUN npm run build
+RUN pnpm run build
 
 # Generate sitemap
-RUN npm run generate-sitemap
+RUN pnpm run generate-sitemap
 
 # Run the app
 FROM base AS runner
@@ -46,4 +46,4 @@ USER nextjs
 EXPOSE 80
 ENV HOSTNAME "0.0.0.0"
 ENV PORT 80
-CMD ["npm", "run", "start"]
+CMD ["pnpm", "start"]
