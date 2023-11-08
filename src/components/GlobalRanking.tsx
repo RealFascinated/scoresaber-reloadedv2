@@ -71,6 +71,7 @@ export default function GlobalRanking({
                 <Pagination
                   currentPage={pageInfo.page}
                   totalPages={pageInfo.totalPages}
+                  useHref
                 />
               </div>
             </div>

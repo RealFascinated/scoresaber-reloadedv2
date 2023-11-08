@@ -47,10 +47,16 @@ export default function Scores({
     sortType: initalSortType,
     scores: initalScores ? initalScores : [],
   });
+  const [changedPage, setChangedPage] = useState(false);
 
   const updateScoresPage = useCallback(
     (sortType: SortType, page: any) => {
-      if (page == initalPage && sortType == initalSortType && initalScores) {
+      if (
+        page == initalPage &&
+        sortType == initalSortType &&
+        initalScores &&
+        !changedPage
+      ) {
         console.log("Already loaded scores, not fetching");
         return;
       }
@@ -76,12 +82,21 @@ export default function Scores({
             "",
             `/player/${playerId}/${sortType.value}/${page}`,
           );
+          setChangedPage(true);
 
           console.log(`Switched page to ${page} with sort ${sortType.value}`);
         },
       );
     },
-    [initalPage, initalScores, initalSortType, playerId, scores, settingsStore],
+    [
+      changedPage,
+      initalPage,
+      initalScores,
+      initalSortType,
+      playerId,
+      scores,
+      settingsStore,
+    ],
   );
 
   useEffect(() => {
