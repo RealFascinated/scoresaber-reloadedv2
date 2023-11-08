@@ -1,11 +1,9 @@
 "use client";
 
-import Container from "@/components/Container";
 import Spinner from "@/components/Spinner";
 import PlayerStats from "@/components/overlay/PlayerStats";
 import ScoreStats from "@/components/overlay/ScoreStats";
 import SongInfo from "@/components/overlay/SongInfo";
-import { Card, CardDescription, CardTitle } from "@/components/ui/card";
 import { HttpSiraStatus } from "@/overlay/httpSiraStatus";
 import { OverlayPlayer } from "@/overlay/type/overlayPlayer";
 import { BeatLeaderAPI } from "@/utils/beatleader/api";
@@ -104,38 +102,16 @@ export default class Overlay extends Component<OverlayProps, OverlayState> {
   render() {
     const { player, config, mounted } = this.state;
 
+    if (mounted && !config) {
+      window.location.href = "/overlay/builder";
+      return null;
+    }
+
     if (!mounted || (!player && config.settings.showPlayerStats)) {
       return (
         <main className="flex items-center !bg-transparent p-3">
           <Spinner />
           <p className="text-xl">Loading player data</p>
-        </main>
-      );
-    }
-
-    if (!config) {
-      return (
-        <main>
-          <Container>
-            <Card className="mt-2 p-3">
-              <CardTitle>Overlay</CardTitle>
-              <CardDescription className="mt-2">
-                <p>
-                  This page is meant to be used as an overlay for streaming.
-                </p>
-                <p>
-                  To generate an overlay, go to the builder{" "}
-                  <a
-                    className="transform-gpu text-pp-blue transition-all hover:opacity-80"
-                    href="/overlay/builder"
-                  >
-                    here
-                  </a>
-                  .
-                </p>
-              </CardDescription>
-            </Card>
-          </Container>
         </main>
       );
     }
