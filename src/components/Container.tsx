@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Footer from "./Footer";
-import Navbar from "./Navbar";
+import Navbar from "./navbar/Navbar";
 
 export default function Container({ children }: { children: React.ReactNode }) {
   return (
