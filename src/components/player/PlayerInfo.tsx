@@ -9,10 +9,6 @@ import Card from "../Card";
 import CountyFlag from "../CountryFlag";
 import Label from "../Label";
 
-/**
- * import PlayerInfoExtraLabels from "./PlayerInfoExtraLabels";
-import PlayerSettingsButtons from "./PlayerSettingsButtons";
- */
 const PlayerInfoExtraLabels = dynamic(() => import("./PlayerInfoExtraLabels"));
 const PlayerSettingsButtons = dynamic(() => import("./PlayerSettingsButtons"));
 

@@ -2,6 +2,8 @@
 
 import { ScoresaberPlayer } from "@/schemas/scoresaber/player";
 import { formatNumber } from "@/utils/numberUtils";
+
+// chartjs
 import {
   CategoryScale,
   Chart as ChartJS,

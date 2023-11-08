@@ -6,7 +6,15 @@ const withBundleAnalyzer = require("@next/bundle-analyzer")({
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   generateEtags: true,
-  compress: true,
+  reactStrictMode: true,
+  swcMinify: true,
+  experimental: {
+    webpackBuildWorker: true,
+    optimizeCss: true,
+  },
+  output: "standalone",
+  compress: false,
+  poweredByHeader: false,
   env: {
     NEXT_PUBLIC_BUILD_ID:
       process.env.GIT_REV || nextBuildId.sync({ dir: __dirname }),
