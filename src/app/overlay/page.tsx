@@ -102,11 +102,13 @@ export default class Overlay extends Component<OverlayProps, OverlayState> {
   render() {
     const { player, config, mounted } = this.state;
 
+    // Redirect to builder if no config is set
     if (mounted && !config) {
       window.location.href = "/overlay/builder";
       return null;
     }
 
+    // Show loading screen if player stats are enabled and not loaded yet
     if (!mounted || (!player && config.settings.showPlayerStats)) {
       return (
         <main className="flex items-center !bg-transparent p-3">
@@ -116,6 +118,7 @@ export default class Overlay extends Component<OverlayProps, OverlayState> {
       );
     }
 
+    // The overlay
     return (
       <main>
         <div>
