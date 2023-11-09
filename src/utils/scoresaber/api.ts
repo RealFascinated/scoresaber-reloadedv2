@@ -125,6 +125,15 @@ async function fetchScores(
   };
 }
 
+/**
+ * Gets the players scores with beatsaver data from the given page
+ *
+ * @param playerId the id of the player
+ * @param page the page to get the scores from
+ * @param searchType the type of search to perform
+ * @param limit the limit of scores to get
+ * @returns the scores with beatsaver data
+ */
 async function fetchScoresWithBeatsaverData(
   playerId: string,
   page: number = 1,

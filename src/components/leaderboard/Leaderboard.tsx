@@ -115,11 +115,13 @@ export default function Leaderboard({ id, page }: LeaderboardProps) {
             </div>
             <div className="flex flex-col gap-1">
               <p>Status: {ranked ? "Ranked" : "Unranked"}</p>
-              <div className="flex">
-                <p>Stars:</p>
-                <StarIcon width={20} height={20} className="ml-1" />
-                <p className="text-pp-blue">{stars}</p>
-              </div>
+              {ranked && (
+                <div className="flex">
+                  <p>Stars:</p>
+                  <StarIcon width={20} height={20} className="ml-1" />
+                  <p className="text-pp-blue">{stars}</p>
+                </div>
+              )}
               <p>
                 Plays: {formatNumber(plays)} ({dailyPlays} in the last day)
               </p>
