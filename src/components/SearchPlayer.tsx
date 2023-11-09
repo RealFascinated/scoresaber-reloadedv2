@@ -5,12 +5,15 @@ import { formatNumber } from "@/utils/numberUtils";
 import { ScoreSaberAPI } from "@/utils/scoresaber/api";
 import { MagnifyingGlassIcon } from "@heroicons/react/20/solid";
 import clsx from "clsx";
+import Link from "next/link";
 import { useEffect, useState } from "react";
 import Avatar from "./Avatar";
 
 export default function SearchPlayer() {
   const [search, setSearch] = useState("");
-  const [players, setPlayers] = useState([] as ScoresaberPlayer[]);
+  const [players, setPlayers] = useState(
+    undefined as ScoresaberPlayer[] | undefined,
+  );
 
   useEffect(() => {
     // Don't search if the query is too short
@@ -28,14 +31,20 @@ export default function SearchPlayer() {
       if (id == undefined) return;
 
       const player = await ScoreSaberAPI.fetchPlayerData(id);
-      if (player == undefined) return;
+      if (player == undefined) {
+        setPlayers([]);
+        return;
+      }
 
       setPlayers([player]);
     }
 
     // Search by name
     const players = await ScoreSaberAPI.searchByName(search);
-    if (players == undefined) return;
+    if (players == undefined) {
+      setPlayers([]);
+      return;
+    }
 
     setPlayers(players);
   }
@@ -44,7 +53,7 @@ export default function SearchPlayer() {
     e.preventDefault();
 
     // Take the user to the first account
-    if (players.length > 0) {
+    if (players && players.length > 0) {
       window.location.href = `/player/${players[0].id}/top/1`;
     }
   }
@@ -68,25 +77,29 @@ export default function SearchPlayer() {
       <div
         className={clsx(
           "absolute z-20 mt-7 flex max-h-[200px] min-w-[14rem] flex-col divide-y overflow-y-auto rounded-md bg-popover shadow-sm md:max-h-[300px]",
-          players.length > 0 ? "flex" : "hidden",
+          players ? "flex" : "hidden",
         )}
       >
-        {players.map((player: ScoresaberPlayer) => (
-          <a
-            key={player.id}
-            className="flex min-w-[14rem] items-center gap-2 p-2 transition-all hover:bg-background"
-            href={`/player/${player.id}/top/1`}
-          >
-            <Avatar label="Account" size={40} url={player.profilePicture} />
+        {players && players.length > 0 ? (
+          players.map((player: ScoresaberPlayer) => (
+            <Link
+              key={player.id}
+              className="flex min-w-[14rem] items-center gap-2 p-2 transition-all hover:bg-background"
+              href={`/player/${player.id}/top/1`}
+            >
+              <Avatar label="Account" size={40} url={player.profilePicture} />
 
-            <div>
-              <p className="text-xs text-gray-400">
-                #{formatNumber(player.rank)}
-              </p>
-              <p className="text-sm">{player.name}</p>
-            </div>
-          </a>
-        ))}
+              <div>
+                <p className="text-xs text-gray-400">
+                  #{formatNumber(player.rank)}
+                </p>
+                <p className="text-sm">{player.name}</p>
+              </div>
+            </Link>
+          ))
+        ) : (
+          <div className="p-2">No players found</div>
+        )}
       </div>
     </form>
   );
