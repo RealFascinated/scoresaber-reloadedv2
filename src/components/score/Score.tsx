@@ -127,7 +127,10 @@ export default function Score({
           <>
             <Tooltip>
               <TooltipTrigger>
-                <Link href={`https://beatsaver.com/maps/${mapId}`}>
+                <Link
+                  href={`https://beatsaver.com/maps/${mapId}`}
+                  target="_blank"
+                >
                   <Button
                     className="h-[30px] w-[30px] bg-neutral-700 p-1"
                     variant={"secondary"}
