@@ -10,7 +10,7 @@ import { useCallback, useEffect, useState } from "react";
 import Card from "../Card";
 import Error from "../Error";
 import Pagination from "../Pagination";
-import Score from "../score/Score";
+import Score from "./score/Score";
 
 type PageInfo = {
   page: number;

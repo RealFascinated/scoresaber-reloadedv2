@@ -1,8 +1,8 @@
 "use client";
 
 import { toast } from "react-toastify";
-import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/Tooltip";
-import { Button } from "../ui/button";
+import { Tooltip, TooltipContent, TooltipTrigger } from "../../ui/Tooltip";
+import { Button } from "../../ui/button";
 
 type CopyBsrButtonProps = {
   mapId: string;

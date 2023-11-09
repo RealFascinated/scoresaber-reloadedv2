@@ -17,11 +17,11 @@ import {
 import clsx from "clsx";
 import Image from "next/image";
 import Link from "next/link";
-import BeatSaverLogo from "../icons/BeatSaverLogo";
-import HeadsetIcon from "../icons/HeadsetIcon";
-import ScoreStatLabel from "../player/ScoreStatLabel";
-import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/Tooltip";
-import { Button } from "../ui/button";
+import BeatSaverLogo from "../../icons/BeatSaverLogo";
+import HeadsetIcon from "../../icons/HeadsetIcon";
+import { Tooltip, TooltipContent, TooltipTrigger } from "../../ui/Tooltip";
+import { Button } from "../../ui/button";
+import ScoreStatLabel from "../ScoreStatLabel";
 import CopyBsrButton from "./CopyBsrButton";
 
 type ScoreProps = {

@@ -109,8 +109,8 @@ export default function Leaderboard({ id, page }: LeaderboardProps) {
               />
               <div className="flex flex-col">
                 <p className="text-xl font-bold">{songName}</p>
-                <p className="text-lg">{songSubName}</p>
-                <p>Mapped By: {levelAuthorName}</p>
+                {/* <p className="text-lg">{songSubName}</p> */}
+                <p className="text-gray-400">{levelAuthorName}</p>
               </div>
             </div>
             <div className="flex flex-col gap-1">
