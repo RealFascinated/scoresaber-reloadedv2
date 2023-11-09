@@ -80,26 +80,24 @@ export default function SearchPlayer() {
           players ? "flex" : "hidden",
         )}
       >
-        {players && players.length > 0 ? (
-          players.map((player: ScoresaberPlayer) => (
-            <Link
-              key={player.id}
-              className="flex min-w-[14rem] items-center gap-2 p-2 transition-all hover:bg-background"
-              href={`/player/${player.id}/top/1`}
-            >
-              <Avatar label="Account" size={40} url={player.profilePicture} />
+        {players && players.length > 0
+          ? players.map((player: ScoresaberPlayer) => (
+              <Link
+                key={player.id}
+                className="flex min-w-[14rem] items-center gap-2 p-2 transition-all hover:bg-background"
+                href={`/player/${player.id}/top/1`}
+              >
+                <Avatar label="Account" size={40} url={player.profilePicture} />
 
-              <div>
-                <p className="text-xs text-gray-400">
-                  #{formatNumber(player.rank)}
-                </p>
-                <p className="text-sm">{player.name}</p>
-              </div>
-            </Link>
-          ))
-        ) : (
-          <div className="p-2">No players found</div>
-        )}
+                <div>
+                  <p className="text-xs text-gray-400">
+                    #{formatNumber(player.rank)}
+                  </p>
+                  <p className="text-sm">{player.name}</p>
+                </div>
+              </Link>
+            ))
+          : search.length > 0 && <div className="p-2">No players found</div>}
       </div>
     </form>
   );
