@@ -1,4 +1,5 @@
 const nextBuildId = require("next-build-id");
+const { withSentryConfig } = require("@sentry/nextjs");
 const withBundleAnalyzer = require("@next/bundle-analyzer")({
   enabled: false,
 });
@@ -80,39 +81,35 @@ const nextConfig = {
 
 module.exports = withBundleAnalyzer(nextConfig);
 
-// // Injected content via Sentry wizard below
+module.exports = withSentryConfig(
+  module.exports,
+  {
+    // For all available options, see:
+    // https://github.com/getsentry/sentry-webpack-plugin#options
 
-// const { withSentryConfig } = require("@sentry/nextjs");
+    // Suppresses source map uploading logs during build
+    silent: true,
+    org: "sentry",
+    project: "scoresaber-reloaded",
+    url: "https://sentry.fascinated.cc/",
+  },
+  {
+    // For all available options, see:
+    // https://docs.sentry.io/platforms/javascript/guides/nextjs/manual-setup/
 
-// module.exports = withSentryConfig(
-//   module.exports,
-//   {
-//     // For all available options, see:
-//     // https://github.com/getsentry/sentry-webpack-plugin#options
+    // Upload a larger set of source maps for prettier stack traces (increases build time)
+    widenClientFileUpload: false,
 
-//     // Suppresses source map uploading logs during build
-//     silent: true,
-//     org: "sentry",
-//     project: "scoresaber-reloaded",
-//     url: "https://sentry.fascinated.cc/",
-//   },
-//   {
-//     // For all available options, see:
-//     // https://docs.sentry.io/platforms/javascript/guides/nextjs/manual-setup/
+    // Transpiles SDK to be compatible with IE11 (increases bundle size)
+    transpileClientSDK: false,
 
-//     // Upload a larger set of source maps for prettier stack traces (increases build time)
-//     widenClientFileUpload: false,
+    // Routes browser requests to Sentry through a Next.js rewrite to circumvent ad-blockers (increases server load)
+    tunnelRoute: "/monitoring",
 
-//     // Transpiles SDK to be compatible with IE11 (increases bundle size)
-//     transpileClientSDK: false,
+    // Hides source maps from generated client bundles
+    hideSourceMaps: true,
 
-//     // Routes browser requests to Sentry through a Next.js rewrite to circumvent ad-blockers (increases server load)
-//     tunnelRoute: "/monitoring",
-
-//     // Hides source maps from generated client bundles
-//     hideSourceMaps: true,
-
-//     // Automatically tree-shake Sentry logger statements to reduce bundle size
-//     disableLogger: true,
-//   },
-// );
+    // Automatically tree-shake Sentry logger statements to reduce bundle size
+    disableLogger: true,
+  },
+);
