@@ -17,7 +17,7 @@ ENV NEXT_TELEMETRY_DISABLED 1
 ARG GIT_REV
 ENV GIT_REV ${GIT_REV}
 
-RUN echo "redis url: ${REDIS_URL}"
+RUN echo "redis url: $REDIS_URL"
 
 # Build the app
 RUN pnpm run build

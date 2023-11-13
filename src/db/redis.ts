@@ -20,8 +20,6 @@ async function connectRedis(): Promise<any> {
   return client;
 }
 
-// todo: add disconnect handler
-
 export const Redis = {
   client: redisClient,
   connectRedis,
