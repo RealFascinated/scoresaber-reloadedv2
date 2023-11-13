@@ -91,7 +91,7 @@ module.exports = withSentryConfig(
     silent: true,
     org: "sentry",
     project: "scoresaber-reloaded",
-    url: "https://sentry.fascinated.cc/",
+    url: "https://sentry.fascinated.cc",
     authToken: process.env.SENTRY_AUTH_TOKEN,
   },
   {

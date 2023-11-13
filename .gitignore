@@ -46,3 +46,5 @@ analyze
 
 # Sitemap
 public/sitemap*
+
+.env
