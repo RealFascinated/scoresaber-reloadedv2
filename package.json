@@ -30,6 +30,7 @@
     "date-fns": "^2.30.0",
     "encoding": "^0.1.13",
     "idb-keyval": "^6.2.1",
+    "infisical-node": "^1.5.0",
     "lucide-react": "^0.292.0",
     "next": "14.0.2",
     "next-build-id": "^3.0.0",
