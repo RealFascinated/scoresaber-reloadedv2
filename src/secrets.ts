@@ -1,8 +1,8 @@
-const InfisicalClient = require("infisical-node");
+import InfisicalClient from "infisical-node";
 
 const infisicalClient = new InfisicalClient({
   token: process.env.INFISICAL_TOKEN,
   siteURL: "https://secrets.fascinated.cc",
 });
 
-module.exports = infisicalClient;
+export default infisicalClient;

@@ -28,7 +28,7 @@
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts",
-    "src/secrets.js"
+    "src/secrets.ts"
   ],
   "exclude": ["node_modules"]
 }

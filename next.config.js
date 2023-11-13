@@ -1,7 +1,12 @@
 const nextBuildId = require("next-build-id");
 const { withSentryConfig } = require("@sentry/nextjs");
 const withBundleAnalyzer = require("@next/bundle-analyzer")({ enabled: false });
-const infisicalClient = require("./src/secrets");
+const InfisicalClient = require("infisical-node");
+
+const infisicalClient = new InfisicalClient({
+  token: process.env.INFISICAL_TOKEN,
+  siteURL: "https://secrets.fascinated.cc",
+});
 
 // Define remote patterns for images
 const remotePatterns = [
