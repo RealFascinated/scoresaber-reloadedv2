@@ -2,8 +2,6 @@ import { createClient } from "redis";
 
 let redisClient = await connectRedis();
 
-console.log(process.env.REDIS_URL);
-
 async function connectRedis(): Promise<any> {
   // console.log("Connecting to redis");
   const client = createClient({
