@@ -4,6 +4,7 @@ import Container from "@/components/Container";
 import { ScoresaberMetricsHistory } from "@/schemas/fascinated/scoresaberMetricsHistory";
 import ssrSettings from "@/ssrSettings.json";
 import { formatNumber } from "@/utils/numberUtils";
+import { formatDate } from "@/utils/timeUtils";
 import { isProduction } from "@/utils/utils";
 import { Metadata } from "next";
 import Link from "next/link";
@@ -44,8 +45,9 @@ export async function generateMetadata(): Promise<Metadata> {
       description:
         description +
         `
-
-        Players currently online: ${formatNumber(lastActivePlayers)}
+        
+        Last Updated: ${formatDate(new Date().toISOString())}
+        Players Online Today: ${formatNumber(lastActivePlayers)}
         Scores set Today: ${formatNumber(lastScoreCount)}`,
     },
   };

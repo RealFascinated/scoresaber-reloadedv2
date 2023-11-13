@@ -31,7 +31,7 @@ export function formatTimeAgo(timestamp: string) {
  * @param timestamp the timestamp to format
  * @returns the formatted timestamp
  */
-export function formatDate(timestamp: string) {
+export function formatDate(timestamp: any) {
   const date = parseISO(timestamp);
   return date.toLocaleDateString("en-US", {
     year: "numeric",
