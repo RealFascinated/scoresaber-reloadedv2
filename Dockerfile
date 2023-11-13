@@ -1,5 +1,7 @@
 FROM fascinated/docker-images:node-pnpm-latest AS base
 
+RUN echo "redis url: $REDIS_URL"
+
 # Install depends
 FROM base AS deps
 RUN apk add --no-cache libc6-compat
