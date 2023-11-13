@@ -23,6 +23,8 @@ ENV SENTRY_AUTH_TOKEN ${SENTRY_AUTH_TOKEN}
 ARG REDIS_URL
 ENV REDIS_URL ${REDIS_URL}
 
+RUN echo "redis url: ${REDIS_URL}"
+
 # Build the app
 RUN pnpm run build
 
