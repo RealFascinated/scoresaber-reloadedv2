@@ -1,7 +1,5 @@
 FROM fascinated/docker-images:node-pnpm-latest AS base
 
-RUN echo "redis url: $REDIS_URL"
-
 # Install depends
 FROM base AS deps
 RUN apk add --no-cache libc6-compat
@@ -18,6 +16,9 @@ ENV NEXT_TELEMETRY_DISABLED 1
 
 ARG GIT_REV
 ENV GIT_REV ${GIT_REV}
+
+ARG REDIS_URL
+ENV REDIS_URL ${REDIS_URL}
 
 RUN echo "redis url: $REDIS_URL"
 
