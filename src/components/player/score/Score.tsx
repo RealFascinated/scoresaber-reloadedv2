@@ -150,21 +150,28 @@ export default function Score({
               <CopyBsrButton mapId={mapId} />
             </div>
             <div className="flex gap-1">
-              <Link
-                href={`${songNameToYouTubeLink(
-                  leaderboard.songName,
-                  leaderboard.songSubName,
-                  leaderboard.songAuthorName,
-                )}`}
-                target="_blank"
-              >
-                <Button
-                  className="h-[30px] w-[30px] bg-neutral-700 p-1"
-                  variant={"secondary"}
-                >
-                  <YouTubeLogo size={20} />
-                </Button>
-              </Link>
+              <Tooltip>
+                <TooltipTrigger>
+                  <Link
+                    href={`${songNameToYouTubeLink(
+                      leaderboard.songName,
+                      leaderboard.songSubName,
+                      leaderboard.songAuthorName,
+                    )}`}
+                    target="_blank"
+                  >
+                    <Button
+                      className="h-[30px] w-[30px] bg-neutral-700 p-1"
+                      variant={"secondary"}
+                    >
+                      <YouTubeLogo size={20} />
+                    </Button>
+                  </Link>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>Click to view the song on YouTube</p>
+                </TooltipContent>
+              </Tooltip>
             </div>
           </>
         )}
