@@ -34,6 +34,16 @@ async function loadIntoSong(data: any) {
   });
 }
 
+/**
+ * Reset the state of the overlay
+ */
+function resetState() {
+  overlayDataStore.setState({
+    scoreStats: undefined,
+    songInfo: undefined,
+  });
+}
+
 type Handlers = {
   [key: string]: (data: any) => void;
 };
@@ -65,16 +75,10 @@ const handlers: Handlers = {
 
   // Left the song
   finished: (data: any) => {
-    overlayDataStore.setState({
-      scoreStats: undefined,
-      songInfo: undefined,
-    });
+    resetState();
   },
   menu: (data: any) => {
-    overlayDataStore.setState({
-      scoreStats: undefined,
-      songInfo: undefined,
-    });
+    resetState();
   },
 
   // pause & resume
@@ -107,6 +111,7 @@ function connectWebSocket() {
     console.log(
       "Lost connection to HttpSiraStatus, reconnecting in 5 seconds...",
     );
+    resetState();
     setTimeout(() => {
       connectWebSocket();
     }, 5000); // 5 seconds
