@@ -16,6 +16,7 @@ async function loadIntoSong(data: any) {
     beatsaverMapData.versions[beatsaverMapData.versions.length - 1].coverURL;
 
   overlayDataStore.setState({
+    paused: false,
     scoreStats: {
       accuracy: performance.relativeScore * 100,
       score: performance.rawScore,

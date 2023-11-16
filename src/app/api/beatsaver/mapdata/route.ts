@@ -1,4 +1,4 @@
-import { Redis } from "@/db/redis";
+import { Redis } from "@/lib/db/redis";
 import { BeatsaverMap } from "@/schemas/beatsaver/BeatsaverMap";
 import { BeatsaverAPI } from "@/utils/beatsaver/api";
 
