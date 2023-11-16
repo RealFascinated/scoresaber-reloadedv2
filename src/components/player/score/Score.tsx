@@ -153,6 +153,7 @@ export default function Score({
               <Link
                 href={`${songNameToYouTubeLink(
                   leaderboard.songName,
+                  leaderboard.songSubName,
                   leaderboard.songAuthorName,
                 )}`}
                 target="_blank"
