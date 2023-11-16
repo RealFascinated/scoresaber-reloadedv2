@@ -1,4 +1,4 @@
-import { OverlayPlayer } from "@/overlay/type/overlayPlayer";
+import { OverlayPlayer } from "@/lib/overlay/type/overlayPlayer";
 import { formatNumber } from "@/utils/numberUtils";
 import { GlobeAltIcon } from "@heroicons/react/20/solid";
 import Image from "next/image";
