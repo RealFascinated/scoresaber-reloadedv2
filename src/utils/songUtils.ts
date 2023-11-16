@@ -48,3 +48,19 @@ export function scoresaberDifficultyNumberToName(
       return "unknown";
   }
 }
+
+/**
+ * Turns a song name and author into a YouTube link
+ *
+ * @param name the name of the song
+ * @param author the author of the song
+ * @returns the YouTube link for the song
+ */
+export function songNameToYouTubeLink(name: string, author: string) {
+  return encodeURI(
+    `https://www.youtube.com/results?search_query=${name} ${author}`.replaceAll(
+      " ",
+      "+",
+    ),
+  );
+}

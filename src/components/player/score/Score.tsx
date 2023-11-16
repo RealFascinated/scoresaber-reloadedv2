@@ -1,3 +1,4 @@
+import YouTubeLogo from "@/components/icons/YouTubeLogo";
 import { ScoresaberLeaderboardInfo } from "@/schemas/scoresaber/leaderboard";
 import { ScoresaberPlayer } from "@/schemas/scoresaber/player";
 import { ScoresaberScore } from "@/schemas/scoresaber/score";
@@ -6,6 +7,7 @@ import { getPpGainedFromScore } from "@/utils/scoresaber/scores";
 import {
   scoresaberDifficultyNumberToName,
   songDifficultyToColor,
+  songNameToYouTubeLink,
 } from "@/utils/songUtils";
 import { formatDate, formatTimeAgo } from "@/utils/timeUtils";
 import {
@@ -122,29 +124,47 @@ export default function Score({
         </Link>
       </div>
 
-      <div className="hidden items-center justify-between gap-1 p-1 md:flex md:items-start md:justify-end">
+      <div className="hidden flex-col items-center justify-between gap-1 p-1 md:flex md:items-start md:justify-end">
         {mapId && (
           <>
-            <Tooltip>
-              <TooltipTrigger>
-                <Link
-                  href={`https://beatsaver.com/maps/${mapId}`}
-                  target="_blank"
-                >
-                  <Button
-                    className="h-[30px] w-[30px] bg-neutral-700 p-1"
-                    variant={"secondary"}
+            <div className="flex gap-1">
+              <Tooltip>
+                <TooltipTrigger>
+                  <Link
+                    href={`https://beatsaver.com/maps/${mapId}`}
+                    target="_blank"
                   >
-                    <BeatSaverLogo size={20} />
-                  </Button>
-                </Link>
-              </TooltipTrigger>
-              <TooltipContent>
-                <p>Click to open the map page</p>
-              </TooltipContent>
-            </Tooltip>
+                    <Button
+                      className="h-[30px] w-[30px] bg-neutral-700 p-1"
+                      variant={"secondary"}
+                    >
+                      <BeatSaverLogo size={20} />
+                    </Button>
+                  </Link>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>Click to open the map page</p>
+                </TooltipContent>
+              </Tooltip>
 
-            <CopyBsrButton mapId={mapId} />
+              <CopyBsrButton mapId={mapId} />
+            </div>
+            <div className="flex gap-1">
+              <Link
+                href={`${songNameToYouTubeLink(
+                  leaderboard.songName,
+                  leaderboard.songAuthorName,
+                )}`}
+                target="_blank"
+              >
+                <Button
+                  className="h-[30px] w-[30px] bg-neutral-700 p-1"
+                  variant={"secondary"}
+                >
+                  <YouTubeLogo size={20} />
+                </Button>
+              </Link>
+            </div>
           </>
         )}
       </div>
