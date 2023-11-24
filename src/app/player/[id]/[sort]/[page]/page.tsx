@@ -69,12 +69,7 @@ export async function generateMetadata({
  */
 async function getData(id: string, page: number, sort: string) {
   const playerData = await ScoreSaberAPI.fetchPlayerData(id);
-  const playerScores = await ScoreSaberAPI.fetchScoresWithBeatsaverData(
-    id,
-    page,
-    sort,
-    10,
-  );
+  const playerScores = await ScoreSaberAPI.fetchScores(id, page, sort, 10);
   return {
     playerData: playerData,
     playerScores: playerScores,

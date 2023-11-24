@@ -4,11 +4,24 @@ import { BeatsaverAPI } from "@/utils/beatsaver/api";
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
-  const mapHashes = searchParams.get("hashes")?.split(",") ?? undefined;
+  const mapHashes = searchParams.get("hashes");
 
   if (!mapHashes) {
     return new Response("mapHashes parameter is required", { status: 400 });
   }
+  let toFetch: any[] = [];
+  if (mapHashes.includes(",")) {
+    const parts = mapHashes.substring(0, mapHashes.length - 1).split(",");
+    toFetch.push(...parts);
+  } else {
+    toFetch.push(mapHashes);
+  }
+  // Convert all hashes to uppercase
+  for (const hash of toFetch) {
+    toFetch[toFetch.indexOf(hash)] = hash.toUpperCase();
+  }
+  // Remove duplicates
+  toFetch = toFetch.filter((hash, index) => toFetch.indexOf(hash) === index);
 
   const idOnly = searchParams.get("idonly") === "true";
   let totalInCache = 0;
@@ -24,39 +37,51 @@ export async function GET(request: Request) {
 
   const fetchAndCacheMap = async (mapHash: string) => {
     const beatSaverMap = await BeatsaverAPI.fetchMapByHash(mapHash);
+
     if (beatSaverMap) {
-      maps[mapHash] = idOnly ? { id: beatSaverMap.id } : beatSaverMap;
-      await (
-        await Redis.client
-      ).set(
-        `beatsaver:map:${mapHash}`,
-        JSON.stringify(idOnly ? { id: beatSaverMap.id } : beatSaverMap),
-        "EX",
-        60 * 60 * 24 * 7,
-      );
+      addMap(mapHash, beatSaverMap);
+      await cacheMap(mapHash, beatSaverMap);
     }
   };
 
-  for (const mapHash of mapHashes) {
+  const cacheMap = async (mapHash: string, map: BeatsaverMap) => {
+    await (
+      await Redis.client
+    ).set(
+      `beatsaver:map:${mapHash}`,
+      JSON.stringify(idOnly ? { id: map.id } : map),
+      "EX",
+      60 * 60 * 24 * 7,
+    );
+  };
+
+  const addMap = (mapHash: string, map: any) => {
+    maps[mapHash] = idOnly ? { id: map.id } : map;
+  };
+
+  for (const mapHash of toFetch) {
     const map = await fetchMapFromCache(mapHash);
-    if (map) {
-      maps[mapHash] = JSON.parse(map);
+    if (map !== null) {
+      const json = JSON.parse(map);
+      addMap(mapHash, json);
       totalInCache++;
     }
   }
 
-  if (totalInCache === 0) {
-    const beatSaverMaps = await BeatsaverAPI.fetchMapsByHash(...mapHashes);
+  if (totalInCache === 0 && toFetch.length > 1) {
+    const beatSaverMaps = await BeatsaverAPI.fetchMapsByHash(...toFetch);
     if (beatSaverMaps) {
-      for (const mapHash of mapHashes) {
+      for (const mapHash of toFetch) {
         const beatSaverMap = beatSaverMaps[mapHash.toLowerCase()];
+
         if (beatSaverMap) {
-          await fetchAndCacheMap(mapHash);
+          await cacheMap(mapHash, beatSaverMap);
+          addMap(mapHash, beatSaverMap);
         }
       }
     }
   } else {
-    for (const mapHash of mapHashes) {
+    for (const mapHash of toFetch) {
       if (!maps[mapHash]) {
         await fetchAndCacheMap(mapHash);
       }

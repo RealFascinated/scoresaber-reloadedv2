@@ -178,6 +178,8 @@ async function fetchScoresWithBeatsaverData(
   for (const score of scores) {
     url += `${score.leaderboard.songHash},`;
   }
+  url = url.substring(0, url.length - 1);
+  url += "&idonly=true";
   const mapResponse = await fetch(url, {
     next: {
       revalidate: 60 * 60 * 24 * 7, // 1 week

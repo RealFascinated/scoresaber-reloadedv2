@@ -13,7 +13,7 @@ export class FetchQueue {
    * @param url - The URL to fetch.
    * @returns The response.
    */
-  public async fetch(url: string, options?: any): Promise<any> {
+  public async fetch(url: string, options?: any): Promise<Response> {
     const now = Date.now();
 
     if (now < this.rateLimitReset) {

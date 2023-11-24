@@ -25,7 +25,7 @@ async function fetchMapsByHash(
       BS_GET_MAP_BY_HASH_URL,
       true,
       hashes.substring(0, hashes.length - 1),
-    ) + "?idonly=true",
+    ),
   );
   const json = await response.json();
 
@@ -47,6 +47,7 @@ async function fetchMapByHash(hash: string): Promise<BeatsaverMap | undefined> {
   const response = await BeatsaverFetchQueue.fetch(
     formatString(BS_GET_MAP_BY_HASH_URL, true, hash),
   );
+  console.log(formatString(BS_GET_MAP_BY_HASH_URL, true, hash));
   const json = await response.json();
 
   // Check if there was an error fetching the user data

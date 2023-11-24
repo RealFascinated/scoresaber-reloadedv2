@@ -1,4 +1,3 @@
-import YouTubeLogo from "@/components/icons/YouTubeLogo";
 import { ScoresaberLeaderboardInfo } from "@/schemas/scoresaber/leaderboard";
 import { ScoresaberPlayer } from "@/schemas/scoresaber/player";
 import { ScoresaberScore } from "@/schemas/scoresaber/score";
@@ -7,7 +6,6 @@ import { getPpGainedFromScore } from "@/utils/scoresaber/scores";
 import {
   scoresaberDifficultyNumberToName,
   songDifficultyToColor,
-  songNameToYouTubeLink,
 } from "@/utils/songUtils";
 import { formatDate, formatTimeAgo } from "@/utils/timeUtils";
 import {
@@ -19,28 +17,19 @@ import {
 import clsx from "clsx";
 import Image from "next/image";
 import Link from "next/link";
-import BeatSaverLogo from "../../icons/BeatSaverLogo";
+import { Suspense } from "react";
 import HeadsetIcon from "../../icons/HeadsetIcon";
 import { Tooltip, TooltipContent, TooltipTrigger } from "../../ui/Tooltip";
-import { Button } from "../../ui/button";
 import ScoreStatLabel from "../ScoreStatLabel";
-import CopyBsrButton from "./CopyBsrButton";
+import MapButtons from "./MapButtons";
 
 type ScoreProps = {
   score: ScoresaberScore;
   player: ScoresaberPlayer;
   leaderboard: ScoresaberLeaderboardInfo;
-  ownProfile?: ScoresaberPlayer;
-  mapId?: string;
 };
 
-export default function Score({
-  score,
-  player,
-  leaderboard,
-  ownProfile,
-  mapId,
-}: ScoreProps) {
+export default function Score({ score, player, leaderboard }: ScoreProps) {
   const isFullCombo = score.missedNotes + score.badCuts === 0;
   const diffName = scoresaberDifficultyNumberToName(
     leaderboard.difficulty.difficulty,
@@ -124,58 +113,9 @@ export default function Score({
         </Link>
       </div>
 
-      <div className="hidden flex-col items-center justify-between gap-1 p-1 md:flex md:items-start md:justify-end">
-        {mapId && (
-          <>
-            <div className="flex gap-1">
-              <Tooltip>
-                <TooltipTrigger>
-                  <Link
-                    href={`https://beatsaver.com/maps/${mapId}`}
-                    target="_blank"
-                  >
-                    <Button
-                      className="h-[30px] w-[30px] bg-neutral-700 p-1"
-                      variant={"secondary"}
-                    >
-                      <BeatSaverLogo size={20} />
-                    </Button>
-                  </Link>
-                </TooltipTrigger>
-                <TooltipContent>
-                  <p>Click to open the map page</p>
-                </TooltipContent>
-              </Tooltip>
-
-              <CopyBsrButton mapId={mapId} />
-            </div>
-            <div className="flex gap-1">
-              <Tooltip>
-                <TooltipTrigger>
-                  <Link
-                    href={`${songNameToYouTubeLink(
-                      leaderboard.songName,
-                      leaderboard.songSubName,
-                      leaderboard.songAuthorName,
-                    )}`}
-                    target="_blank"
-                  >
-                    <Button
-                      className="h-[30px] w-[30px] bg-neutral-700 p-1"
-                      variant={"secondary"}
-                    >
-                      <YouTubeLogo size={20} />
-                    </Button>
-                  </Link>
-                </TooltipTrigger>
-                <TooltipContent>
-                  <p>Click to view the song on YouTube</p>
-                </TooltipContent>
-              </Tooltip>
-            </div>
-          </>
-        )}
-      </div>
+      <Suspense fallback={<div />}>
+        <MapButtons leaderboard={leaderboard} />
+      </Suspense>
 
       <div className="flex items-center justify-between p-1 md:items-start md:justify-end">
         <div className="flex flex-col md:hidden">
