@@ -30,6 +30,9 @@ export default function MapButtons({ leaderboard }: MapButtonsProps) {
       return;
     }
     const json = await beatSaberMap.json();
+    if (json.maps[hash] !== null || json.maps[hash] !== undefined) {
+      return;
+    }
     setMapId(json.maps[hash].id);
   }, [hash]);
 
@@ -40,55 +43,53 @@ export default function MapButtons({ leaderboard }: MapButtonsProps) {
   return (
     <div className="hidden flex-col items-center justify-between gap-1 p-1 md:flex md:items-start md:justify-end">
       {mapId && (
-        <>
-          <div className="flex gap-1">
-            <Tooltip>
-              <TooltipTrigger>
-                <Link
-                  href={`https://beatsaver.com/maps/${mapId}`}
-                  target="_blank"
+        <div className="flex gap-1">
+          <Tooltip>
+            <TooltipTrigger>
+              <Link
+                href={`https://beatsaver.com/maps/${mapId}`}
+                target="_blank"
+              >
+                <Button
+                  className="h-[30px] w-[30px] bg-neutral-700 p-1"
+                  variant={"secondary"}
                 >
-                  <Button
-                    className="h-[30px] w-[30px] bg-neutral-700 p-1"
-                    variant={"secondary"}
-                  >
-                    <BeatSaverLogo size={20} />
-                  </Button>
-                </Link>
-              </TooltipTrigger>
-              <TooltipContent>
-                <p>Click to open the map page</p>
-              </TooltipContent>
-            </Tooltip>
+                  <BeatSaverLogo size={20} />
+                </Button>
+              </Link>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>Click to open the map page</p>
+            </TooltipContent>
+          </Tooltip>
 
-            <CopyBsrButton mapId={mapId} />
-          </div>
-          <div className="flex gap-1">
-            <Tooltip>
-              <TooltipTrigger>
-                <Link
-                  href={`${songNameToYouTubeLink(
-                    leaderboard.songName,
-                    leaderboard.songSubName,
-                    leaderboard.songAuthorName,
-                  )}`}
-                  target="_blank"
-                >
-                  <Button
-                    className="h-[30px] w-[30px] bg-neutral-700 p-1"
-                    variant={"secondary"}
-                  >
-                    <YouTubeLogo size={20} />
-                  </Button>
-                </Link>
-              </TooltipTrigger>
-              <TooltipContent>
-                <p>Click to view the song on YouTube</p>
-              </TooltipContent>
-            </Tooltip>
-          </div>
-        </>
+          <CopyBsrButton mapId={mapId} />
+        </div>
       )}
+      <div className="flex gap-1">
+        <Tooltip>
+          <TooltipTrigger>
+            <Link
+              href={`${songNameToYouTubeLink(
+                leaderboard.songName,
+                leaderboard.songSubName,
+                leaderboard.songAuthorName,
+              )}`}
+              target="_blank"
+            >
+              <Button
+                className="h-[30px] w-[30px] bg-neutral-700 p-1"
+                variant={"secondary"}
+              >
+                <YouTubeLogo size={20} />
+              </Button>
+            </Link>
+          </TooltipTrigger>
+          <TooltipContent>
+            <p>Click to view the song on YouTube</p>
+          </TooltipContent>
+        </Tooltip>
+      </div>
     </div>
   );
 }
