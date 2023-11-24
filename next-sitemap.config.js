@@ -8,12 +8,16 @@ const SS_GET_PLAYERS_URL = SS_API_URL + "/players?page={}";
 async function getTopPlayers() {
   console.log("Fetching top players...");
   const players = [];
-  const pagesToFetch = 30;
+  const pagesToFetch = 10;
   for (let i = 0; i < pagesToFetch; i++) {
     console.log(`Fetching page ${i + 1} of ${pagesToFetch}...`);
-    const response = await fetch(SS_GET_PLAYERS_URL.replace("{}", i));
-    const data = await response.json();
-    players.push(...data.players);
+    try {
+      const response = await fetch(SS_GET_PLAYERS_URL.replace("{}", i));
+      const data = await response.json();
+      players.push(...data.players);
+    } catch (e) {
+      console.log(`Error fetching page ${i + 1} of ${pagesToFetch}: ${e}`);
+    }
   }
   console.log("Done fetching top players.");
   return players;
