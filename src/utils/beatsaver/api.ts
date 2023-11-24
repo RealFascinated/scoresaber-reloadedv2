@@ -25,7 +25,7 @@ async function fetchMapsByHash(
       BS_GET_MAP_BY_HASH_URL,
       true,
       hashes.substring(0, hashes.length - 1),
-    ),
+    ) + "?idonly=true",
   );
   const json = await response.json();
 
