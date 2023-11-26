@@ -44,12 +44,12 @@ export default function Navbar() {
           icon={<MagnifyingGlassIcon height={23} width={23} />}
           href="/search"
         />
-        <NavbarButton
+        {/* <NavbarButton
           ariaLabel="View your settings"
           text="Settings"
           icon={<CogIcon height={23} width={23} />}
           href="/settings"
-        />
+        /> */}
       </Card>
     </>
   );
