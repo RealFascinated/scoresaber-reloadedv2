@@ -14,7 +14,7 @@ export default function Card({
 }: CardProps) {
   return (
     <CardBase className={outerClassName}>
-      <CardContent className={clsx(className, "pb-4 pt-2")}>
+      <CardContent className={clsx(className, "p-3 pb-4 pt-2")}>
         {children}
       </CardContent>
     </CardBase>

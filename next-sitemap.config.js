@@ -4,7 +4,7 @@ const { getCodeList } = require("country-list");
 const SS_API_URL = ssrSettings.proxy + "/https://scoresaber.com/api";
 const SS_GET_PLAYERS_URL = SS_API_URL + "/players?page={}";
 
-// todo: cache this somehow?
+// todo: cache this on a file somehow?
 async function getTopPlayers() {
   console.log("Fetching top players...");
   const players = [];
