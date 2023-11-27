@@ -57,7 +57,7 @@ export default function GlobalRanking({
                 {players.map((player) => (
                   <tr key={player.rank} className="border-b border-border">
                     <PlayerRanking
-                      showCountryFlag={country ? false : true}
+                      showCountryFlag={country == undefined ? false : true}
                       player={player}
                     />
                   </tr>

@@ -21,7 +21,12 @@ export default function PlayerRanking({
 
   return (
     <>
-      <td className="px-4 py-2">#{formatNumber(player.rank)}</td>
+      <td className="px-4 py-2">
+        #{formatNumber(showCountryFlag ? player.countryRank : player.rank)}{" "}
+        <span className="text-sm">
+          {showCountryFlag && "(#" + player.rank + ")"}
+        </span>
+      </td>
       <td className="flex items-center gap-2 px-4 py-2">
         <Avatar url={player.profilePicture} label="Avatar" size={24} />
         {showCountryFlag && (
