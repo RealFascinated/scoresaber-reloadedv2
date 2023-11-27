@@ -8,30 +8,26 @@ import CountyFlag from "../CountryFlag";
 
 type PlayerRankingProps = {
   player: ScoresaberPlayer;
-  showCountryFlag?: boolean;
+  isCountry?: boolean;
 };
 
 const Avatar = dynamic(() => import("@/components/Avatar"));
 
 export default function PlayerRanking({
   player,
-  showCountryFlag,
+  isCountry,
 }: PlayerRankingProps) {
   const settingsStore = useStore(useSettingsStore, (store) => store);
 
   return (
     <>
       <td className="px-4 py-2">
-        #{formatNumber(showCountryFlag ? player.countryRank : player.rank)}{" "}
-        <span className="text-sm">
-          {showCountryFlag && "(#" + player.rank + ")"}
-        </span>
+        #{formatNumber(isCountry ? player.countryRank : player.rank)}{" "}
+        <span className="text-sm">{isCountry && "(#" + player.rank + ")"}</span>
       </td>
       <td className="flex items-center gap-2 px-4 py-2">
         <Avatar url={player.profilePicture} label="Avatar" size={24} />
-        {showCountryFlag && (
-          <CountyFlag countryCode={player.country} className="!h-5 !w-5" />
-        )}
+        <CountyFlag countryCode={player.country} className="!h-5 !w-5" />
         <Link
           className="transform-gpu transition-all hover:text-blue-500"
           href={`/player/${player.id}/top/1`}
