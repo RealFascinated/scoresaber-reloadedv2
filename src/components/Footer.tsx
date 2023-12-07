@@ -22,7 +22,7 @@ const buildId = process.env.NEXT_PUBLIC_BUILD_ID
 const buildTime = process.env.NEXT_PUBLIC_BUILD_TIME;
 const gitUrl = isProduction()
   ? `https://git.fascinated.cc/Fascinated/scoresaber-reloaded-v2/commit/${buildId}`
-  : "https://git.fascinated.cc/Fascinated/scoresaber-reloaded-v2";
+  : "https://s.fascinated.cc/s/ssr-gitea";
 
 export default function Footer() {
   return (
@@ -31,7 +31,7 @@ export default function Footer() {
         <div className="flex flex-col items-center gap-1 md:flex-row md:items-start md:gap-3">
           <a
             className="transform-gpu transition-all hover:text-blue-500"
-            href="https://git.fascinated.cc/Fascinated/scoresaber-reloaded-v2"
+            href="https://s.fascinated.cc/s/ssr-gitea"
           >
             {ssrSettings.siteName}
           </a>
