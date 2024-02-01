@@ -1,11 +1,5 @@
 const nextBuildId = require("next-build-id");
 const withBundleAnalyzer = require("@next/bundle-analyzer")({ enabled: false });
-const InfisicalClient = require("infisical-node");
-
-const infisicalClient = new InfisicalClient({
-  token: process.env.INFISICAL_TOKEN,
-  siteURL: "https://secrets.fascinated.cc",
-});
 
 // Define remote patterns for images
 const remotePatterns = [
@@ -60,4 +54,4 @@ const nextConfig = {
   images: { remotePatterns },
 };
 
-withBundleAnalyzer(nextConfig);
+module.exports = withBundleAnalyzer(nextConfig);
