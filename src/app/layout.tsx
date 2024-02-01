@@ -18,7 +18,7 @@ export const viewport: Viewport = {
 export const metadata: Metadata = {
   metadataBase: new URL(ssrSettings.siteUrl),
   title: {
-    template: ssrSettings.siteName + " - %s",
+    template: ssrSettings.siteNameShort + " - %s",
     default: ssrSettings.siteName,
   },
   description: ssrSettings.description,
