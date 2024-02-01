@@ -1,8 +1,4 @@
-import {
-  CogIcon,
-  MagnifyingGlassIcon,
-  ServerIcon,
-} from "@heroicons/react/20/solid";
+import { MagnifyingGlassIcon } from "@heroicons/react/20/solid";
 import { GlobeAltIcon, TvIcon } from "@heroicons/react/24/outline";
 import { Card } from "../ui/card";
 import FriendsButton from "./FriendsButton";
@@ -28,12 +24,6 @@ export default function Navbar() {
           text="Overlay"
           icon={<TvIcon height={23} width={23} />}
           href="/overlay/builder"
-        />
-        <NavbarButton
-          ariaLabel="View analytics for Scoresaber"
-          text="Analytics"
-          icon={<ServerIcon height={23} width={23} />}
-          href="/analytics"
         />
 
         <div className="m-auto" />
