@@ -34,7 +34,7 @@ const nextConfig = {
   generateEtags: true,
   reactStrictMode: true,
   swcMinify: true,
-  compress: false,
+  compress: true,
   poweredByHeader: false,
   experimental: {
     webpackBuildWorker: true,
