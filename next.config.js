@@ -1,5 +1,4 @@
 const nextBuildId = require("next-build-id");
-const { withSentryConfig } = require("@sentry/nextjs");
 const withBundleAnalyzer = require("@next/bundle-analyzer")({ enabled: false });
 const InfisicalClient = require("infisical-node");
 
@@ -61,23 +60,20 @@ const nextConfig = {
   images: { remotePatterns },
 };
 
-module.exports = async () =>
-  withSentryConfig(
-    withBundleAnalyzer(nextConfig),
-    {
-      silent: true,
-      org: "sentry",
-      project: "scoresaber-reloaded",
-      url: "https://sentry.fascinated.cc",
-      authToken: (await infisicalClient.getSecret("SENTRY_AUTH_TOKEN"))
-        .secretValue,
-      dryRun: process.env.NODE_ENV !== "development",
-    },
-    {
-      widenClientFileUpload: false,
-      transpileClientSDK: false,
-      tunnelRoute: "/monitoring",
-      hideSourceMaps: true,
-      disableLogger: true,
-    },
-  );
+(module.exports = async () => withBundleAnalyzer(nextConfig)),
+  {
+    silent: true,
+    org: "sentry",
+    project: "scoresaber-reloaded",
+    url: "https://sentry.fascinated.cc",
+    authToken: (await infisicalClient.getSecret("SENTRY_AUTH_TOKEN"))
+      .secretValue,
+    dryRun: process.env.NODE_ENV !== "development",
+  },
+  {
+    widenClientFileUpload: false,
+    transpileClientSDK: false,
+    tunnelRoute: "/monitoring",
+    hideSourceMaps: true,
+    disableLogger: true,
+  };
