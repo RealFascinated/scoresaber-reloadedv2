@@ -60,20 +60,4 @@ const nextConfig = {
   images: { remotePatterns },
 };
 
-(module.exports = async () => withBundleAnalyzer(nextConfig)),
-  {
-    silent: true,
-    org: "sentry",
-    project: "scoresaber-reloaded",
-    url: "https://sentry.fascinated.cc",
-    authToken: (await infisicalClient.getSecret("SENTRY_AUTH_TOKEN"))
-      .secretValue,
-    dryRun: process.env.NODE_ENV !== "development",
-  },
-  {
-    widenClientFileUpload: false,
-    transpileClientSDK: false,
-    tunnelRoute: "/monitoring",
-    hideSourceMaps: true,
-    disableLogger: true,
-  };
+withBundleAnalyzer(nextConfig);
