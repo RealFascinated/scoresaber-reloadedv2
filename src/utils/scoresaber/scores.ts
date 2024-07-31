@@ -63,18 +63,18 @@ function lerp(v0: number, v1: number, t: number) {
   return v0 + t * (v1 - v0);
 }
 
-function calculatePPModifier(c1, c2, acc) {
-  const distance = (c2[0] - acc) / (c2[0] - c1[0]);
-  const interpolated = lerp(c2[1], c1[1], distance);
+function calculatePPModifier(c1: [number, number], c2: [number, number], acc: number): number {
+  const distance: number = (c2[0] - acc) / (c2[0] - c1[0]);
+  const interpolated: number = lerp(c2[1], c1[1], distance);
   console.log(`Acc: ${acc}, c1: ${c1}, c2: ${c2}, Distance: ${distance}, Interpolated: ${interpolated}`);
   return interpolated;
 }
 
-function findPPModifier(acc, curve) {
+function findPPModifier(acc: number, curve: [number, number][]): number | undefined {
   acc = clamp(acc, 0, 100) / 100;
   console.log("Clamped Accuracy:", acc);
 
-  let prev = curve[1];
+  let prev: [number, number] = curve[1];
   for (const item of curve) {
     console.log("Curve Point:", item[0], item[1]);
     if (item[0] <= acc) {
@@ -82,21 +82,22 @@ function findPPModifier(acc, curve) {
     }
     prev = item;
   }
+  return undefined;
 }
 
-export function getScoreSaberPP(acc, stars) {
+export function getScoreSaberPP(acc: number, stars: number): { pp: number | undefined } {
   console.log("Input Stars:", stars);
   console.log("Input Accuracy:", acc);
-  
-  const ppValue = stars * starMultiplier;
-  const modifier = findPPModifier(acc * 100, ppCurve);
+
+  const ppValue: number = stars * starMultiplier;
+  const modifier: number | undefined = findPPModifier(acc * 100, ppCurve);
   console.log("Modifier:", modifier);
-  
-  if (!modifier) return undefined;
-  
-  const finalPP = modifier * ppValue;
+
+  if (!modifier) return { pp: undefined };
+
+  const finalPP: number = modifier * ppValue;
   console.log("Final PP:", finalPP);
-  
+
   return {
     pp: Number.isNaN(finalPP) ? undefined : finalPP,
   };
