@@ -7,7 +7,7 @@ import { useScoresaberScoresStore } from "@/store/scoresaberScoresStore";
 export const WEIGHT_COEFFICIENT = 0.965;
 
 const starMultiplier = 42.11;
-const ppCurve = [
+const ppCurve: [number, number][] = [
   [1, 5.367394282890631],
   [0.9995, 5.019543595874787],
   [0.999, 4.715470646416203],
@@ -63,14 +63,23 @@ function lerp(v0: number, v1: number, t: number) {
   return v0 + t * (v1 - v0);
 }
 
-function calculatePPModifier(c1: [number, number], c2: [number, number], acc: number): number {
+function calculatePPModifier(
+  c1: [number, number],
+  c2: [number, number],
+  acc: number,
+): number {
   const distance: number = (c2[0] - acc) / (c2[0] - c1[0]);
   const interpolated: number = lerp(c2[1], c1[1], distance);
-  console.log(`Acc: ${acc}, c1: ${c1}, c2: ${c2}, Distance: ${distance}, Interpolated: ${interpolated}`);
+  console.log(
+    `Acc: ${acc}, c1: ${c1}, c2: ${c2}, Distance: ${distance}, Interpolated: ${interpolated}`,
+  );
   return interpolated;
 }
 
-function findPPModifier(acc: number, curve: [number, number][]): number | undefined {
+function findPPModifier(
+  acc: number,
+  curve: [number, number][],
+): number | undefined {
   acc = clamp(acc, 0, 100) / 100;
   console.log("Clamped Accuracy:", acc);
 
@@ -85,7 +94,10 @@ function findPPModifier(acc: number, curve: [number, number][]): number | undefi
   return undefined;
 }
 
-export function getScoreSaberPP(acc: number, stars: number): { pp: number | undefined } {
+export function getScoreSaberPP(
+  acc: number,
+  stars: number,
+): { pp: number | undefined } {
   console.log("Input Stars:", stars);
   console.log("Input Accuracy:", acc);
 
